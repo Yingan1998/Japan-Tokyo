@@ -795,8 +795,8 @@
     }
 
     function openMap(place) {
-      const url = `https://www.google.com/maps/search/?q=${encodeURIComponent(place)}`;
-      window.open(url, "_blank");
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
+      location.href = url;
     }
 
     function renderHeaderDate() {
@@ -971,12 +971,20 @@
         alert("此日地點不足（至少需要兩個地點）");
         return;
       }
+
       const origin = pts[0];
       const destination = pts[pts.length - 1];
       const waypoints = pts.slice(1, -1).join("|");
-      const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${encodeURIComponent(waypoints)}`;
-      window.open(url, "_blank");
+
+      const url =
+        `https://www.google.com/maps/dir/?api=1` +
+        `&origin=${encodeURIComponent(origin)}` +
+        `&destination=${encodeURIComponent(destination)}` +
+        `&waypoints=${encodeURIComponent(waypoints)}`;
+
+      location.href = url; 
     }
+
 
     function openTodayRoute() {
       openDayRoute(data.selectedDay);
