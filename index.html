@@ -59,12 +59,29 @@
       content: "";
       position: absolute;
       inset: -40px;
-      background: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=60") center/cover no-repeat;
-      opacity: .16;
-      filter: blur(12px);
-      transform: scale(1.06);
+      background:
+        url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
+        url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=60");
+      background-size: 300px 300px, cover;
+      background-position: center;
+      opacity: .18;
+      filter: blur(6px);
+      transform: scale(1.04);
       z-index: -1;
     }
+
+    .itemSub {
+      font-family: 'Noto Sans JP', 'Noto Sans TC', sans-serif;
+      letter-spacing: .3px;
+      opacity: .85;
+    }
+
+    .dayTab .d {
+      font-family: 'Noto Sans JP', 'Patrick Hand';
+      font-weight: 600;
+    }
+
+
 
     /* App 容器 */
     .app {
@@ -298,6 +315,7 @@
       backdrop-filter: blur(12px);
       position: relative;
       overflow: hidden;
+      border-radius: 26px 26px 22px 22px;
     }
 
     .itemCard::before {
@@ -306,6 +324,17 @@
       inset: 0;
       background: radial-gradient(400px 180px at 10% 10%, rgba(141, 208, 255, .35), rgba(255, 255, 255, 0) 55%);
       pointer-events: none;
+    }
+
+    .itemCard::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 20px;
+      right: 20px;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 50%;
     }
 
     .itemTop {
@@ -474,6 +503,53 @@
       color: #2a4a6a;
       white-space: nowrap;
     }
+
+    .expenseItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(0, 0, 0, .08);
+    }
+
+    .expenseItem:last-child {
+      border-bottom: none;
+    }
+
+    .expenseMeta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .expenseAmount {
+      font-weight: 900;
+    }
+
+    .expenseRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .expenseMeta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .expenseActions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pie {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--pie));
+      margin: 10px auto;
+    }
   </style>
 </head>
 
@@ -531,12 +607,32 @@
     <section class="page" id="page-expense">
       <div class="sectionTitleRow">
         <div class="sectionTitle">記帳 <span class="muted">Expense</span></div>
-        <button class="btnPill" onclick="alert('下一步做：記帳功能（現金/信用卡/分類/彙總）')">＋ 記一筆</button>
+        <!-- <div class="dayTabs" id="expenseDayTabs"></div> -->
+        <div style="display:flex; gap:8px;">
+          <button class="btnPill primary" onclick="openExpenseSheet()">＋ 記一筆</button>
+          <button class="btnPill" onclick="exportExpenseCSV()">⬇ 匯出</button>
+        </div>
       </div>
+
       <div class="simpleCard">
-        💴 記帳功能製作中（下一步我們可以做：分類、現金/卡、每日總額、圖表）
+        <div class="rowBetween">
+          <div><b>旅途支出總計</b></div>
+          <div class="pill">
+            ¥ <span id="expenseTotalJPY">0</span><br>
+            ≈ NT$ <span id="expenseTotalTWD">0</span>
+          </div>
+        </div>
       </div>
+
+      <div class="simpleCard">
+        <b>分類比例</b>
+        <div id="expensePie" style="margin-top:12px;"></div>
+      </div>
+
+      <div id="expenseList"></div>
     </section>
+
+
 
     <section class="page" id="page-shopping">
       <div class="sectionTitleRow">
@@ -738,31 +834,61 @@
 
 
     function renderTrip() {
-      const day = data.days[data.selectedDay - 1];
+      const dayIndex = data.selectedDay - 1;
+      const day = data.days[dayIndex];
       const list = document.getElementById("tripList");
       list.innerHTML = "";
 
       day.items.forEach((it, i) => {
+        const spent = getTripExpenseSum(dayIndex, it.title);
+
         const el = document.createElement("div");
         el.className = "itemCard";
         el.innerHTML = `
-        <div class="itemTop">
-          <div>
-            <div class="itemTitle">${escapeHtml(it.title)}</div>
-            <div class="itemSub">${escapeHtml(it.sub || "")}</div>
-            <div style="margin-top:10px;">
-              <span class="badge">📍 ${escapeHtml(it.place || "未設定地點")}</span>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
-            <button class="btnMap" onclick="openMap('${escapeAttr(it.place || "")}')">導航 MAP</button>
-            <button class="btnGhost" onclick="editItem(${i})">✏️ 編輯</button>
+      <div class="itemTop">
+        <div>
+          <div class="itemTitle">${escapeHtml(it.title)}</div>
+          <div class="itemSub">${escapeHtml(it.sub || "")}</div>
+
+          <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge">📍 ${escapeHtml(it.place || "未設定地點")}</span>
+
+            ${spent > 0 ? `
+              <span class="badge"
+                style="cursor:pointer;background:rgba(255,215,160,.9);font-weight:900"
+                onclick="openExpenseFromTrip(${dayIndex}, '${escapeAttr(it.title)}')">
+                💴 ¥${spent.toLocaleString()}
+              </span>
+            ` : ``}
           </div>
         </div>
-      `;
+
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
+          <button class="btnMap" onclick="openMap('${escapeAttr(it.place || "")}')">導航 MAP</button>
+          <button class="btnGhost" onclick="editItem(${i})">✏️ 編輯</button>
+        </div>
+      </div>
+    `;
         list.appendChild(el);
       });
     }
+
+    function openExpenseFromTrip(dayIndex, title) {
+      switchPage('expense', document.querySelector('.bItem:nth-child(3)'));
+
+      const key = `${dayIndex}|${title}`;
+
+      setTimeout(() => {
+        document.querySelectorAll("#expenseList .simpleCard").forEach(card => {
+          if (card.innerHTML.includes(key)) {
+            card.style.boxShadow = "0 0 0 3px rgba(255,159,58,.6)";
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+      }, 200);
+    }
+
+
 
     function renderMapList() {
       const box = document.getElementById("mapList");
@@ -956,10 +1082,14 @@
           "https://api.exchangerate.host/latest?base=JPY&symbols=TWD"
         );
         const data = await res.json();
-        const rate = data.rates.TWD.toFixed(3);
+        const rate = Number(data.rates.TWD);
+
+        currentRate = rate; // ✅ 存成全域
 
         document.getElementById("rateBox").innerHTML =
-          `目前匯率｜<b>1 JPY ≈ ${rate} TWD</b>`;
+          `目前匯率｜<b>1 JPY ≈ ${rate.toFixed(3)} TWD</b>`;
+
+        renderExpenses(); // ⭐ 匯率更新後重算記帳
 
       } catch (err) {
         console.error("匯率讀取失敗", err);
@@ -987,12 +1117,215 @@
     }
 
 
+    // ====== Expense 記帳功能 ======
+    let expenses = JSON.parse(localStorage.getItem("tokyoExpenses")) || [];
+    let currentRate = 0.27; // fallback
+
+    function saveExpenses() {
+      localStorage.setItem("tokyoExpenses", JSON.stringify(expenses));
+    }
+
+    function getDayInfo(dateISO) {
+      const d = new Date(dateISO);
+      const start = new Date(START_DATE + "T00:00:00");
+      const diff = Math.floor((d - start) / 86400000);
+      return {
+        dayNo: diff + 1,
+        label: `Day ${diff + 1}`
+      };
+    }
+
+    let editingExpenseIndex = null;
+
+    function openExpenseSheet(index = null) {
+      editingExpenseIndex = index;
+
+      document.getElementById("expenseSheet").style.display = "block";
+
+      // 行程下拉
+      const tripSel = document.getElementById("exTrip");
+      tripSel.innerHTML = `<option value="">— 不關聯 —</option>`;
+      data.days.forEach((d, di) => {
+        d.items.forEach(it => {
+          const opt = document.createElement("option");
+          opt.value = `${di}|${it.title}`;
+          opt.textContent = `Day ${di + 1}｜${it.title}`;
+          tripSel.appendChild(opt);
+        });
+      });
+
+      if (index !== null) {
+        const e = expenses[index];
+        document.getElementById("exAmount").value = e.amount;
+        document.getElementById("exCategory").value = e.category;
+        document.getElementById("exNote").value = e.note || "";
+        tripSel.value = e.tripKey || "";
+      }
+    }
+
+    function closeExpenseSheet() {
+      editingExpenseIndex = null;
+      document.getElementById("expenseSheet").style.display = "none";
+    }
+
+    function saveExpenseSheet() {
+      const amountRaw = document.getElementById("exAmount").value;
+      const amount = Number(amountRaw);
+
+      if (amountRaw === "" || isNaN(amount) || amount <= 0) {
+        alert("請輸入正確的金額");
+        return;
+      }
+
+      const category = document.getElementById("exCategory").value;
+      const note = document.getElementById("exNote").value;
+      const tripKey = document.getElementById("exTrip").value;
+
+      const rec = {
+        amount,
+        category,
+        note,
+        tripKey,
+        dayNo: data.selectedDay,
+        date: data.days[data.selectedDay - 1].date, // Day 對齊
+        time: new Date().toISOString()
+      };
+
+      if (editingExpenseIndex !== null) {
+        expenses[editingExpenseIndex] = rec;
+      } else {
+        expenses.push(rec);
+      }
+
+      saveExpenses();
+      closeExpenseSheet();
+      renderExpenses();
+    }
+
+
+
+
+    function deleteExpense(i) {
+      if (!confirm("刪除這筆記帳？")) return;
+      expenses.splice(i, 1);
+      saveExpenses();
+      renderExpenses();
+    }
+
+    function renderExpenses() {
+      //renderExpenseDayTabs();
+
+      const list = document.getElementById("expenseList");
+      list.innerHTML = "";
+
+      let totalJPY = 0;
+      let catSum = {};
+
+      expenses.forEach((e, i) => {
+        totalJPY += e.amount;
+        catSum[e.category] = (catSum[e.category] || 0) + e.amount;
+
+        const dayLabel = `Day ${e.dayNo}`;
+        //if (expenseDayFilter && e.dayNo !== expenseDayFilter) return;
+
+        const div = document.createElement("div");
+        div.className = "simpleCard";
+        div.innerHTML = `
+      <div class="expenseRow">
+        <div>
+          <b>${e.category}</b>
+          <div class="expenseMeta">
+            Day ${e.dayNo} ｜ ¥${e.amount.toLocaleString()} ≈ NT$ ${(e.amount * currentRate).toFixed(0)}
+          </div>
+        </div>
+        <div class="expenseActions">
+          <button class="btnGhost" onclick="openExpenseSheet(${i})">✏️</button>
+          <button class="btnGhost" onclick="deleteExpense(${i})">🗑</button>
+        </div>
+      </div>
+    `;
+        list.appendChild(div);
+      });
+
+      document.getElementById("expenseTotalJPY").textContent = totalJPY.toLocaleString();
+      document.getElementById("expenseTotalTWD").textContent =
+        (totalJPY * currentRate).toFixed(0);
+
+      renderPie(catSum);
+    }
+
+    function renderPie(catSum) {
+      const total = Object.values(catSum).reduce((a, b) => a + b, 0);
+      let deg = 0;
+      let stops = [];
+
+      Object.entries(catSum).forEach(([_, v]) => {
+        const d = (v / total) * 360;
+        stops.push(`hsl(${deg},70%,70%) ${deg}deg ${deg + d}deg`);
+        deg += d;
+      });
+
+      document.getElementById("expensePie").innerHTML =
+        `<div class="pie" style="--pie:${stops.join(",")}"></div>`;
+    }
+
+    function exportExpenseCSV() {
+      let csv = "日期,Day,分類,日圓,台幣,付款,備註\n";
+      expenses.forEach(e => {
+        const day = getDayInfo(e.date);
+        csv += `${e.date},${day.label},${e.category},${e.amount},${(e.amount * currentRate).toFixed(0)},,${e.note}\n`;
+
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "tokyo_expense.csv";
+      a.click();
+    }
+
+
+    //let expenseDayFilter = 0; // 0 = 全部
+
+    function renderExpenseDayTabs() {
+      const box = document.getElementById("expenseDayTabs");
+      box.innerHTML = "";
+
+      const all = document.createElement("div");
+      all.className = "dayTab" + (expenseDayFilter === 0 ? " active" : "");
+      all.textContent = "全部";
+      all.onclick = () => { expenseDayFilter = 0; renderExpenses(); };
+      box.appendChild(all);
+
+      data.days.forEach((d, i) => {
+        const tab = document.createElement("div");
+        tab.className = "dayTab" + (expenseDayFilter === i + 1 ? " active" : "");
+        tab.textContent = `Day ${i + 1}`;
+        tab.onclick = () => {
+          expenseDayFilter = i + 1;
+          renderExpenses();
+        };
+        box.appendChild(tab);
+      });
+    }
+
+    function getTripExpenseSum(dayIndex, title) {
+      const key = `${dayIndex}|${title}`;
+      return expenses
+        .filter(e => e.tripKey === key)
+        .reduce((sum, e) => sum + e.amount, 0);
+    }
+
+
+
 
     // ====== Init ======
     renderHeaderDate();
     renderDayTabs();
     renderTrip();
     renderCountdown();
+    renderExpenses();
+
 
     // API資料
     loadWeather();
@@ -1001,6 +1334,39 @@
 
 
   </script>
+
+  <!-- Expense Sheet -->
+  <div id="expenseSheet" style="display:none; position:fixed; inset:0; z-index:999;">
+    <div onclick="closeExpenseSheet()" style="position:absolute; inset:0; background:rgba(0,0,0,.3)"></div>
+    <div style="
+    position:absolute; bottom:0; left:0; right:0;
+    background:#fff; border-radius:24px 24px 0 0;
+    padding:20px; max-height:80vh; overflow:auto;">
+
+      <h3 style="margin-top:0">💴 記一筆花費</h3>
+
+      <label>金額（日圓）</label>
+      <input id="exAmount" type="number" style="width:100%; padding:10px; margin-bottom:8px">
+
+      <label>分類</label>
+      <select id="exCategory" style="width:100%; padding:10px; margin-bottom:8px">
+        <option>🍴 吃</option>
+        <option>🚃 交通</option>
+        <option>🎁 購物</option>
+        <option>🎫 門票</option>
+        <option>🏨 住宿</option>
+      </select>
+
+      <label>關聯行程（可選）</label>
+      <select id="exTrip" style="width:100%; padding:10px; margin-bottom:8px"></select>
+
+      <label>備註</label>
+      <input id="exNote" style="width:100%; padding:10px; margin-bottom:12px">
+
+      <button class="btnPill primary" style="width:100%" onclick="saveExpenseSheet()">儲存</button>
+    </div>
+  </div>
+
 </body>
 
 </html>
