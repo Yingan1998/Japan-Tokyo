@@ -44,31 +44,24 @@
       overflow-x: hidden;
     }
 
-    /* 背景：藍天感 */
     .bg {
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(1200px 700px at 30% 20%, rgba(255, 255, 255, .75), rgba(255, 255, 255, 0) 60%),
-        radial-gradient(900px 600px at 70% 30%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 55%),
-        linear-gradient(180deg, #cfe9ff 0%, #9fd5ff 45%, #75bfff 100%);
       z-index: -2;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.6s ease, filter 0.6s ease;
     }
 
+    /* 預設柔霧層（保護文字） */
     .bg::after {
       content: "";
       position: absolute;
-      inset: -40px;
-      background:
-        url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
-        url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=60");
-      background-size: 300px 300px, cover;
-      background-position: center;
-      opacity: .18;
-      filter: blur(6px);
-      transform: scale(1.04);
-      z-index: -1;
+      inset: 0;
+      background: rgba(255, 255, 255, .18);
+      backdrop-filter: blur(2px);
     }
+
 
     .itemSub {
       font-family: 'Noto Sans JP', 'Noto Sans TC', sans-serif;
@@ -559,7 +552,7 @@
   <div class="app">
     <div class="topbar">
       <div class="brand"><span class="leaf"></span> Japan Tokyo</div>
-      <div class="rate" id="rateBox">目前匯率｜<b>1 JPY ≈ 0.27 TWD</b></div>
+      <div class="rate" id="rateBox">匯率讀取中…</div>
     </div>
 
     <!-- Info Card -->
@@ -699,6 +692,21 @@
 
     // ====== Day 資料（你給的行程）======
     // 每天可有多個項目：title/sub/place(地點字串給Google Maps)
+    const dayBackgrounds = {
+      1: "https://source.unsplash.com/1600x900/?airport,tokyo",
+      2: "https://source.unsplash.com/1600x900/?tokyo,disney",
+      3: "https://source.unsplash.com/1600x900/?meiji-shrine,forest",
+      4: "https://source.unsplash.com/1600x900/?mount-fuji",
+      5: "https://source.unsplash.com/1600x900/?ghibli,forest",
+      6: "https://source.unsplash.com/1600x900/?tokyo,fireworks",
+      7: "https://source.unsplash.com/1600x900/?sunset,travel"
+    };
+
+    function applyDayBackground(day) {
+      document.querySelector(".bg").style.backgroundImage =
+        `url(${dayBackgrounds[day]})`;
+    }
+
     let data = JSON.parse(localStorage.getItem("emenuTokyo")) || {
       selectedDay: 1,
       days: [
@@ -795,8 +803,8 @@
     }
 
     function openMap(place) {
-      const url = `https://www.google.com/maps/search/?q=${encodeURIComponent(place)}`;
-      window.open(url, "_blank");
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
+      location.href = url;
     }
 
     function renderHeaderDate() {
@@ -820,6 +828,7 @@
           save();
           renderTrip();
           renderDayTabs();
+          updateBackgroundByDay(dayNo);
         };
 
         tab.innerHTML = `
@@ -971,12 +980,20 @@
         alert("此日地點不足（至少需要兩個地點）");
         return;
       }
+
       const origin = pts[0];
       const destination = pts[pts.length - 1];
       const waypoints = pts.slice(1, -1).join("|");
-      const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${encodeURIComponent(waypoints)}`;
-      window.open(url, "_blank");
+
+      const url =
+        `https://www.google.com/maps/dir/?api=1` +
+        `&origin=${encodeURIComponent(origin)}` +
+        `&destination=${encodeURIComponent(destination)}` +
+        `&waypoints=${encodeURIComponent(waypoints)}`;
+
+      location.href = url;
     }
+
 
     function openTodayRoute() {
       openDayRoute(data.selectedDay);
@@ -1079,22 +1096,39 @@
     async function loadRate() {
       try {
         const res = await fetch(
-          "https://api.exchangerate.host/latest?base=JPY&symbols=TWD"
+          "https://open.er-api.com/v6/latest/JPY"
         );
-        const data = await res.json();
-        const rate = Number(data.rates.TWD);
 
-        currentRate = rate; // ✅ 存成全域
+        if (!res.ok) throw new Error("Rate API HTTP error");
+
+        const data = await res.json();
+
+        if (data.result !== "success") {
+          throw new Error("Rate API result not success");
+        }
+
+        const jpyToTwd = data.rates.TWD;
+        if (!jpyToTwd) throw new Error("No TWD rate");
+
+        // 全域匯率（記帳用：JPY → TWD）
+        currentRate = jpyToTwd;
+
+        // TWD → JPY
+        const twdToJpy = 1 / jpyToTwd;
 
         document.getElementById("rateBox").innerHTML =
-          `目前匯率｜<b>1 JPY ≈ ${rate.toFixed(3)} TWD</b>`;
+          `目前匯率｜<b>1 TWD ≈ ${twdToJpy.toFixed(2)} JPY</b>`;
 
-        renderExpenses(); // ⭐ 匯率更新後重算記帳
+        renderExpenses(); // 重新計算記帳金額
 
       } catch (err) {
         console.error("匯率讀取失敗", err);
+        document.getElementById("rateBox").innerHTML =
+          "目前匯率｜<b>匯率讀取失敗</b>";
       }
     }
+
+
 
 
     function renderCountdown() {
@@ -1119,7 +1153,7 @@
 
     // ====== Expense 記帳功能 ======
     let expenses = JSON.parse(localStorage.getItem("tokyoExpenses")) || [];
-    let currentRate = 0.27; // fallback
+    let currentRate = 0.0; // fallback
 
     function saveExpenses() {
       localStorage.setItem("tokyoExpenses", JSON.stringify(expenses));
@@ -1316,6 +1350,25 @@
         .reduce((sum, e) => sum + e.amount, 0);
     }
 
+    function updateBackgroundByDay(dayNo) {
+      const url = dayBackgrounds[dayNo];
+      if (!url) return;
+
+      document.body.style.backgroundImage = `
+    linear-gradient(
+      rgba(255,255,255,0.55),
+      rgba(255,255,255,0.55)
+    ),
+    url('${url}')
+  `;
+
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+      document.body.style.backgroundAttachment = "fixed";
+    }
+
+
+
 
 
 
@@ -1325,6 +1378,7 @@
     renderTrip();
     renderCountdown();
     renderExpenses();
+    updateBackgroundByDay(data.selectedDay);
 
 
     // API資料
