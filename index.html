@@ -559,7 +559,7 @@
   <div class="app">
     <div class="topbar">
       <div class="brand"><span class="leaf"></span> Japan Tokyo</div>
-      <div class="rate" id="rateBox">目前匯率｜<b>1 JPY ≈ 0.27 TWD</b></div>
+      <div class="rate" id="rateBox">匯率讀取中…</div>
     </div>
 
     <!-- Info Card -->
@@ -795,8 +795,8 @@
     }
 
     function openMap(place) {
-      const url = `https://www.google.com/maps/search/?q=${encodeURIComponent(place)}`;
-      window.open(url, "_blank");
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
+      location.href = url;
     }
 
     function renderHeaderDate() {
@@ -971,12 +971,20 @@
         alert("此日地點不足（至少需要兩個地點）");
         return;
       }
+
       const origin = pts[0];
       const destination = pts[pts.length - 1];
       const waypoints = pts.slice(1, -1).join("|");
-      const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${encodeURIComponent(waypoints)}`;
-      window.open(url, "_blank");
+
+      const url =
+        `https://www.google.com/maps/dir/?api=1` +
+        `&origin=${encodeURIComponent(origin)}` +
+        `&destination=${encodeURIComponent(destination)}` +
+        `&waypoints=${encodeURIComponent(waypoints)}`;
+
+      location.href = url;
     }
+
 
     function openTodayRoute() {
       openDayRoute(data.selectedDay);
@@ -1079,22 +1087,39 @@
     async function loadRate() {
       try {
         const res = await fetch(
-          "https://api.exchangerate.host/latest?base=JPY&symbols=TWD"
+          "https://open.er-api.com/v6/latest/JPY"
         );
-        const data = await res.json();
-        const rate = Number(data.rates.TWD);
 
-        currentRate = rate; // ✅ 存成全域
+        if (!res.ok) throw new Error("Rate API HTTP error");
+
+        const data = await res.json();
+
+        if (data.result !== "success") {
+          throw new Error("Rate API result not success");
+        }
+
+        const jpyToTwd = data.rates.TWD;
+        if (!jpyToTwd) throw new Error("No TWD rate");
+
+        // 全域匯率（記帳用：JPY → TWD）
+        currentRate = jpyToTwd;
+
+        // TWD → JPY
+        const twdToJpy = 1 / jpyToTwd;
 
         document.getElementById("rateBox").innerHTML =
-          `目前匯率｜<b>1 JPY ≈ ${rate.toFixed(3)} TWD</b>`;
+          `目前匯率｜<b>1 TWD ≈ ${twdToJpy.toFixed(2)} JPY</b>`;
 
-        renderExpenses(); // ⭐ 匯率更新後重算記帳
+        renderExpenses(); // 重新計算記帳金額
 
       } catch (err) {
         console.error("匯率讀取失敗", err);
+        document.getElementById("rateBox").innerHTML =
+          "目前匯率｜<b>匯率讀取失敗</b>";
       }
     }
+
+
 
 
     function renderCountdown() {
@@ -1119,7 +1144,7 @@
 
     // ====== Expense 記帳功能 ======
     let expenses = JSON.parse(localStorage.getItem("tokyoExpenses")) || [];
-    let currentRate = 0.27; // fallback
+    let currentRate = 0.0; // fallback
 
     function saveExpenses() {
       localStorage.setItem("tokyoExpenses", JSON.stringify(expenses));
