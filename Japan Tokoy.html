@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Japan Tokyo｜旅する手帳（Web）</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Noto+Sans+TC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #233;
+      --muted: #667;
+      --glass: rgba(255, 255, 255, .72);
+      --glass2: rgba(255, 255, 255, .82);
+      --shadow: 0 12px 30px rgba(0, 0, 0, .14);
+      --shadow2: 0 8px 22px rgba(0, 0, 0, .12);
+      --blue1: #8dd0ff;
+      --blue2: #5bb8ff;
+      --blue3: #4b77ff;
+      --chip: #eaf4ff;
+      --accent: #ff9f3a;
+      --ok: #6fcf97;
+      --danger: #ff6b6b;
+      --tab: #ffffff;
+      --tabActive: #5473ff;
+      --tabText: #2a3b55;
+      --tabTextActive: #fff;
+      --radius: 26px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
+      color: var(--ink);
+      background: #cfe9ff;
+      overflow-x: hidden;
+    }
+
+    /* 背景：藍天感 */
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1200px 700px at 30% 20%, rgba(255, 255, 255, .75), rgba(255, 255, 255, 0) 60%),
+        radial-gradient(900px 600px at 70% 30%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 55%),
+        linear-gradient(180deg, #cfe9ff 0%, #9fd5ff 45%, #75bfff 100%);
+      z-index: -2;
+    }
+
+    .bg::after {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background: url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=60") center/cover no-repeat;
+      opacity: .16;
+      filter: blur(12px);
+      transform: scale(1.06);
+      z-index: -1;
+    }
+
+    /* App 容器 */
+    .app {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 14px 14px 170px;
+    }
+
+    /* 頂部 title */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 6px 12px;
+      color: #1f3b57;
+    }
+
+    .brand {
+      font-family: 'Patrick Hand';
+      font-size: 28px;
+      letter-spacing: .5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand .leaf {
+      width: 22px;
+      height: 22px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #7cffb0, #2ecb73);
+      display: inline-block;
+      box-shadow: 0 6px 14px rgba(46, 203, 115, .25);
+      transform: rotate(-12deg);
+    }
+
+    .rate {
+      font-size: 12px;
+      opacity: .9;
+      background: rgba(255, 255, 255, .55);
+      padding: 8px 10px;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+    }
+
+    /* Info 卡（天氣/匯率/定位/日期） */
+    .infoCard {
+      background: rgba(255, 255, 255, .7);
+      border-radius: 24px;
+      padding: 14px;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+    }
+
+    .infoRow {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .weatherBox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 170px;
+    }
+
+    .wxIcon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #e8f6ff, #bfe7ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+      font-size: 24px;
+    }
+
+    .wxMain {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .temp {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .wxDesc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .locChip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, .7);
+      padding: 10px 12px;
+      border-radius: 18px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+      font-size: 12px;
+      color: #2a4a6a;
+    }
+
+    .dateChip {
+      background: rgba(255, 255, 255, .6);
+      padding: 10px 12px;
+      border-radius: 18px;
+      font-size: 12px;
+      color: #2a4a6a;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+    }
+
+    /* Day Tabs */
+    .dayTabsWrap {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, .62);
+      border-radius: 22px;
+      padding: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .10);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .dayTabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+
+    .dayTabs::-webkit-scrollbar {
+      height: 0;
+    }
+
+    .dayTab {
+      flex: 0 0 auto;
+      width: 92px;
+      padding: 12px 10px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .85);
+      box-shadow: 0 10px 18px rgba(0, 0, 0, .08);
+      text-align: center;
+      color: var(--tabText);
+      cursor: pointer;
+      user-select: none;
+      transition: .18s;
+    }
+
+    .dayTab .d {
+      font-size: 12px;
+      opacity: .85;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .dayTab .num {
+      font-size: 26px;
+      font-weight: 900;
+      margin-top: 4px;
+      letter-spacing: .6px;
+    }
+
+    .dayTab.active {
+      background: linear-gradient(180deg, rgba(84, 115, 255, .95), rgba(64, 92, 230, .95));
+      color: var(--tabTextActive);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 25px rgba(84, 115, 255, .28);
+    }
+
+    .dayTab.active .d {
+      opacity: .95;
+    }
+
+    /* section title */
+    .sectionTitleRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 14px 4px 8px;
+      gap: 10px;
+    }
+
+    .sectionTitle {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      background: rgba(255, 255, 255, .55);
+      padding: 8px 12px;
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+    }
+
+    .btnPill {
+      border: none;
+      border-radius: 18px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, .55);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #2a4a6a;
+    }
+
+    .btnPill.primary {
+      background: rgba(84, 115, 255, .16);
+    }
+
+    /* itinerary cards */
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .itemCard {
+      background: rgba(255, 255, 255, .84);
+      border-radius: 24px;
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .itemCard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(400px 180px at 10% 10%, rgba(141, 208, 255, .35), rgba(255, 255, 255, 0) 55%);
+      pointer-events: none;
+    }
+
+    .itemTop {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .itemTitle {
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .itemSub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .7);
+      font-size: 12px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+      white-space: nowrap;
+    }
+
+    .btnMap {
+      border: none;
+      border-radius: 18px;
+      padding: 10px 14px;
+      background: rgba(255, 159, 58, .95);
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(255, 159, 58, .28);
+      min-width: 98px;
+    }
+
+    /* Pages */
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Bottom Nav */
+    .bottomNav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 16px;
+      width: min(420px, calc(100% - 28px));
+      background: rgba(255, 255, 255, .88);
+      border-radius: 32px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .18);
+      padding: 12px 10px;
+      display: flex;
+      justify-content: space-around;
+      gap: 6px;
+      backdrop-filter: blur(12px);
+    }
+
+    .bItem {
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #52667a;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .bIcon {
+      width: 54px;
+      height: 54px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, .9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, .10);
+      font-size: 22px;
+      transition: .18s;
+    }
+
+    .bItem.active .bIcon {
+      transform: translateY(-2px);
+      background: rgba(84, 115, 255, .14);
+      box-shadow: 0 16px 26px rgba(84, 115, 255, .20);
+    }
+
+    .bItem.active {
+      color: #2b4661;
+      font-weight: 900;
+    }
+
+    /* small helper */
+    .muted {
+      color: var(--muted);
+    }
+
+    .divider {
+      height: 10px;
+    }
+
+    .tiny {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, .55);
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    /* Map page list card style reuse */
+    .simpleCard {
+      background: rgba(255, 255, 255, .84);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: var(--shadow2);
+      margin: 12px 0;
+    }
+
+    .rowBetween {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pill {
+      background: rgba(84, 115, 255, .12);
+      color: #2a4a6a;
+      padding: 8px 10px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .btnGhost {
+      border: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, .75);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+      font-weight: 900;
+      cursor: pointer;
+      color: #2a4a6a;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <div class="app">
+    <div class="topbar">
+      <div class="brand"><span class="leaf"></span> Japan Tokyo</div>
+      <div class="rate" id="rateBox">目前匯率｜<b>1 JPY ≈ 0.27 TWD</b></div>
+    </div>
+
+    <!-- Info Card -->
+    <div class="infoCard">
+      <div class="infoRow">
+        <div class="weatherBox">
+          <div class="wxIcon">⛅</div>
+          <div class="wxMain">
+            <div class="temp" id="tempBox">12°C</div>
+            <div class="wxDesc" id="wxDesc">晴時多雲｜晴れ時々曇り</div>
+          </div>
+        </div>
+
+        <div class="locChip">📍 東京｜Tokyo</div>
+        <div class="dateChip" id="dateRange"></div>
+        <div class="dateChip" id="countdownBox">⏳ 計算中…</div>
+
+      </div>
+
+      <!-- Day Tabs -->
+      <div class="dayTabsWrap">
+        <div class="dayTabs" id="dayTabs"></div>
+      </div>
+    </div>
+
+    <!-- Pages -->
+    <section class="page active" id="page-trip">
+      <div class="sectionTitleRow">
+        <div class="sectionTitle">行程安排 <span class="muted">Itinerary</span></div>
+        <button class="btnPill primary" onclick="addItem()">＋ 新增</button>
+      </div>
+      <div class="list" id="tripList"></div>
+      <div class="divider"></div>
+      <div class="tiny muted">提示：可在每項行程按「導航 MAP」直接開 Google Maps。</div>
+    </section>
+
+    <section class="page" id="page-map">
+      <div class="sectionTitleRow">
+        <div class="sectionTitle">地圖 <span class="muted">Map</span></div>
+        <button class="btnPill" onclick="openTodayRoute()">🧭 今日路線</button>
+      </div>
+      <div id="mapList"></div>
+    </section>
+
+    <section class="page" id="page-expense">
+      <div class="sectionTitleRow">
+        <div class="sectionTitle">記帳 <span class="muted">Expense</span></div>
+        <button class="btnPill" onclick="alert('下一步做：記帳功能（現金/信用卡/分類/彙總）')">＋ 記一筆</button>
+      </div>
+      <div class="simpleCard">
+        💴 記帳功能製作中（下一步我們可以做：分類、現金/卡、每日總額、圖表）
+      </div>
+    </section>
+
+    <section class="page" id="page-shopping">
+      <div class="sectionTitleRow">
+        <div class="sectionTitle">購物 <span class="muted">List</span></div>
+        <button class="btnPill" onclick="alert('下一步做：購物清單（勾選/分類/預算）')">＋ 新增</button>
+      </div>
+      <div class="simpleCard">🛍 購物清單製作中（下一步可做：勾選完成、分類、價格）</div>
+    </section>
+
+    <section class="page" id="page-info">
+      <div class="sectionTitleRow">
+        <div class="sectionTitle">資訊 <span class="muted">Info</span></div>
+        <button class="btnPill" onclick="alert('下一步可加入：交通卡/機場交通/餐廳口袋名單/注意事項')">＋ 新增</button>
+      </div>
+      <div class="simpleCard">
+        <b>出發：</b>2026/11/30（台灣週一｜日本月曜日）<br>
+        <b>回程：</b>2026/12/05（台灣週六｜日本土曜日）<br><br>
+        <div class="pill">🎡 Disney：Day 4（不累版）</div><br><br>
+        <div class="pill">⭐ 台場煙火：Day 6（與 Disney 不隔天 ✅）</div><br><br>
+        <div class="pill">🍃 Level 2：吉卜力漫遊（可切換加入 Day 5/任一天）</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottomNav">
+    <div class="bItem active" onclick="switchPage('trip', this)">
+      <div class="bIcon">📅</div>
+      行程
+    </div>
+    <div class="bItem" onclick="switchPage('map', this)">
+      <div class="bIcon">🗺️</div>
+      地圖
+    </div>
+    <div class="bItem" onclick="switchPage('expense', this)">
+      <div class="bIcon">💴</div>
+      記帳
+    </div>
+    <div class="bItem" onclick="switchPage('shopping', this)">
+      <div class="bIcon">🛍️</div>
+      購物
+    </div>
+    <div class="bItem" onclick="switchPage('info', this)">
+      <div class="bIcon">ℹ️</div>
+      資訊
+    </div>
+  </div>
+
+  <script>
+
+    // ====== API 設定 ======
+    const OPENWEATHER_API_KEY = "ce48502f2066d3567b5a41ede9e7169f";
+
+    // 東京（固定）
+    const TOKYO_LAT = 35.681236;
+    const TOKYO_LON = 139.767125;
+
+    // ====== 每日天氣快取（Day Tabs 用）======
+    let dailyWeather = {};
+
+    // ====== 日期（你給的）======
+    const START_DATE = "2026-11-30";
+    const END_DATE = "2026-12-05"; // 7天6夜：11/30~12/05（共6晚）
+
+    // ====== Day 資料（你給的行程）======
+    // 每天可有多個項目：title/sub/place(地點字串給Google Maps)
+    let data = JSON.parse(localStorage.getItem("emenuTokyo")) || {
+      selectedDay: 1,
+      days: [
+        {
+          labelZh: "DAY1",
+          labelJp: "到着",
+          date: "2026-11-30",
+          items: [
+            { title: "抵達東京 ✈️／入住飯店", sub: "東京駅・ホテル チェックイン", place: "東京駅" },
+            { title: "自由活動（暖機日）", sub: "新宿／浅草 夕食（住新宿可逛唐吉訶德）", place: "新宿駅" },
+            { title: "若抵達早：晴空塔／淺草寺散步", sub: "スカイツリー・浅草寺", place: "東京スカイツリー" }
+          ]
+        },
+        {
+          labelZh: "DAY2",
+          labelJp: "買い物",
+          date: "2026-12-01",
+          items: [
+            { title: "池袋太陽城", sub: "Sunshine City", place: "池袋 サンシャインシティ" },
+            { title: "水族館／Pokémon Center", sub: "サンシャイン水族館・ポケモンセンター", place: "サンシャイン水族館" },
+            { title: "Animate／無印良品", sub: "アニメイト・無印良品", place: "アニメイト池袋本店" },
+            { title: "晚上：貓頭鷹咖啡（預約）或 Round One", sub: "フクロウカフェ／ボウリング・カラオケ", place: "Round1 池袋店" }
+          ]
+        },
+        {
+          labelZh: "DAY3",
+          labelJp: "散歩",
+          date: "2026-12-02",
+          items: [
+            { title: "明治神宮", sub: "明治神宮 参拝", place: "明治神宮" },
+            { title: "竹下通：可麗餅／章魚燒", sub: "竹下通り スイーツ", place: "竹下通り" },
+            { title: "表參道咖啡／早午餐", sub: "Blue Bottle / bills", place: "表参道" },
+            { title: "澀谷 Sky 夜景", sub: "渋谷スカイ 夜景", place: "SHIBUYA SKY" }
+          ]
+        },
+        {
+          labelZh: "DAY4",
+          labelJp: "魔法",
+          date: "2026-12-03",
+          items: [
+            { title: "東京迪士尼（整天）", sub: "朝一入園｜Premier Access／夜間遊行＋煙火（若有）", place: "東京ディズニーランド" }
+          ]
+        },
+        {
+          labelZh: "DAY5",
+          labelJp: "回復",
+          date: "2026-12-04",
+          items: [
+            { title: "休息＋購物緩衝日", sub: "迪士尼後肌肉恢復日", place: "銀座" },
+            { title: "🛒 銀座購物版", sub: "Uniqlo 旗艦／GU／三越／Loft", place: "UNIQLO 銀座店" },
+            { title: "🧋 下午茶版（可選）", sub: "六本木森美術館／TeamLab Borderless（需預約）", place: "teamLab Borderless" },
+            { title: "🛁 Chill 放鬆版（可選）", sub: "溫泉／Spa", place: "大江戸温泉物語" },
+
+            { title: "🍃 Level 2：吉卜力控最愛（可替換成今日主線）", sub: "井之頭公園→吉卜力美術館→吉祥寺商店街", place: "三鷹の森ジブリ美術館" },
+            { title: "吉祥寺：Donguri どんぐり共和國", sub: "ジブリ公式ショップ", place: "どんぐり共和国 吉祥寺店" },
+            { title: "茶房武藏野文庫／小笹／Harmonica Yokocho", sub: "魔女宅急便 vibes", place: "茶房武蔵野文庫" }
+          ]
+        },
+        {
+          labelZh: "DAY6",
+          labelJp: "花火",
+          date: "2026-12-05",
+          items: [
+            { title: "台場 DiverCity 看鋼彈", sub: "ガンダム", place: "ダイバーシティ東京 プラザ" },
+            { title: "Decks Tokyo Beach 漫步", sub: "お台場 散歩", place: "デックス東京ビーチ" },
+            { title: "⭐ 台場煙火節", sub: "花火大会（浪漫 Ending Day）", place: "お台場海浜公園" }
+          ]
+        },
+        {
+          labelZh: "DAY7",
+          labelJp: "帰国",
+          date: "2026-12-05",
+          items: [
+            { title: "回家前採買", sub: "上野阿美橫町／Bic Camera／Yodobashi", place: "アメヤ横丁" },
+            { title: "前往機場 ✈️", sub: "成田／羽田", place: "成田空港" }
+          ]
+        }
+      ]
+    };
+
+    // 週別顯示（中/日）
+    const weekdayZh = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
+    const weekdayJp = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
+
+    function fmtYmd(ymd) {
+      const d = new Date(ymd + "T00:00:00");
+      const w = d.getDay();
+      return `${ymd.replaceAll('-', '/')}（${weekdayZh[w]}｜${weekdayJp[w]}）`;
+    }
+
+    // ====== UI Render ======
+    function save() {
+      localStorage.setItem("emenuTokyo", JSON.stringify(data));
+    }
+
+    function openMap(place) {
+      const url = `https://www.google.com/maps/search/?q=${encodeURIComponent(place)}`;
+      window.open(url, "_blank");
+    }
+
+    function renderHeaderDate() {
+      document.getElementById("dateRange").innerHTML =
+        `出發｜${fmtYmd(START_DATE)}<br>回程｜${fmtYmd(END_DATE)}`;
+    }
+
+    function renderDayTabs() {
+      const box = document.getElementById("dayTabs");
+      box.innerHTML = "";
+
+      data.days.forEach((d, idx) => {
+        const dayNo = idx + 1;
+        const wx = dailyWeather[d.date];
+        const icon = wx ? weatherIcon(wx) : "⏳";
+
+        const tab = document.createElement("div");
+        tab.className = "dayTab" + (dayNo === data.selectedDay ? " active" : "");
+        tab.onclick = () => {
+          data.selectedDay = dayNo;
+          save();
+          renderTrip();
+          renderDayTabs();
+        };
+
+        tab.innerHTML = `
+      <div class="d">Day ${dayNo}｜${d.labelJp} ${icon}</div>
+      <div class="num">
+        ${String(new Date(d.date).getDate()).padStart(2, "0")}
+      </div>
+    `;
+        box.appendChild(tab);
+      });
+    }
+
+
+    function renderTrip() {
+      const day = data.days[data.selectedDay - 1];
+      const list = document.getElementById("tripList");
+      list.innerHTML = "";
+
+      day.items.forEach((it, i) => {
+        const el = document.createElement("div");
+        el.className = "itemCard";
+        el.innerHTML = `
+        <div class="itemTop">
+          <div>
+            <div class="itemTitle">${escapeHtml(it.title)}</div>
+            <div class="itemSub">${escapeHtml(it.sub || "")}</div>
+            <div style="margin-top:10px;">
+              <span class="badge">📍 ${escapeHtml(it.place || "未設定地點")}</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;">
+            <button class="btnMap" onclick="openMap('${escapeAttr(it.place || "")}')">導航 MAP</button>
+            <button class="btnGhost" onclick="editItem(${i})">✏️ 編輯</button>
+          </div>
+        </div>
+      `;
+        list.appendChild(el);
+      });
+    }
+
+    function renderMapList() {
+      const box = document.getElementById("mapList");
+      box.innerHTML = "";
+      data.days.forEach((d, idx) => {
+        const wrap = document.createElement("div");
+        wrap.className = "simpleCard";
+        wrap.innerHTML = `
+        <div class="rowBetween">
+          <div>
+            <b>Day ${idx + 1}</b> <span class="muted">｜${escapeHtml(d.labelJp)}</span><br>
+            <span class="tiny">${fmtYmd(d.date)}</span>
+          </div>
+          <button class="btnGhost" onclick="openDayRoute(${idx + 1})">🧭 路線</button>
+        </div>
+        <div style="margin-top:10px;"></div>
+        <div id="mapDay${idx + 1}"></div>
+      `;
+        box.appendChild(wrap);
+
+        const inner = wrap.querySelector(`#mapDay${idx + 1}`);
+        d.items.forEach(it => {
+          const line = document.createElement("div");
+          line.style.margin = "10px 0";
+          line.innerHTML = `
+          <div class="rowBetween" style="gap:12px;">
+            <div>
+              <div style="font-weight:900">${escapeHtml(it.title)}</div>
+              <div class="tiny">📍 ${escapeHtml(it.place || "未設定")}</div>
+            </div>
+            <button class="btnMap" style="min-width:92px" onclick="openMap('${escapeAttr(it.place || "")}')">MAP</button>
+          </div>
+        `;
+          inner.appendChild(line);
+        });
+      });
+    }
+
+    // ====== Pages ======
+    function switchPage(tab, el) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".bItem").forEach(b => b.classList.remove("active"));
+      document.getElementById(`page-${tab}`).classList.add("active");
+      el.classList.add("active");
+
+      if (tab === "map") renderMapList();
+    }
+
+    // ====== Add/Edit ======
+    function addItem() {
+      const day = data.days[data.selectedDay - 1];
+      const title = prompt("新增項目標題（中文/日文皆可）");
+      if (!title) return;
+      const sub = prompt("補充說明（可留空）", "");
+      const place = prompt("地點（給 MAP 用，建議日文更準）", "東京駅");
+      day.items.push({ title, sub, place });
+      save(); renderTrip(); renderMapList();
+    }
+
+    function editItem(index) {
+      const day = data.days[data.selectedDay - 1];
+      const it = day.items[index];
+      const title = prompt("修改標題", it.title);
+      if (title === null) return;
+      const sub = prompt("修改補充說明", it.sub || "");
+      if (sub === null) return;
+      const place = prompt("修改地點（MAP）", it.place || "");
+      if (place === null) return;
+      it.title = title;
+      it.sub = sub;
+      it.place = place;
+      save(); renderTrip(); renderMapList();
+    }
+
+    // ====== Routes ======
+    function openDayRoute(dayNo) {
+      const d = data.days[dayNo - 1];
+      const pts = d.items.map(x => x.place).filter(Boolean);
+      if (pts.length < 2) {
+        alert("此日地點不足（至少需要兩個地點）");
+        return;
+      }
+      const origin = pts[0];
+      const destination = pts[pts.length - 1];
+      const waypoints = pts.slice(1, -1).join("|");
+      const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=${encodeURIComponent(waypoints)}`;
+      window.open(url, "_blank");
+    }
+
+    function openTodayRoute() {
+      openDayRoute(data.selectedDay);
+    }
+
+    // ====== Helpers ======
+    function escapeHtml(s) {
+      return String(s || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+    function escapeAttr(s) {
+      return String(s || "")
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'")
+        .replaceAll("\n", " ")
+        .replaceAll("\r", " ");
+    }
+
+    function weatherIcon(main) {
+      const map = {
+        Clear: "☀️",
+        Clouds: "⛅",
+        Rain: "🌧️",
+        Drizzle: "🌦️",
+        Thunderstorm: "⛈️",
+        Snow: "❄️",
+        Mist: "🌫️",
+        Fog: "🌫️"
+      };
+      return map[main] || "⛅";
+    }
+
+    async function loadDailyForecast() {
+      try {
+        const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${TOKYO_LAT}&lon=${TOKYO_LON}&units=metric&appid=${OPENWEATHER_API_KEY}`;
+        const res = await fetch(url);
+        const json = await res.json();
+
+        dailyWeather = {};
+
+        json.list.forEach(item => {
+          // 取每天中午 12:00 左右
+          if (item.dt_txt.includes("12:00:00")) {
+            const date = item.dt_txt.split(" ")[0]; // yyyy-mm-dd
+            dailyWeather[date] = item.weather[0].main;
+          }
+        });
+
+        // 抓完後重畫 Day Tabs
+        renderDayTabs();
+
+      } catch (err) {
+        console.error("每日天氣預報讀取失敗", err);
+      }
+    }
+
+
+    async function loadWeather() {
+      try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${TOKYO_LAT}&lon=${TOKYO_LON}&units=metric&lang=zh_tw&appid=${OPENWEATHER_API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        // 溫度
+        document.getElementById("tempBox").textContent =
+          Math.round(data.main.temp) + "°C";
+
+        // 天氣描述（繁中）
+        document.getElementById("wxDesc").textContent =
+          data.weather[0].description;
+
+        // icon（簡單判斷）
+        const main = data.weather[0].main;
+        const iconBox = document.querySelector(".wxIcon");
+
+        const iconMap = {
+          Clear: "☀️",
+          Clouds: "⛅",
+          Rain: "🌧️",
+          Drizzle: "🌦️",
+          Thunderstorm: "⛈️",
+          Snow: "❄️",
+          Mist: "🌫️",
+          Fog: "🌫️"
+        };
+
+        iconBox.textContent = iconMap[main] || "⛅";
+
+      } catch (err) {
+        console.error("天氣讀取失敗", err);
+        document.getElementById("wxDesc").textContent = "天氣資料讀取失敗";
+      }
+    }
+
+
+    async function loadRate() {
+      try {
+        const res = await fetch(
+          "https://api.exchangerate.host/latest?base=JPY&symbols=TWD"
+        );
+        const data = await res.json();
+        const rate = data.rates.TWD.toFixed(3);
+
+        document.getElementById("rateBox").innerHTML =
+          `目前匯率｜<b>1 JPY ≈ ${rate} TWD</b>`;
+
+      } catch (err) {
+        console.error("匯率讀取失敗", err);
+      }
+    }
+
+
+    function renderCountdown() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const start = new Date(START_DATE + "T00:00:00");
+      const diffMs = start - today;
+      const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+      const box = document.getElementById("countdownBox");
+
+      if (diffDays > 0) {
+        box.innerHTML = `✈️ 距離出發還有 <b>${diffDays}</b> 天`;
+      } else if (diffDays === 0) {
+        box.innerHTML = `🎉 今天出發！祝旅途平安`;
+      } else {
+        box.innerHTML = `🧳 旅程進行中 / 已出發`;
+      }
+    }
+
+
+
+    // ====== Init ======
+    renderHeaderDate();
+    renderDayTabs();
+    renderTrip();
+    renderCountdown();
+
+    // API資料
+    loadWeather();
+    loadRate();
+    loadDailyForecast();
+
+
+  </script>
+</body>
+
+</html>
