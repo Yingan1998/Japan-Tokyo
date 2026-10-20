@@ -2739,7 +2739,7 @@
         <div class="dashboardNextCard" id="dashboardNextCard">
           <div class="dashboardCardHeading"><span>下一個行程</span><span class="dashboardLiveDot" aria-hidden="true"></span><span id="dashNextCountdown">等待行程</span></div>
           <div class="dashboardNextBody">
-            <div><h2 id="dashNextTitle">尚未安排下一個行程</h2><p id="dashNextMeta">請從下方時間軸選擇行程</p></div>
+            <div><h2 id="dashNextTitle">尚未安排下一個行程</h2><p id="dashNextMeta">可切換日期查看行程安排</p></div>
             <div class="dashboardNextActions"><button class="btnPill primary" type="button" onclick="navigateNextItem()">導航</button><button class="btnGhost" type="button" onclick="openExpenseFromDashboard()">＋ 記一筆</button></div>
           </div>
         </div>
@@ -2759,18 +2759,6 @@
           <article class="dashboardPanelCard">
             <div class="dashboardPanelHeading"><div><span class="dashboardKicker">ACCOMMODATION</span><h2>今日住宿</h2></div><button class="btnGhost" type="button" onclick="openPageWithoutNav('accommodations')">查看</button></div>
             <div id="dashboardAccommodationCard" class="dashboardTravelCardBody"></div>
-          </article>
-        </div>
-
-        <div class="dashboardPanelCard dashboardReservedPanel">
-          <div class="dashboardPanelHeading"><div><span class="dashboardKicker">RESERVED COSTS</span><h2>旅行費用概況</h2></div><span class="muted">預訂費用與實際記帳分開</span></div>
-          <div id="dashboardReservedCosts" class="reservedCostGrid"></div>
-        </div>
-
-        <div class="dashboardGrid singleColumn">
-          <article class="dashboardPanelCard dashboardTimelinePanel">
-            <div class="dashboardPanelHeading"><div><span class="dashboardKicker">SCHEDULE</span><h2>當日時間軸</h2></div><button class="btnGhost" type="button" onclick="goToToday()">回到今日</button></div>
-            <div id="dashboardTimeline" class="dashboardTimeline"></div>
           </article>
         </div>
 
@@ -2849,6 +2837,14 @@
         </div>
         <div id="expenseStats" class="moduleSummary"></div>
         <div id="expenseRateStatus" class="expenseMeta"></div>
+      </div>
+
+      <div class="simpleCard expenseReservedCard">
+        <div class="dashboardPanelHeading">
+          <div><span class="dashboardKicker">TRIP COST OVERVIEW</span><h2>旅行費用概況</h2></div>
+          <span class="muted">預訂費用與實際記帳分開</span>
+        </div>
+        <div id="expenseReservedCosts" class="reservedCostGrid"></div>
       </div>
 
       <div class="simpleCard">
@@ -5210,7 +5206,6 @@ function weatherCodeMain(code) {
         }
       }
 
-      renderDashboardTimeline(viewIndex);
       renderDashboardRoute(viewIndex);
       renderDashboardTickets(dayTickets);
       renderDashboardTravelCards();
@@ -5354,7 +5349,7 @@ function weatherCodeMain(code) {
     function renderDashboardTravelCards() {
       const flightBox = document.getElementById("dashboardFlightCard");
       const hotelBox = document.getElementById("dashboardAccommodationCard");
-      const costBox = document.getElementById("dashboardReservedCosts");
+      const costBox = document.getElementById("expenseReservedCosts");
       if (flightBox) {
         const flight = flights.find(item => item.date === (data.days[dashboardViewedDayIndex()]?.date)) || flights[0];
         if (flight) flightBox.innerHTML = '<div class="travelFlightRow"><strong>' + escapeHtml(flight.direction + " · " + flight.flightNo + " · " + flight.depart.code + " → " + flight.arrive.code) + '</strong><small>' + escapeHtml(formatTravelDate(flight.date) + " " + flight.depart.time + "（" + flight.depart.timezone + "） → " + flight.arrive.time + "（" + flight.arrive.timezone + "）") + '<br>' + escapeHtml(flight.depart.terminal + " → " + flight.arrive.terminal + " · " + flight.aircraft) + '</small><div class="travelCardActions"><button class="btnGhost" type="button" onclick="openPageWithoutNav(\'flights\')">查看航班</button><button class="btnGhost" type="button" onclick="openExternal(\'https://www.evaair.com/\')">官方 Check-in</button></div></div>';
