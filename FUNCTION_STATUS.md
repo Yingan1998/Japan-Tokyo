@@ -1,7 +1,7 @@
 # Japan Tokyo 智慧旅遊 Web App 功能驗收報告
 
 - 檢查日期：2026-10-20
-- 檢查來源：`index_Japan_Tokyo.html`、`assets/fuji-winter-watercolor.png`、使用者提供的完整功能需求文字
+- 檢查來源：`index_Japan_Tokyo.html`、`assets/fuji-winter-watercolor.jpg`、使用者提供的完整功能需求文字
 - 檢查方式：原始碼逐項檢視、`rg` 靜態搜尋、瀏覽器互動測試（航班／住宿編輯、購物狀態切換、資料備份流程）
 - 部署範圍：本報告只列網站原始碼與公開視覺資產；不將本機備份檔或其他私人匯出檔上傳。
 
@@ -185,3 +185,4 @@
 - 響應式檢查：CSS 已包含手機、平板與桌面 breakpoint；外部 API／Google Maps 仍需要網路。
 
 本文件是目前版本的驗收基線。標示為 ◐ 或 ⏳ 的項目不應在產品說明中宣稱為完整功能。
+
