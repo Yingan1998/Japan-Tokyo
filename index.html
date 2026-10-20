@@ -1128,6 +1128,63 @@
       gap: 12px;
     }
 
+    .mapDayPicker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      padding: 10px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, .62);
+      border: 1px solid rgba(255, 255, 255, .76);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+    }
+
+    .mapDayPicker .dayTabs {
+      flex: 1;
+      min-width: 0;
+      padding: 2px 2px 6px;
+    }
+
+    .mapDayPicker .dayTab {
+      width: 108px;
+      padding: 10px 8px;
+    }
+
+    .mapDayPicker .dayTab .d {
+      font-weight: 800;
+    }
+
+    .mapDayArrow {
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 0;
+      border-radius: 14px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .mapDayArrow:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .mapDaySummary {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .58);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
     .checkList {
       display: grid;
       gap: 8px;
@@ -2760,8 +2817,14 @@
     <section class="page" id="page-map">
       <div class="sectionTitleRow">
         <div class="sectionTitle">地圖 <span class="muted">Map</span></div>
-        <button class="btnPill" onclick="openTodayRoute()">🧭 今日路線</button>
+        <button class="btnPill" onclick="openTodayRoute()">🧭 目前日期路線</button>
       </div>
+      <div class="mapDayPicker" aria-label="地圖日期選擇">
+        <button class="mapDayArrow" id="mapPrevDay" type="button" aria-label="前一天" onclick="stepMapDay(-1)">‹</button>
+        <div class="dayTabs" id="mapDayTabs" role="tablist" aria-label="選擇地圖日期"></div>
+        <button class="mapDayArrow" id="mapNextDay" type="button" aria-label="後一天" onclick="stepMapDay(1)">›</button>
+      </div>
+      <div class="mapDaySummary" id="mapDaySummary" aria-live="polite"></div>
       <div id="mapList" class="mapGrid"></div>
     </section>
 
@@ -3460,6 +3523,7 @@
           save();
           renderTrip();
           renderDayTabs();
+          if (document.getElementById("page-map")?.classList.contains("active")) renderMapList();
         };
         tab.onkeydown = event => {
           if (event.key === "Enter" || event.key === " ") tab.click();
@@ -3593,38 +3657,94 @@
     function renderMapList() {
       const box = document.getElementById("mapList");
       box.innerHTML = "";
-      data.days.forEach((d, idx) => {
-        const wrap = document.createElement("div");
-        wrap.className = "simpleCard";
-        wrap.innerHTML = `
+      const dayIndex = Math.min(Math.max(Number(data.selectedDay || 1) - 1, 0), Math.max(data.days.length - 1, 0));
+      const dayNo = dayIndex + 1;
+      const d = data.days[dayIndex];
+      renderMapDayTabs();
+
+      if (!d) {
+        document.getElementById("mapDaySummary").textContent = "目前沒有可顯示的日期。";
+        box.innerHTML = '<div class="emptyState">尚無行程資料。</div>';
+        return;
+      }
+
+      data.selectedDay = dayNo;
+      const places = d.items.filter(item => String(item.place || "").trim());
+      const summary = document.getElementById("mapDaySummary");
+      if (summary) {
+        summary.innerHTML = `<b>Day ${dayNo}｜${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</b> · ${escapeHtml(fmtYmd(d.date))} · ${places.length} 個可導航地點`;
+      }
+
+      const wrap = document.createElement("div");
+      wrap.className = "simpleCard";
+      wrap.innerHTML = `
         <div class="rowBetween">
           <div>
-            <b>Day ${idx + 1}</b> <span class="muted">｜${escapeHtml(d.labelJp)}</span><br>
-            <span class="tiny">${fmtYmd(d.date)}</span>
+            <b>Day ${dayNo}</b> <span class="muted">｜${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</span><br>
+            <span class="tiny">${escapeHtml(fmtYmd(d.date))} · ${escapeHtml(getDayVersion(dayIndex))} 方案</span>
           </div>
-          <button class="btnGhost" onclick="openDayRoute(${idx + 1})">🧭 路線</button>
+          <button class="btnGhost" type="button" onclick="openDayRoute(${dayNo})">🧭 路線</button>
         </div>
-        <div style="margin-top:10px;"></div>
-        <div id="mapDay${idx + 1}"></div>
+        <div id="mapSelectedDayItems" style="margin-top:10px;"></div>
       `;
-        box.appendChild(wrap);
+      box.appendChild(wrap);
 
-        const inner = wrap.querySelector(`#mapDay${idx + 1}`);
-        d.items.forEach(it => {
-          const line = document.createElement("div");
-          line.style.margin = "10px 0";
-          line.innerHTML = `
+      const inner = wrap.querySelector("#mapSelectedDayItems");
+      if (!places.length) {
+        inner.innerHTML = '<div class="emptyState">今天的行程尚未填寫地點。</div>';
+        return;
+      }
+
+      places.forEach((it, index) => {
+        const line = document.createElement("div");
+        line.style.margin = "10px 0";
+        line.innerHTML = `
           <div class="rowBetween" style="gap:12px;">
             <div>
-              <div style="font-weight:900">${escapeHtml(it.title)}</div>
-              <div class="tiny">📍 ${escapeHtml(it.place || "未設定")}</div>
+              <div style="font-weight:900">${index + 1}. ${escapeHtml(it.title)}</div>
+              <div class="tiny">📍 ${escapeHtml(it.place)}</div>
+              ${it.startTime || it.endTime ? `<div class="tiny">⏱ ${escapeHtml([it.startTime, it.endTime].filter(Boolean).join("–"))}</div>` : ""}
             </div>
-            <button class="btnMap" style="min-width:92px" onclick="openMap('${escapeAttr(it.place || "")}')">MAP</button>
+            <button class="btnMap" style="min-width:92px" type="button" onclick="openMap('${escapeAttr(it.place)}')">MAP</button>
           </div>
         `;
-          inner.appendChild(line);
-        });
+        inner.appendChild(line);
       });
+    }
+
+    function renderMapDayTabs() {
+      const box = document.getElementById("mapDayTabs");
+      if (!box) return;
+      box.innerHTML = "";
+      const selected = Math.min(Math.max(Number(data.selectedDay || 1), 1), data.days.length || 1);
+      data.days.forEach((d, idx) => {
+        const dayNo = idx + 1;
+        const tab = document.createElement("button");
+        tab.type = "button";
+        tab.className = "dayTab" + (dayNo === selected ? " active" : "");
+        tab.setAttribute("role", "tab");
+        tab.setAttribute("aria-selected", dayNo === selected ? "true" : "false");
+        tab.innerHTML = `<div class="d">Day ${dayNo}</div><div class="num">${String(new Date(d.date).getDate()).padStart(2, "0")}</div>`;
+        tab.onclick = () => selectMapDay(dayNo);
+        box.appendChild(tab);
+      });
+      const prev = document.getElementById("mapPrevDay");
+      const next = document.getElementById("mapNextDay");
+      if (prev) prev.disabled = selected <= 1;
+      if (next) next.disabled = selected >= data.days.length;
+    }
+
+    function selectMapDay(dayNo) {
+      data.selectedDay = Math.min(Math.max(Number(dayNo) || 1, 1), data.days.length || 1);
+      save();
+      renderMapDayTabs();
+      renderMapList();
+      renderDayTabs();
+      renderTrip();
+    }
+
+    function stepMapDay(offset) {
+      selectMapDay(Number(data.selectedDay || 1) + Number(offset || 0));
     }
 
     // ====== Tickets ======
