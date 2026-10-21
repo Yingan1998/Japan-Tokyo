@@ -4576,6 +4576,16 @@
       loadLeaflet().then(L => {
         if (!canvas.isConnected || !L || typeof L.map !== "function") return;
         const { known, center, zoom } = leafletMapCenter(entries);
+
+        // Leaflet measures its container when L.map() is created. The canvas is
+        // hidden until the loader succeeds, so reveal it before initialization;
+        // otherwise Leaflet may calculate a smaller viewport and leave blank
+        // areas when the map page is opened or resized.
+        wrap.classList.remove("fallbackVisible");
+        wrap.classList.add("leafletMapReady");
+        fallback.hidden = true;
+        if (hint) hint.hidden = true;
+
         const map = L.map(canvas, {
           zoomControl: true,
           scrollWheelZoom: true,
@@ -4606,13 +4616,30 @@
           bounds.push(position);
         });
 
-        if (bounds.length > 1) map.fitBounds(bounds, { padding: [36, 36], maxZoom: 15 });
-        map.whenReady(() => map.invalidateSize());
+        const fitOptions = { padding: [36, 36], maxZoom: 15 };
+        if (bounds.length > 1) map.fitBounds(bounds, fitOptions);
+
+        const invalidateMapSize = () => {
+          if (canvas.isConnected) map.invalidateSize({ pan: false });
+        };
+        const refitAfterReveal = () => {
+          invalidateMapSize();
+          if (bounds.length > 1) map.fitBounds(bounds, fitOptions);
+        };
+
+        map.whenReady(() => {
+          // Run after the display change has been painted, then once more after
+          // fonts/layout settle. This fixes partial tile grids on first open.
+          requestAnimationFrame(() => {
+            refitAfterReveal();
+            requestAnimationFrame(invalidateMapSize);
+          });
+          window.setTimeout(invalidateMapSize, 260);
+        });
+        const onWindowResize = () => invalidateMapSize();
+        window.addEventListener("resize", onWindowResize, { passive: true });
+        mapCard._leafletResizeHandler = onWindowResize;
         mapCard._leafletMap = map;
-        wrap.classList.remove("fallbackVisible");
-        fallback.hidden = true;
-        wrap.classList.add("leafletMapReady");
-        if (hint) hint.hidden = true;
       }).catch(useMapFallback);
     }
 
