@@ -3439,6 +3439,249 @@
       grid-column: 1 / -1;
     }
 
+    /* Expense and ticket pages keep clear separation from the global day picker. */
+    .expensePage {
+      padding-top: 18px;
+    }
+
+    .ticketPage {
+      padding-top: 14px;
+    }
+
+    .ticketScopeBar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 10px 0 8px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .76), rgba(226, 241, 247, .54));
+      box-shadow: 0 10px 24px rgba(49, 83, 110, .08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .ticketScopeBar strong,
+    .ticketScopeBar small {
+      display: block;
+    }
+
+    .ticketScopeBar strong {
+      margin-top: 3px;
+      color: #1f405d;
+      font-size: 17px;
+    }
+
+    .ticketScopeBar small {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .ticketScopeBar .btnGhost {
+      flex: 0 0 auto;
+      min-height: 40px;
+    }
+
+    .ticketToolbar {
+      margin: 8px 0;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, .7);
+      border-radius: 18px;
+    }
+
+    .ticketToolbar .filterControl {
+      min-width: 180px;
+    }
+
+    .ticketSummary {
+      margin: 8px 0 14px;
+      padding: 8px;
+      border-radius: 16px;
+    }
+
+    .ticketList {
+      display: grid;
+      gap: 14px;
+    }
+
+    .ticketList .ticketCard {
+      margin: 0;
+      padding: 18px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .82), rgba(232, 244, 248, .58));
+      box-shadow: 0 14px 30px rgba(44, 77, 101, .11);
+    }
+
+    .ticketCardHeader,
+    .ticketCardTitle,
+    .ticketCardMeta,
+    .ticketCardLinks {
+      display: flex;
+      align-items: center;
+    }
+
+    .ticketCardHeader {
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ticketCardTitle {
+      min-width: 0;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .ticketCardTitle h3 {
+      margin: 0;
+      color: #1d3c59;
+      font-size: 17px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .ticketCardTitle p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .ticketIcon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 36px;
+      width: 36px;
+      height: 36px;
+      border-radius: 13px;
+      background: rgba(255, 217, 157, .54);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
+      font-size: 19px;
+    }
+
+    .ticketCardActions {
+      flex: 0 0 auto;
+    }
+
+    .ticketCardActions .btnGhost {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+    }
+
+    .ticketCardMeta {
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .ticketStatusBadge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: #2f7655;
+      background: rgba(111, 207, 151, .2);
+      border: 1px solid rgba(74, 155, 118, .16);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .ticketCardDetails {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .ticketCardDetails > div {
+      min-width: 0;
+      padding: 9px 11px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .54);
+      border: 1px solid rgba(255, 255, 255, .7);
+    }
+
+    .ticketCardDetails span,
+    .ticketCardDetails strong {
+      display: block;
+    }
+
+    .ticketCardDetails span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .ticketCardDetails strong {
+      margin-top: 3px;
+      color: #31536d;
+      font-size: 12px;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .ticketCardNote {
+      margin: 12px 0 0;
+      padding: 10px 12px;
+      border-left: 3px solid rgba(210, 106, 86, .58);
+      border-radius: 0 12px 12px 0;
+      color: var(--muted);
+      background: rgba(255, 253, 248, .48);
+      font-size: 12px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .ticketCardLinks {
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .ticketCardLinks .btnGhost {
+      text-decoration: none;
+    }
+
+    .ticketCardLinks .ticketQr {
+      flex: 0 0 auto;
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .expensePage,
+      .ticketPage {
+        padding-top: 12px;
+      }
+
+      .ticketScopeBar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .ticketScopeBar .btnGhost {
+        width: 100%;
+      }
+
+      .ticketToolbar {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .ticketToolbar .filterControl {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .ticketCardDetails {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 699px) {
       #tripList .itemTop {
         grid-template-columns: minmax(0, 1fr);
@@ -3534,7 +3777,7 @@
           <div class="dashboardCardHeading"><span>下一個行程</span><span class="dashboardLiveDot" aria-hidden="true"></span><span id="dashNextCountdown">等待行程</span></div>
           <div class="dashboardNextBody">
             <div><h2 id="dashNextTitle">尚未安排下一個行程</h2><p id="dashNextMeta">可切換日期查看行程安排</p></div>
-            <div class="dashboardNextActions"><button class="btnPill primary" type="button" onclick="navigateNextItem()">導航</button><button class="btnGhost" type="button" onclick="openExpenseFromDashboard()">＋ 記一筆</button></div>
+            <div class="dashboardNextActions"><button class="btnPill primary" type="button" onclick="navigateNextItem()">導航</button></div>
           </div>
         </div>
 
@@ -3675,20 +3918,23 @@
       <div id="shoppingList"></div>
     </section>
 
-    <section class="page" id="page-tickets">
+    <section class="page ticketPage" id="page-tickets">
       <div class="sectionTitleRow">
         <div class="sectionTitle">票券 <span class="muted">Tickets</span></div>
         <button class="btnPill primary" type="button" onclick="openTicketSheet()">＋ 新增票券</button>
       </div>
-      <div class="moduleToolbar">
+      <div class="ticketScopeBar">
+        <div><span class="dashboardKicker">VIEWING</span><strong id="ticketScopeLabel">全部票券</strong><small id="ticketScopeDescription">可用日期、狀態與關鍵字快速篩選</small></div>
+        <button class="btnGhost" id="ticketShowAllBtn" type="button" onclick="showAllTickets()">顯示全部票券</button>
+      </div>
+      <div class="moduleToolbar ticketToolbar">
         <select class="filterControl" id="ticketStatusFilter" onchange="renderTickets()">
           <option value="all">全部狀態</option><option>待確認</option><option>待購買</option><option>已購買</option><option>待取票</option><option>已取票</option><option>已使用</option><option>已取消</option>
         </select>
         <input class="filterControl" id="ticketSearch" placeholder="搜尋活動、平台或訂單" oninput="renderTickets()">
-        <button class="btnGhost" id="ticketShowAllBtn" type="button" onclick="showAllTickets()">顯示全部票券</button>
       </div>
-      <div class="moduleSummary" id="ticketSummary"></div>
-      <div id="ticketList"></div>
+      <div class="moduleSummary ticketSummary" id="ticketSummary"></div>
+      <div id="ticketList" class="ticketList"></div>
     </section>
 
     <section class="page" id="page-flights">
@@ -4845,7 +5091,8 @@
       if (!list) return;
       const query = (document.getElementById("ticketSearch")?.value || "").trim().toLocaleLowerCase();
       const status = document.getElementById("ticketStatusFilter")?.value || "all";
-      const selectedTicketDate = ticketDateMode === "day" ? data.days[data.selectedDay - 1]?.date || "" : "";
+      const selectedTicketDay = data.days[data.selectedDay - 1];
+      const selectedTicketDate = ticketDateMode === "day" ? selectedTicketDay?.date || "" : "";
       const visible = tickets.filter(ticket =>
         (!selectedTicketDate || ticket.date === selectedTicketDate) &&
         (status === "all" || ticket.status === status) &&
@@ -4862,6 +5109,14 @@
         showAllButton.disabled = ticketDateMode === "all";
         showAllButton.textContent = ticketDateMode === "all" ? "目前顯示全部" : "顯示全部票券";
       }
+      const scopeLabel = document.getElementById("ticketScopeLabel");
+      const scopeDescription = document.getElementById("ticketScopeDescription");
+      if (scopeLabel) scopeLabel.textContent = ticketDateMode === "day"
+        ? `Day ${data.selectedDay}｜${selectedTicketDay?.labelJp || selectedTicketDay?.labelZh || "當日票券"}`
+        : "全部票券";
+      if (scopeDescription) scopeDescription.textContent = ticketDateMode === "day"
+        ? `${fmtYmd(selectedTicketDate)} · 只顯示目前日期的票券`
+        : "可用日期、狀態與關鍵字快速篩選";
       if (summary) summary.innerHTML = `<span class="summaryChip">${ticketDateMode === "day" ? escapeHtml(fmtYmd(selectedTicketDate)) + " · " : ""}顯示 ${visible.length} 張</span><span class="summaryChip">全部 ${tickets.length} 張</span><span class="summaryChip">即將使用 ${soon} 張</span><span class="summaryChip">已購買 ${tickets.filter(ticket => ticket.status === "已購買").length} 張</span>`;
       list.innerHTML = visible.length ? "" : `<div class="emptyState">尚無符合條件的票券，請按「新增票券」建立資料。</div>`;
       visible.forEach(ticket => {
@@ -4869,11 +5124,11 @@
         const index = tickets.indexOf(ticket);
         const card = document.createElement("div");
         card.className = `simpleCard ticketCard${daysToGo >= 0 && daysToGo <= 7 ? " isSoon" : ""}`;
-        card.innerHTML = `<div class="rowBetween"><div><b>🎫 ${escapeHtml(ticket.name)}</b><div class="expenseMeta">${escapeHtml(ticket.type || "票券")}｜${escapeHtml(ticket.status || "待確認")}</div></div><div class="expenseActions"><button class="btnGhost" onclick="openTicketSheet(${index})">✏️</button><button class="btnGhost" onclick="deleteTicket(${index})">🗑</button></div></div>
-          <div class="timelineMeta"><span class="badge">📅 ${escapeHtml(ticket.date || "日期待補")} ${escapeHtml(ticket.entryTime || "")}</span><span class="badge">💴 ${escapeHtml(ticket.currency || "JPY")} ${Number(ticket.price || 0).toLocaleString()}${ticket.priceType === "per_person" ? "／人" : ""}</span><span class="badge">${escapeHtml(ticket.sourceType || "票券資料")}</span></div>
-          <div class="itemSub">平台：${escapeHtml(ticket.platform || "未填寫")}｜訂單：${escapeHtml(ticket.orderNo || "未填寫")}<br>關聯：${escapeHtml(ticketTripName(ticket.tripItemId))}${ticket.pickupDeadline ? `<br>取票期限：${escapeHtml(ticket.pickupDeadline)}` : ""}${ticket.note ? `<br>備註：${escapeHtml(ticket.note)}` : ""}</div>
-          ${safeExternalUrl(ticket.url) ? `<a class="btnGhost" style="display:inline-block;margin-top:10px;text-decoration:none" href="${safeExternalUrl(ticket.url)}" target="_blank" rel="noopener">查看門票／雲端檔案 ↗</a>` : ""}
-          ${ticket.attachment?.dataUrl ? (ticket.attachment.type?.startsWith("image/") ? `<img class="ticketQr" src="${escapeHtml(ticket.attachment.dataUrl)}" alt="票券附件">` : `<a class="btnGhost" style="display:inline-block;margin-top:10px" href="${escapeHtml(ticket.attachment.dataUrl)}" download="${escapeHtml(ticket.attachment.name || "ticket.pdf")}">下載附件</a>`) : ""}`;
+        card.innerHTML = `<div class="ticketCardHeader"><div class="ticketCardTitle"><span class="ticketIcon" aria-hidden="true">🎫</span><div><h3>${escapeHtml(ticket.name)}</h3><p>${escapeHtml(ticket.type || "票券")}</p></div></div><div class="expenseActions ticketCardActions"><button class="btnGhost" aria-label="編輯票券" title="編輯票券" onclick="openTicketSheet(${index})">✏️</button><button class="btnGhost" aria-label="刪除票券" title="刪除票券" onclick="deleteTicket(${index})">🗑</button></div></div>
+          <div class="ticketCardMeta"><span class="ticketStatusBadge">${escapeHtml(ticket.status || "待確認")}</span><span class="badge">📅 ${escapeHtml(ticket.date || "日期待補")} ${escapeHtml(ticket.entryTime || "")}</span><span class="badge">💴 ${escapeHtml(ticket.currency || "JPY")} ${Number(ticket.price || 0).toLocaleString()}${ticket.priceType === "per_person" ? "／人" : ""}</span><span class="badge">${escapeHtml(ticket.sourceType || "票券資料")}</span></div>
+          <div class="ticketCardDetails"><div><span>購買平台</span><strong>${escapeHtml(ticket.platform || "未填寫")}</strong></div><div><span>訂單編號</span><strong>${escapeHtml(ticket.orderNo || "未填寫")}</strong></div><div><span>關聯行程</span><strong>${escapeHtml(ticketTripName(ticket.tripItemId))}</strong></div>${ticket.pickupDeadline ? `<div><span>取票期限</span><strong>${escapeHtml(ticket.pickupDeadline)}</strong></div>` : ""}</div>
+          ${ticket.note ? `<p class="ticketCardNote">${escapeHtml(ticket.note)}</p>` : ""}
+          <div class="ticketCardLinks">${safeExternalUrl(ticket.url) ? `<a class="btnGhost" href="${safeExternalUrl(ticket.url)}" target="_blank" rel="noopener">查看門票／雲端檔案 ↗</a>` : ""}${ticket.attachment?.dataUrl ? (ticket.attachment.type?.startsWith("image/") ? `<img class="ticketQr" src="${escapeHtml(ticket.attachment.dataUrl)}" alt="票券附件">` : `<a class="btnGhost" href="${escapeHtml(ticket.attachment.dataUrl)}" download="${escapeHtml(ticket.attachment.name || "ticket.pdf")}">下載附件</a>`) : ""}</div>`;
         list.appendChild(card);
       });
     }
