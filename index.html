@@ -3144,6 +3144,28 @@
         white-space: normal;
       }
     }
+
+    /* 頂部操作維持一致高度；地圖改為全寬後接續時間軸。 */
+    .topActions > .rate,
+    .topActions > .iconBtn {
+      min-height: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #mapList.mapGrid {
+      width: 100%;
+      grid-template-columns: minmax(0, 1fr) !important;
+      gap: 18px;
+    }
+
+    #mapList .mapEmbedCard,
+    #mapList .mapTimelineCard {
+      width: 100%;
+      min-width: 0;
+    }
   </style>
 </head>
 
@@ -3297,11 +3319,6 @@
       <div class="sectionTitleRow">
         <div class="sectionTitle">地圖 <span class="muted">Map</span></div>
         <button class="btnPill" onclick="openTodayRoute()">🧭 目前日期路線</button>
-      </div>
-      <div class="mapDayPicker" aria-label="地圖日期選擇">
-        <button class="mapDayArrow" id="mapPrevDay" type="button" aria-label="前一天" onclick="stepMapDay(-1)">‹</button>
-        <div class="dayTabs" id="mapDayTabs" role="tablist" aria-label="選擇地圖日期"></div>
-        <button class="mapDayArrow" id="mapNextDay" type="button" aria-label="後一天" onclick="stepMapDay(1)">›</button>
       </div>
       <div class="mapDaySummary" id="mapDaySummary" aria-live="polite"></div>
       <div id="mapList" class="mapGrid"></div>
