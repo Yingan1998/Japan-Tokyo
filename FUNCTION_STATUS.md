@@ -1,6 +1,6 @@
 # Japan Tokyo 智慧旅遊 Web App 功能驗收報告
 
-- 檢查日期：2026-10-20
+- 檢查日期：2026-10-21
 - 檢查來源：`index_Japan_Tokyo.html`、`assets/fuji-winter-watercolor.jpg`、使用者提供的完整功能需求文字
 - 檢查方式：原始碼逐項檢視、`rg` 靜態搜尋、瀏覽器互動測試（航班／住宿編輯、購物狀態切換、資料備份流程）
 - 部署範圍：本報告只列網站原始碼與公開視覺資產；不將本機備份檔或其他私人匯出檔上傳。
@@ -47,7 +47,7 @@
 | --- | --- | --- |
 | 每個景點 Google Maps 導航 | ✅ | 行程卡片與 Dashboard 均可開啟 Maps 導航。 |
 | 地圖頁依日期切換路線 | ✅ | 地圖頁新增 Day 選擇列與前後日按鈕，只渲染目前選取日期的地點與路線；不再一次列出九天路線。 |
-| 地圖頁 Google Maps 嵌入與景點標記 | ✅ | 目前日期會載入 Google Maps iframe，依景點座標置中並在地圖上顯示可點擊圖示；未收錄的新地點仍可用文字導航。 |
+| 地圖頁 Google Maps 嵌入與景點標記 | ◐ | 未設定金鑰時保留 Google Maps iframe 預覽；設定 `window.JAPAN_TOKYO_GOOGLE_MAPS_API_KEY` 後改用 Google Maps JavaScript API 原生 `Map`／`Marker`，標記會與座標一起拖曳。未收錄的新地點仍可用文字導航。 |
 | 地圖頁景點時間軸 | ✅ | Google Maps 下方依開始／結束時間呈現目前日期的景點時間軸，並在手機版自動換行。 |
 | 當日路線與交通卡片 | ✅ | Dashboard 路線區塊會依行程順序顯示交通方式、時間、費用、步行距離與出口。 |
 | 電車／步行／巴士／計程車欄位 | ◐ | `transportMethod` 可輸入文字，沒有固定類型選單與資料驗證。 |
@@ -189,6 +189,19 @@
 - 記帳與行程關聯：記帳表單使用 `tripItemId`，編輯既有紀錄時保留原日期。
 - 備份流程：JSON 匯出內容包含核心資料集合；匯入流程有確認、解析失敗提示及重新整理後重載。
 - 響應式檢查：CSS 已包含手機、平板與桌面 breakpoint；外部 API／Google Maps 仍需要網路。
+- 地圖原生標記：未設定 Key 時以 Google Maps iframe fallback 正常顯示；以本機 Google Maps API mock 測試原生路徑，Day 1 成功建立 4 個 `google.maps.Marker`，且沒有 HTML 浮動標記層。
+
+## 十七、Google Maps 原生標記設定
+
+地圖頁預設不包含任何 API Key。要啟用可拖曳、縮放且會跟著座標移動的原生景點圖示，請在 `index.html` 的主程式 `<script>` 之前加入：
+
+```html
+<script>
+  window.JAPAN_TOKYO_GOOGLE_MAPS_API_KEY = "你的金鑰";
+</script>
+```
+
+請在 Google Cloud 限制此瀏覽器金鑰的網域，並啟用 Maps JavaScript API；不要把未限制的金鑰提交到公開儲存庫。未設定或載入失敗時，網站會繼續使用 Google Maps iframe 預覽，不會影響行程與其他資料功能。
 
 本文件是目前版本的驗收基線。標示為 ◐ 或 ⏳ 的項目不應在產品說明中宣稱為完整功能。
 
