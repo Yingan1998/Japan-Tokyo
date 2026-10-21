@@ -2944,7 +2944,8 @@
 
     .mapFrameWrap {
       position: relative;
-      min-height: clamp(320px, 52vh, 600px);
+      height: clamp(360px, 58vh, 680px);
+      min-height: 360px;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, .86);
       border-radius: 20px;
@@ -2957,8 +2958,8 @@
     .mapCanvas {
       display: none;
       width: 100%;
-      height: clamp(320px, 52vh, 600px);
-      min-height: 320px;
+      height: 100%;
+      min-height: 0;
     }
 
     .mapFrameWrap.leafletMapReady .mapCanvas {
@@ -2972,8 +2973,8 @@
 
     .mapFallback {
       display: none;
-      min-height: clamp(320px, 52vh, 600px);
-      height: clamp(320px, 52vh, 600px);
+      min-height: 0;
+      height: 100%;
       place-items: center;
       padding: 24px;
       color: var(--muted);
@@ -3153,11 +3154,15 @@
         border-radius: 20px;
       }
 
-      .mapFrameWrap,
+      .mapFrameWrap {
+        min-height: 340px;
+        height: min(68vh, 560px);
+      }
+
       .mapCanvas,
       .mapFallback {
-        min-height: 330px;
-        height: 48vh;
+        min-height: 0;
+        height: 100%;
       }
 
       .mapEmbedHeader,
@@ -4591,7 +4596,7 @@
           scrollWheelZoom: true,
           attributionControl: true
         }).setView(center, zoom);
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        const tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
         }).addTo(map);
@@ -4635,7 +4640,9 @@
             requestAnimationFrame(invalidateMapSize);
           });
           window.setTimeout(invalidateMapSize, 260);
+          window.setTimeout(refitAfterReveal, 900);
         });
+        tileLayer.on("load", invalidateMapSize);
         const onWindowResize = () => invalidateMapSize();
         window.addEventListener("resize", onWindowResize, { passive: true });
         mapCard._leafletResizeHandler = onWindowResize;
