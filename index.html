@@ -2767,6 +2767,7 @@
 
     .dashboardShell {
       gap: 18px;
+      margin-top: 18px;
     }
 
     .dashboardStats,
@@ -2842,6 +2843,222 @@
       line-height: 1.5;
     }
 
+    .mapDayPicker {
+      margin: 18px 0 16px;
+      padding: 14px;
+    }
+
+    .mapDaySummary {
+      margin-bottom: 18px;
+    }
+
+    .mapEmbedCard,
+    .mapTimelineCard {
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, .78);
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .78), rgba(238, 248, 249, .48));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px) saturate(115%);
+      -webkit-backdrop-filter: blur(16px) saturate(115%);
+    }
+
+    .mapEmbedHeader,
+    .mapTimelineHeader {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mapEmbedHeader h3,
+    .mapTimelineHeader h3 {
+      margin: 0;
+      color: #1e3c57;
+      font-size: 17px;
+    }
+
+    .mapEmbedHeader small,
+    .mapTimelineHeader small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .mapFrameWrap {
+      position: relative;
+      min-height: clamp(320px, 52vh, 600px);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .86);
+      border-radius: 20px;
+      background: #dcecf2;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .76), 0 10px 24px rgba(44, 77, 101, .12);
+    }
+
+    .mapFrame {
+      display: block;
+      width: 100%;
+      height: clamp(320px, 52vh, 600px);
+      min-height: 320px;
+      border: 0;
+    }
+
+    .mapMarkerLayer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .mapMarker {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      max-width: min(190px, 34vw);
+      padding: 5px 8px 5px 5px;
+      border: 2px solid rgba(255, 255, 255, .94);
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(145deg, #d96852, #b9473d);
+      box-shadow: 0 8px 18px rgba(72, 48, 51, .28);
+      transform: translate(-50%, -100%);
+      pointer-events: auto;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .mapMarker:hover,
+    .mapMarker:focus-visible {
+      z-index: 4;
+      transform: translate(-50%, -100%) scale(1.04);
+      outline: 3px solid rgba(255, 255, 255, .72);
+      outline-offset: 2px;
+    }
+
+    .mapMarkerIcon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 22px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      color: #263d58;
+      background: #fff5d9;
+      font-size: 12px;
+    }
+
+    .mapMarkerLabel {
+      max-width: 135px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mapEmbedNote {
+      margin: 9px 2px 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .mapTimelineCard {
+      padding: 18px;
+    }
+
+    .mapTimelineList {
+      position: relative;
+      display: grid;
+      gap: 10px;
+    }
+
+    .mapTimelineList::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      bottom: 16px;
+      left: 82px;
+      width: 2px;
+      background: linear-gradient(#79aabb, rgba(121, 170, 187, .12));
+      pointer-events: none;
+    }
+
+    .mapTimelineItem {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 16px;
+      background: rgba(255, 253, 248, .58);
+    }
+
+    .mapTimelineTime {
+      position: relative;
+      z-index: 1;
+      color: #55768b;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .mapTimelineDot {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 82px;
+      width: 10px;
+      height: 10px;
+      border: 2px solid #f5fbfc;
+      border-radius: 50%;
+      background: #d96852;
+      box-shadow: 0 0 0 3px rgba(217, 104, 82, .16);
+      transform: translate(-50%, -50%);
+    }
+
+    .mapTimelineContent {
+      min-width: 0;
+    }
+
+    .mapTimelineContent strong,
+    .mapTimelineContent small {
+      display: block;
+    }
+
+    .mapTimelineContent strong {
+      overflow: hidden;
+      color: #294761;
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mapTimelineContent small {
+      margin-top: 4px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mapTimelineItem .btnMap {
+      min-width: 78px;
+      padding: 8px 10px;
+      border-radius: 13px;
+      font-size: 11px;
+    }
+
     .pageWeatherActions {
       display: flex;
       align-items: center;
@@ -2862,6 +3079,49 @@
       .sectionTitleActions {
         width: 100%;
         justify-content: flex-end;
+      }
+
+      .mapEmbedCard,
+      .mapTimelineCard {
+        padding: 13px;
+        border-radius: 20px;
+      }
+
+      .mapFrameWrap,
+      .mapFrame {
+        min-height: 330px;
+        height: 48vh;
+      }
+
+      .mapEmbedHeader,
+      .mapTimelineHeader {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .mapTimelineList::before {
+        left: 17px;
+      }
+
+      .mapTimelineItem {
+        grid-template-columns: 1fr auto;
+        gap: 8px 12px;
+        padding: 12px 10px 12px 36px;
+      }
+
+      .mapTimelineTime {
+        grid-column: 1 / -1;
+        text-align: left;
+      }
+
+      .mapTimelineDot {
+        top: 28px;
+        left: 17px;
+      }
+
+      .mapTimelineContent strong,
+      .mapTimelineContent small {
+        white-space: normal;
       }
     }
   </style>
@@ -3202,6 +3462,39 @@
     // 東京（固定）
     const TOKYO_LAT = 35.681236;
     const TOKYO_LON = 139.767125;
+
+    // 地圖頁使用已確認的景點座標置中 Google Maps；未收錄的新景點會保留文字導航。
+    const MAP_PLACE_COORDS = {
+      "APA Hotel Sugamo Ekimae": [35.7334, 139.7397],
+      "巣鴨地蔵通り商店街": [35.7330, 139.7396],
+      "アメヤ横丁": [35.7074, 139.7747],
+      "としまえん駅": [35.7422, 139.6511],
+      "ワーナー ブラザース スタジオツアー東京": [35.7483, 139.6457],
+      "池袋サンシャインシティ": [35.7289, 139.7190],
+      "原宿駅": [35.6702, 139.7028],
+      "明治神宮": [35.6764, 139.6993],
+      "SHIBUYA SKY": [35.6580, 139.7016],
+      "歌舞伎町一番街": [35.6946, 139.7010],
+      "舞浜駅": [35.6361, 139.8849],
+      "東京ディズニーランド": [35.6329, 139.8804],
+      "三鷹駅": [35.7023, 139.5604],
+      "三鷹の森ジブリ美術館": [35.6962, 139.5704],
+      "吉祥寺サンロード商店街": [35.7049, 139.5800],
+      "東横INN上野田原町駅": [35.7086, 139.7900],
+      "浅草寺": [35.7148, 139.7967],
+      "東京駅一番街": [35.6812, 139.7671],
+      "東京タワー": [35.6586, 139.7454],
+      "東京駅丸の内北口": [35.6810, 139.7648],
+      "大石公園": [35.5068, 138.7542],
+      "忍野八海": [35.4607, 138.8323],
+      "山中湖": [35.4130, 138.8666],
+      "日川時計店": [35.4974, 138.8078],
+      "台場駅": [35.6255, 139.7759],
+      "ダイバーシティ東京 プラザ": [35.6254, 139.7757],
+      "お台場海浜公園": [35.6291, 139.7765],
+      "羽田空港 第3ターミナル": [35.5494, 139.7798],
+      "松山空港": [35.5494, 139.7798]
+    };
 
     // ====== 每日天氣快取（Day Tabs 用）======
     let dailyWeather = {};
@@ -3870,8 +4163,62 @@
 
 
 
+    function resolveMapPlace(place) {
+      const text = String(place || "").trim().toLocaleLowerCase();
+      if (!text) return null;
+      const hit = Object.entries(MAP_PLACE_COORDS).find(([name]) => {
+        const key = name.toLocaleLowerCase();
+        return key === text || key.includes(text) || text.includes(key);
+      });
+      if (!hit) return null;
+      return { lat: hit[1][0], lon: hit[1][1], name: hit[0] };
+    }
+
+    function mapPlaceIcon(item) {
+      const text = `${item?.title || ""} ${item?.place || ""}`.toLocaleLowerCase();
+      if (/飯店|hotel|東横/.test(text)) return "🏨";
+      if (/迪士尼|樂園|遊樂/.test(text)) return "🎢";
+      if (/影城|美術館|展|票/.test(text)) return "🎟️";
+      if (/山中|河口|大石|忍野|富士/.test(text)) return "🗻";
+      if (/寺|神宮/.test(text)) return "⛩️";
+      if (/車站|駅|機場|空港/.test(text)) return "🚉";
+      if (/商店|街|購物|市場|橫町/.test(text)) return "🛍️";
+      if (/橋|海濱|台場/.test(text)) return "🌉";
+      return "📍";
+    }
+
+    function mapMarkerPosition(entries, index) {
+      const known = entries.filter(entry => entry.point);
+      const current = entries[index];
+      if (!current.point || known.length < 2) {
+        const ratio = entries.length <= 1 ? .5 : index / (entries.length - 1);
+        return { left: `${18 + ratio * 64}%`, top: `${27 + (index % 3) * 20}%` };
+      }
+      const lats = known.map(entry => entry.point.lat);
+      const lons = known.map(entry => entry.point.lon);
+      const latMin = Math.min(...lats), latMax = Math.max(...lats);
+      const lonMin = Math.min(...lons), lonMax = Math.max(...lons);
+      const latRatio = latMax === latMin ? .5 : (current.point.lat - latMin) / (latMax - latMin);
+      const lonRatio = lonMax === lonMin ? .5 : (current.point.lon - lonMin) / (lonMax - lonMin);
+      return { left: `${10 + lonRatio * 80}%`, top: `${88 - latRatio * 66}%` };
+    }
+
+    function mapEmbedUrl(entries) {
+      const known = entries.filter(entry => entry.point).map(entry => entry.point);
+      if (!known.length) return `https://www.google.com/maps?q=${encodeURIComponent("Tokyo")}&z=11&output=embed`;
+      const centerLat = known.reduce((sum, point) => sum + point.lat, 0) / known.length;
+      const centerLon = known.reduce((sum, point) => sum + point.lon, 0) / known.length;
+      const range = Math.max(
+        Math.max(...known.map(point => point.lat)) - Math.min(...known.map(point => point.lat)),
+        Math.max(...known.map(point => point.lon)) - Math.min(...known.map(point => point.lon))
+      );
+      const zoom = range > 2 ? 8 : range > .8 ? 10 : range > .3 ? 11 : range > .12 ? 12 : range > .05 ? 13 : 14;
+      return `https://www.google.com/maps?q=${encodeURIComponent(`${centerLat.toFixed(6)},${centerLon.toFixed(6)}`)}&z=${zoom}&output=embed`;
+    }
+
     function renderMapList() {
       const box = document.getElementById("mapList");
+      if (!box) return;
       box.innerHTML = "";
       const dayIndex = Math.min(Math.max(Number(data.selectedDay || 1) - 1, 0), Math.max(data.days.length - 1, 0));
       const dayNo = dayIndex + 1;
@@ -3885,47 +4232,66 @@
       }
 
       data.selectedDay = dayNo;
-      const places = d.items.filter(item => String(item.place || "").trim());
+      const entries = d.items
+        .filter(item => String(item.place || "").trim())
+        .map((item, index) => ({ item, index, point: resolveMapPlace(item.place) }));
       const summary = document.getElementById("mapDaySummary");
       if (summary) {
-        summary.innerHTML = `<b>Day ${dayNo}｜${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</b> · ${escapeHtml(fmtYmd(d.date))} · ${places.length} 個可導航地點`;
+        summary.innerHTML = `<b>Day ${dayNo}｜${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</b> · ${escapeHtml(fmtYmd(d.date))} · ${entries.length} 個可導航地點`;
       }
 
-      const wrap = document.createElement("div");
-      wrap.className = "simpleCard";
-      wrap.innerHTML = `
-        <div class="rowBetween">
-          <div>
-            <b>Day ${dayNo}</b> <span class="muted">｜${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</span><br>
-            <span class="tiny">${escapeHtml(fmtYmd(d.date))} · ${escapeHtml(getDayVersion(dayIndex))} 方案</span>
-          </div>
+      const mapCard = document.createElement("section");
+      mapCard.className = "mapEmbedCard";
+      mapCard.innerHTML = `
+        <div class="mapEmbedHeader">
+          <div><h3>Day ${dayNo}｜${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</h3><small>${escapeHtml(fmtYmd(d.date))} · ${escapeHtml(getDayVersion(dayIndex))} 方案 · Google Maps 預覽</small></div>
           <button class="btnGhost" type="button" onclick="openDayRoute(${dayNo})">🧭 路線</button>
         </div>
-        <div id="mapSelectedDayItems" style="margin-top:10px;"></div>
+        <div class="mapFrameWrap">
+          <iframe class="mapFrame" title="Day ${dayNo} Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="mapMarkerLayer" aria-label="景點地圖標記"></div>
+        </div>
+        <p class="mapEmbedNote">地圖以目前日期行程置中；點擊地圖上的圖示可開啟該景點的 Google Maps 導航。</p>
       `;
-      box.appendChild(wrap);
-
-      const inner = wrap.querySelector("#mapSelectedDayItems");
-      if (!places.length) {
-        inner.innerHTML = '<div class="emptyState">今天的行程尚未填寫地點。</div>';
-        return;
-      }
-
-      places.forEach((it, index) => {
-        const line = document.createElement("div");
-        line.style.margin = "10px 0";
-        line.innerHTML = `
-          <div class="rowBetween" style="gap:12px;">
-            <div>
-              <div style="font-weight:900">${index + 1}. ${escapeHtml(it.title)}</div>
-              <div class="tiny">📍 ${escapeHtml(it.place)}</div>
-              ${it.startTime || it.endTime ? `<div class="tiny">⏱ ${escapeHtml([it.startTime, it.endTime].filter(Boolean).join("–"))}</div>` : ""}
-            </div>
-            <button class="btnMap" style="min-width:92px" type="button" onclick="openMap('${escapeAttr(it.place)}')">MAP</button>
-          </div>
-        `;
-        inner.appendChild(line);
+      const frame = mapCard.querySelector(".mapFrame");
+      frame.src = mapEmbedUrl(entries);
+      const markerLayer = mapCard.querySelector(".mapMarkerLayer");
+      entries.forEach((entry, index) => {
+        const marker = document.createElement("button");
+        const position = mapMarkerPosition(entries, index);
+        marker.type = "button";
+        marker.className = "mapMarker";
+        marker.style.left = position.left;
+        marker.style.top = position.top;
+        marker.title = `導航至：${entry.item.place}`;
+        marker.setAttribute("aria-label", `導航至 ${entry.item.place}`);
+        marker.innerHTML = `<span class="mapMarkerIcon">${mapPlaceIcon(entry.item)}</span><span class="mapMarkerLabel">${index + 1}. ${escapeHtml(entry.item.place)}</span>`;
+        marker.onclick = () => openMap(entry.item.place);
+        markerLayer.appendChild(marker);
       });
+      box.appendChild(mapCard);
+
+      const timelineCard = document.createElement("section");
+      timelineCard.className = "mapTimelineCard";
+      timelineCard.innerHTML = `
+        <div class="mapTimelineHeader"><div><h3>景點時間軸</h3><small>依照 Day ${dayNo} 行程順序排列，可隨視窗寬度自動換行。</small></div><span class="pill">${entries.length} 個地點</span></div>
+        <div class="mapTimelineList"></div>
+      `;
+      const timeline = timelineCard.querySelector(".mapTimelineList");
+      if (!entries.length) {
+        timeline.innerHTML = '<div class="emptyState">今天的行程尚未填寫地點。</div>';
+      } else {
+        entries.forEach((entry, index) => {
+          const item = entry.item;
+          const time = [item.startTime, item.endTime].filter(Boolean).join("–") || "時間待補";
+          const row = document.createElement("div");
+          row.className = "mapTimelineItem";
+          row.innerHTML = `<span class="mapTimelineTime">${escapeHtml(time)}</span><span class="mapTimelineDot" aria-hidden="true"></span><div class="mapTimelineContent"><strong>${index + 1}. ${escapeHtml(item.title || "未命名行程")}</strong><small>📍 ${escapeHtml(item.place)}${item.transportMethod ? " · " + escapeHtml(item.transportMethod) : ""}</small></div><button class="btnMap" type="button">MAP</button>`;
+          row.querySelector(".btnMap").onclick = () => openMap(item.place);
+          timeline.appendChild(row);
+        });
+      }
+      box.appendChild(timelineCard);
     }
 
     function renderMapDayTabs() {
