@@ -3366,6 +3366,84 @@
         flex: 1 1 0;
       }
     }
+
+    /* Itinerary card layout: keep long Japanese locations and reservation labels
+       inside their own column instead of letting them collide with actions. */
+    #tripList .itemTop {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(128px, 138px);
+      align-items: start;
+      gap: 12px;
+    }
+
+    #tripList .itemMain {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    #tripList .itemTitle,
+    #tripList .itemSub {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    #tripList .itemTags {
+      min-width: 0;
+      max-width: 100%;
+      align-items: flex-start;
+    }
+
+    #tripList .itemTags .badge {
+      min-width: 0;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      line-height: 1.35;
+    }
+
+    #tripList .itemActions {
+      width: 100%;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+      gap: 7px;
+    }
+
+    #tripList .itemActions > button,
+    #tripList .itemActions > .badge {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    #tripList .itemActions > .badge {
+      grid-column: 1 / -1;
+      justify-content: center;
+      text-align: center;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      line-height: 1.35;
+    }
+
+    #tripList .itemActions .btnMap,
+    #tripList .itemActions .doneBtn {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 699px) {
+      #tripList .itemTop {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      #tripList .itemActions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
   </style>
 </head>
 
@@ -4356,7 +4434,7 @@
             ${overlap ? `<span class="overlapWarning">⚠️ 時間重疊</span>` : ""}
           </div>
 
-          <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
+          <div class="itemTags" style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
             <span class="badge">📍 ${escapeHtml(it.place || "未設定地點")}</span>
             ${it.category ? `<span class="badge">🏷 ${escapeHtml(it.category)}</span>` : ""}
             ${it.transportMethod ? `<span class="badge">🚃 ${escapeHtml(it.transportMethod)}${it.transportDuration ? "｜" + escapeHtml(it.transportDuration) : ""}${it.transportCost ? "｜¥" + Number(it.transportCost).toLocaleString() : ""}</span>` : ""}
