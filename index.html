@@ -4175,6 +4175,17 @@
       safeSet("emenuTokyo", data);
     }
 
+    // Keep every itinerary projection in sync after a single data mutation.
+    // The trip page owns the dashboard/primary cards; the map and ticket pages
+    // are refreshed when they are visible so their timelines never show stale
+    // items after an edit, copy, move, delete, or version switch.
+    function refreshItineraryViews() {
+      renderDayTabs();
+      renderTrip();
+      if (document.getElementById("page-map")?.classList.contains("active")) renderMapList();
+      if (document.getElementById("page-tickets")?.classList.contains("active")) renderTickets();
+    }
+
     function saveCompletedItems() {
       safeSet("tokyoCompletedItems", completedItems);
     }
@@ -4191,7 +4202,7 @@
       item.status = completedItems[key] ? "completed" : "not_started";
       saveCompletedItems();
       save();
-      renderTrip();
+      refreshItineraryViews();
     }
 
     function renderVersionSwitch() {
@@ -4212,10 +4223,7 @@
       data.days = clone(data.versions[version].days);
       data.selectedDay = Math.min(data.selectedDay, data.days.length || 1);
       save();
-      renderVersionSwitch();
-      renderDayTabs();
-      renderTrip();
-      renderTickets();
+      refreshItineraryViews();
     }
 
     function switchDayItineraryVersion(version) {
@@ -4226,10 +4234,7 @@
       data.dayVersions[day.date] = version;
       data.days[dayIndex] = clone(data.versions[version].days[dayIndex]);
       save();
-      renderVersionSwitch();
-      renderDayTabs();
-      renderTrip();
-      renderTickets();
+      refreshItineraryViews();
     }
 
     function statusLabel(status) {
@@ -4243,7 +4248,7 @@
       completedItems[itemId] = status === "completed";
       saveCompletedItems();
       save();
-      renderTrip();
+      refreshItineraryViews();
     }
 
     function hasTimeOverlap(items, index) {
@@ -4283,8 +4288,7 @@
 
       data.selectedDay = closestIndex + 1;
       save();
-      renderTrip();
-      renderDayTabs();
+      refreshItineraryViews();
       document.getElementById("page-trip")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
@@ -4348,10 +4352,7 @@
           data.selectedDay = dayNo;
           ticketDateMode = "day";
           save();
-          renderTrip();
-          renderDayTabs();
-          if (document.getElementById("page-map")?.classList.contains("active")) renderMapList();
-          if (document.getElementById("page-tickets")?.classList.contains("active")) renderTickets();
+          refreshItineraryViews();
         };
         tab.onkeydown = event => {
           if (event.key === "Enter" || event.key === " ") tab.click();
@@ -4381,10 +4382,7 @@
       data.selectedDay = Math.min(Math.max(Number(data.selectedDay || 1) + Number(offset || 0), 1), total);
       ticketDateMode = "day";
       save();
-      renderDayTabs();
-      renderTrip();
-      if (document.getElementById("page-map")?.classList.contains("active")) renderMapList();
-      if (document.getElementById("page-tickets")?.classList.contains("active")) renderTickets();
+      refreshItineraryViews();
     }
 
 
@@ -4479,11 +4477,10 @@
       const targetDay = Number(answer);
       if (!Number.isInteger(targetDay) || targetDay < 1 || targetDay > data.days.length) return alert("請輸入 1 到 " + data.days.length + " 的日期。");
       if (targetDay - 1 === location.dayIndex) return;
-      const [item] = data.days[location.dayIndex].items.splice(location.itemIndex, 1);
+      const [item] = data.days[location.dayIndex].items.splice(location.index, 1);
       data.days[targetDay - 1].items.push(item);
       save();
-      renderDayTabs();
-      renderTrip();
+      refreshItineraryViews();
     }
 
     function openExpenseFromTrip(dayIndex, itemId) {
@@ -4739,10 +4736,7 @@
     function selectMapDay(dayNo) {
       data.selectedDay = Math.min(Math.max(Number(dayNo) || 1, 1), data.days.length || 1);
       save();
-      renderMapDayTabs();
-      renderMapList();
-      renderDayTabs();
-      renderTrip();
+      refreshItineraryViews();
     }
 
     function stepMapDay(offset) {
@@ -5335,10 +5329,7 @@ function shoppingCurrencySummary(items, field) {
       saveCompletedItems();
       save();
       closeItinerarySheet();
-      renderDayTabs();
-      renderTrip();
-      renderMapList();
-      renderTickets();
+      refreshItineraryViews();
     }
 
     function addItem() {
@@ -5357,7 +5348,7 @@ function shoppingCurrencySummary(items, field) {
       completedItems[item.id] = item.status === "completed";
       saveCompletedItems();
       save();
-      renderTrip();
+      refreshItineraryViews();
     }
 
     function findItemLocation(itemId) {
@@ -5378,8 +5369,7 @@ function shoppingCurrencySummary(items, field) {
       const targetIndex = data.days[target.dayIndex].items.findIndex(entry => entry.id === targetId);
       data.days[target.dayIndex].items.splice(Math.max(0, targetIndex), 0, item);
       save();
-      renderTrip();
-      renderMapList();
+      refreshItineraryViews();
     }
 
     function copyItem(itemId) {
@@ -5388,8 +5378,7 @@ function shoppingCurrencySummary(items, field) {
       const item = data.days[location.dayIndex].items[location.index];
       data.days[location.dayIndex].items.splice(location.index + 1, 0, { ...clone(item), id: makeId("trip"), status: "not_started" });
       save();
-      renderTrip();
-      renderMapList();
+      refreshItineraryViews();
     }
 
     function deleteItem(itemId) {
@@ -5402,8 +5391,7 @@ function shoppingCurrencySummary(items, field) {
       delete completedItems[itemId];
       saveCompletedItems();
       save();
-      renderTrip();
-      renderMapList();
+      refreshItineraryViews();
     }
 
     // ====== Routes ======
@@ -6870,9 +6858,7 @@ function weatherCodeMain(code) {
       data.selectedDay = Math.max(1, targetIndex + 1);
       ticketDateMode = "day";
       save();
-      renderDayTabs();
-      renderTrip();
-      renderDashboard();
+      refreshItineraryViews();
       document.getElementById("page-trip")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
