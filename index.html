@@ -722,6 +722,12 @@
       gap: 8px;
     }
 
+    .reminderTrigger {
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
     .reminderPanel {
       display: flex;
       align-items: center;
@@ -2972,7 +2978,7 @@
       <div class="sectionTitleRow">
         <div class="sectionTitle">行程安排 <span class="muted">Itinerary</span></div>
         <div class="sectionTitleActions">
-          <button class="btnGhost" type="button" onclick="toggleReminderPanel()">⏰ 提醒</button>
+          <button class="btnGhost reminderTrigger" type="button" onclick="toggleReminderPanel()">⏰ 提醒</button>
           <button class="btnPill primary" onclick="addItem()">＋ 新增</button>
         </div>
       </div>
