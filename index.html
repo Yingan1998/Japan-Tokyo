@@ -2959,57 +2959,32 @@
       border: 0;
     }
 
-    .mapMarkerLayer {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
+    /* Google Maps JavaScript API 互動畫布。景點標記由 Google Maps 管理，
+       因此拖曳、縮放與重新置中時會跟著實際座標移動。 */
+    .mapCanvas {
+      display: none;
+      width: 100%;
+      height: clamp(320px, 52vh, 600px);
+      min-height: 320px;
     }
 
-    .mapMarker {
-      position: absolute;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      max-width: min(190px, 34vw);
-      padding: 5px 8px 5px 5px;
-      border: 2px solid rgba(255, 255, 255, .94);
-      border-radius: 999px;
-      color: #fff;
-      background: linear-gradient(145deg, #d96852, #b9473d);
-      box-shadow: 0 8px 18px rgba(72, 48, 51, .28);
-      transform: translate(-50%, -100%);
-      pointer-events: auto;
-      cursor: pointer;
+    .mapFrameWrap.nativeMapReady .mapCanvas {
+      display: block;
+    }
+
+    .mapFrameWrap.nativeMapReady .mapFrame,
+    .mapFrameWrap.nativeMapReady .mapApiHint {
+      display: none;
+    }
+
+    .mapApiHint {
+      margin: 0;
+      padding: 8px 10px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .62);
+      border-top: 1px solid rgba(255, 255, 255, .82);
       font-size: 11px;
-      font-weight: 900;
-      line-height: 1.15;
-    }
-
-    .mapMarker:hover,
-    .mapMarker:focus-visible {
-      z-index: 4;
-      transform: translate(-50%, -100%) scale(1.04);
-      outline: 3px solid rgba(255, 255, 255, .72);
-      outline-offset: 2px;
-    }
-
-    .mapMarkerIcon {
-      display: grid;
-      place-items: center;
-      flex: 0 0 22px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      color: #263d58;
-      background: #fff5d9;
-      font-size: 12px;
-    }
-
-    .mapMarkerLabel {
-      max-width: 135px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      line-height: 1.45;
     }
 
     .mapEmbedNote {
@@ -3140,7 +3115,8 @@
       }
 
       .mapFrameWrap,
-      .mapFrame {
+      .mapFrame,
+      .mapCanvas {
         min-height: 330px;
         height: 48vh;
       }
@@ -3681,6 +3657,11 @@
     // 東京（固定）
     const TOKYO_LAT = 35.681236;
     const TOKYO_LON = 139.767125;
+
+    // 不把金鑰寫進公開檔案。部署時可在這段主程式之前設定：
+    // window.JAPAN_TOKYO_GOOGLE_MAPS_API_KEY = "你的 Google Maps JavaScript API Key";
+    // 未設定時會保留免金鑰的 Google Maps iframe 預覽。
+    const GOOGLE_MAPS_API_KEY = String(window.JAPAN_TOKYO_GOOGLE_MAPS_API_KEY || "").trim();
 
     // 地圖頁使用已確認的景點座標置中 Google Maps；未收錄的新景點會保留文字導航。
     const MAP_PLACE_COORDS = {
@@ -4427,22 +4408,6 @@
       return "📍";
     }
 
-    function mapMarkerPosition(entries, index) {
-      const known = entries.filter(entry => entry.point);
-      const current = entries[index];
-      if (!current.point || known.length < 2) {
-        const ratio = entries.length <= 1 ? .5 : index / (entries.length - 1);
-        return { left: `${18 + ratio * 64}%`, top: `${27 + (index % 3) * 20}%` };
-      }
-      const lats = known.map(entry => entry.point.lat);
-      const lons = known.map(entry => entry.point.lon);
-      const latMin = Math.min(...lats), latMax = Math.max(...lats);
-      const lonMin = Math.min(...lons), lonMax = Math.max(...lons);
-      const latRatio = latMax === latMin ? .5 : (current.point.lat - latMin) / (latMax - latMin);
-      const lonRatio = lonMax === lonMin ? .5 : (current.point.lon - lonMin) / (lonMax - lonMin);
-      return { left: `${10 + lonRatio * 80}%`, top: `${88 - latRatio * 66}%` };
-    }
-
     function mapEmbedUrl(entries) {
       const known = entries.filter(entry => entry.point).map(entry => entry.point);
       if (!known.length) return `https://www.google.com/maps?q=${encodeURIComponent("Tokyo")}&z=11&output=embed`;
@@ -4454,6 +4419,111 @@
       );
       const zoom = range > 2 ? 8 : range > .8 ? 10 : range > .3 ? 11 : range > .12 ? 12 : range > .05 ? 13 : 14;
       return `https://www.google.com/maps?q=${encodeURIComponent(`${centerLat.toFixed(6)},${centerLon.toFixed(6)}`)}&z=${zoom}&output=embed`;
+    }
+
+    // Google Maps 原生標記初始化。這裡不使用 iframe 上方的 HTML 浮動圖層，
+    // 而是把每個標記交給 Google Maps，因此拖曳地圖時標記會與座標一起移動。
+    let googleMapsLoaderPromise = null;
+
+    function hasGoogleMapsApi() {
+      return !!(window.google && window.google.maps && typeof window.google.maps.Map === "function");
+    }
+
+    function loadGoogleMapsApi() {
+      if (hasGoogleMapsApi()) return Promise.resolve(window.google.maps);
+      if (!GOOGLE_MAPS_API_KEY) return Promise.reject(new Error("尚未設定 Google Maps JavaScript API Key"));
+      if (googleMapsLoaderPromise) return googleMapsLoaderPromise;
+
+      googleMapsLoaderPromise = new Promise((resolve, reject) => {
+        const existing = document.getElementById("googleMapsJavaScriptApi");
+        const script = existing || document.createElement("script");
+        const finish = () => hasGoogleMapsApi()
+          ? resolve(window.google.maps)
+          : reject(new Error("Google Maps JavaScript API 載入後沒有可用的 Map 物件"));
+        script.addEventListener("load", finish, { once: true });
+        script.addEventListener("error", () => reject(new Error("Google Maps JavaScript API 載入失敗")), { once: true });
+        if (!existing) {
+          script.id = "googleMapsJavaScriptApi";
+          script.async = true;
+          script.defer = true;
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_API_KEY)}`;
+          document.head.appendChild(script);
+        }
+      });
+      return googleMapsLoaderPromise;
+    }
+
+    function mapCenterAndZoom(entries) {
+      const known = entries.filter(entry => entry.point).map(entry => entry.point);
+      if (!known.length) return { known, center: { lat: TOKYO_LAT, lng: TOKYO_LON }, zoom: 11 };
+      const center = {
+        lat: known.reduce((sum, point) => sum + point.lat, 0) / known.length,
+        lng: known.reduce((sum, point) => sum + point.lon, 0) / known.length
+      };
+      const range = Math.max(
+        Math.max(...known.map(point => point.lat)) - Math.min(...known.map(point => point.lat)),
+        Math.max(...known.map(point => point.lon)) - Math.min(...known.map(point => point.lon))
+      );
+      const zoom = range > 2 ? 8 : range > .8 ? 10 : range > .3 ? 11 : range > .12 ? 12 : range > .05 ? 13 : 14;
+      return { known, center, zoom };
+    }
+
+    function initializeNativeGoogleMap(mapCard, entries) {
+      const wrap = mapCard?.querySelector(".mapFrameWrap");
+      const canvas = mapCard?.querySelector(".mapCanvas");
+      const frame = mapCard?.querySelector(".mapFrame");
+      const hint = mapCard?.querySelector(".mapApiHint");
+      if (!wrap || !canvas || !frame) return;
+
+      const useIframeFallback = () => {
+        if (!canvas.isConnected) return;
+        wrap.classList.remove("nativeMapReady");
+        canvas.replaceChildren();
+        frame.style.display = "block";
+        if (hint) {
+          hint.hidden = false;
+          hint.textContent = GOOGLE_MAPS_API_KEY
+            ? "Google Maps JavaScript API 載入失敗，目前先顯示 Google Maps 預覽；請檢查金鑰限制與網路連線。"
+            : "目前是 Google Maps 預覽模式。設定 Google Maps JavaScript API Key 後，景點圖示會由地圖管理，拖曳與縮放時會跟著座標移動。";
+        }
+      };
+
+      loadGoogleMapsApi().then(maps => {
+        if (!canvas.isConnected || !maps || typeof maps.Map !== "function") return;
+        const { known, center, zoom } = mapCenterAndZoom(entries);
+        const map = new maps.Map(canvas, {
+          center,
+          zoom,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: true,
+          gestureHandling: "greedy"
+        });
+        const bounds = typeof maps.LatLngBounds === "function" ? new maps.LatLngBounds() : null;
+
+        entries.forEach(entry => {
+          if (!entry.point || typeof maps.Marker !== "function") return;
+          const position = { lat: entry.point.lat, lng: entry.point.lon };
+          const marker = new maps.Marker({
+            map,
+            position,
+            title: String(entry.item.title || entry.item.place || entry.point.name || "景點"),
+            label: { text: mapPlaceIcon(entry.item), fontSize: "20px" }
+          });
+          if (bounds) bounds.extend(position);
+          if (typeof marker.addListener === "function") {
+            marker.addListener("click", () => openMap(entry.item.place));
+          }
+        });
+        if (known.length > 1 && bounds && typeof map.fitBounds === "function") {
+          map.fitBounds(bounds, { top: 44, right: 44, bottom: 44, left: 44 });
+        }
+        wrap.classList.add("nativeMapReady");
+        if (hint) hint.hidden = true;
+      }).catch(error => {
+        console.warn("Google Maps native map unavailable; using iframe fallback.", error);
+        useIframeFallback();
+      });
     }
 
     function renderMapList() {
@@ -4488,13 +4558,16 @@
           <button class="btnGhost" type="button" onclick="openDayRoute(${dayNo})">🧭 路線</button>
         </div>
         <div class="mapFrameWrap">
+          <div class="mapCanvas" aria-label="Google Maps 互動地圖"></div>
           <iframe class="mapFrame" title="Day ${dayNo} Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <p class="mapApiHint">目前是 Google Maps 預覽模式。設定 Google Maps JavaScript API Key 後，景點圖示會由地圖管理，拖曳與縮放時會跟著座標移動。</p>
         </div>
-        <p class="mapEmbedNote">地圖以目前日期行程置中，可自由拖曳與縮放；請由下方時間軸的 MAP 按鈕開啟景點導航。</p>
+        <p class="mapEmbedNote">圖示使用行程中可辨識的景點座標；未收錄的地點仍可從下方時間軸的 MAP 按鈕開啟導航。</p>
       `;
       const frame = mapCard.querySelector(".mapFrame");
       frame.src = mapEmbedUrl(entries);
       box.appendChild(mapCard);
+      initializeNativeGoogleMap(mapCard, entries);
 
       const timelineCard = document.createElement("section");
       timelineCard.className = "mapTimelineCard";
