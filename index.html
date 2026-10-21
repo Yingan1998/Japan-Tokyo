@@ -152,6 +152,23 @@
       min-width: 170px;
     }
 
+    .weatherTrigger {
+      width: auto;
+      border: 0;
+      padding: 0;
+      text-align: left;
+      color: inherit;
+      font: inherit;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .weatherTrigger:focus-visible {
+      outline: 3px solid rgba(47, 143, 140, .34);
+      outline-offset: 6px;
+      border-radius: 18px;
+    }
+
     .wxIcon {
       width: 44px;
       height: 44px;
@@ -695,6 +712,62 @@
       align-items: center;
       gap: 8px;
       margin: 10px 0;
+    }
+
+    .sectionTitleActions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .reminderPanel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: -2px 4px 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, .74);
+      border-radius: 16px;
+      background: rgba(255, 253, 248, .64);
+      box-shadow: 0 8px 18px rgba(49, 83, 110, .08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .reminderPanel[hidden] { display: none; }
+
+    .reminderPanelCopy {
+      min-width: 0;
+      color: #36536c;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .reminderPanelCopy strong,
+    .reminderPanelCopy span { display: block; }
+
+    .reminderPanelCopy span {
+      margin-top: 2px;
+      color: var(--muted);
+    }
+
+    .reminderPanelActions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
+    .reminderPanelActions .filterControl {
+      width: auto;
+      min-width: 128px;
+      padding: 7px 9px;
+      font-size: 11px;
     }
 
     .filterControl,
@@ -2658,6 +2731,132 @@
         min-width: 0;
         min-height: 44px;
       }
+
+      .reminderPanel {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .reminderPanelActions {
+        justify-content: stretch;
+      }
+
+      .reminderPanelActions .filterControl,
+      .reminderPanelActions .btnGhost {
+        flex: 1 1 140px;
+      }
+    }
+    /* ===== Interaction and spacing refinements ===== */
+    .list {
+      gap: 20px;
+    }
+
+    #tripList {
+      row-gap: 24px;
+    }
+
+    .mapGrid {
+      gap: 18px;
+    }
+
+    .dashboardShell {
+      gap: 18px;
+    }
+
+    .dashboardStats,
+    .dashboardGrid {
+      gap: 16px;
+    }
+
+    .moduleToolbar {
+      margin: 14px 0;
+      padding: 7px 12px;
+      border-radius: 18px;
+    }
+
+    .versionSwitch {
+      margin-inline: 4px;
+    }
+
+    .dayTabDay,
+    .dayTabPlace {
+      display: block;
+    }
+
+    .dayTabDay {
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .dayTabPlace {
+      min-height: 2.6em;
+      margin-top: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.3;
+      opacity: .88;
+    }
+
+    .dayTabPlace .dayTabWeather {
+      display: inline-block;
+      margin-left: 2px;
+    }
+
+    .doneBtn {
+      color: #3b6076;
+      background: rgba(255, 253, 248, .78);
+      border: 1px solid rgba(74, 143, 145, .2);
+    }
+
+    .doneBtn.isComplete,
+    .itemCard.done .doneBtn {
+      color: #2f7655;
+      background: rgba(177, 226, 202, .64);
+      border-color: rgba(74, 155, 118, .24);
+    }
+
+    .itemCard.done .doneBtn {
+      color: #4f6c65;
+    }
+
+    .weatherDetailsCard {
+      display: grid;
+      gap: 14px;
+    }
+
+    .dashboardTicketOnly {
+      grid-template-columns: 1fr;
+    }
+
+    .weatherDetailsHint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .pageWeatherActions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    @media (max-width: 600px) {
+      #tripList {
+        row-gap: 18px;
+      }
+
+      .moduleToolbar {
+        padding: 8px 10px;
+      }
+
+      .sectionTitleActions {
+        width: 100%;
+        justify-content: flex-end;
+      }
     }
   </style>
 </head>
@@ -2678,13 +2877,13 @@
     <!-- Info Card -->
     <div class="infoCard">
       <div class="infoRow">
-        <div class="weatherBox">
+        <button class="weatherBox weatherTrigger" type="button" onclick="openWeatherDetails()" aria-label="查看分區天氣詳細資訊" title="點擊查看分區天氣">
           <div class="wxIcon">⛅</div>
           <div class="wxMain">
             <div class="temp" id="tempBox">12°C</div>
             <div class="wxDesc" id="wxDesc">晴時多雲｜晴れ時々曇り</div>
           </div>
-        </div>
+        </button>
 
         <div class="locChip">📍 東京｜Tokyo</div>
         <div class="dateChip" id="dateRange"></div>
@@ -2762,27 +2961,24 @@
           </article>
         </div>
 
-        <div class="dashboardGrid">
-          <article class="dashboardPanelCard">
-            <div class="dashboardPanelHeading"><div><span class="dashboardKicker">LOCAL WEATHER</span><h2>分區天氣</h2></div><button class="btnGhost" type="button" onclick="loadRegionalWeather(true)">更新</button></div>
-            <div id="regionalWeatherList" class="regionalWeatherList"></div>
-            <div id="dashboardRainPlan" class="dashboardNotice"></div>
-          </article>
+        <div class="dashboardGrid dashboardTicketOnly">
           <article class="dashboardPanelCard">
             <div class="dashboardPanelHeading"><div><span class="dashboardKicker">TICKETS & RESERVATIONS</span><h2>今日票券與預約</h2></div><button class="btnGhost" type="button" onclick="openTodayTickets()">管理</button></div>
             <div id="dashboardTicketList" class="dashboardTicketList"></div>
           </article>
         </div>
-
-        <div class="dashboardReminderBar">
-          <div><strong>行程提醒</strong><span id="dashboardReminderStatus">僅在此頁開啟時檢查，不會宣稱背景推播</span></div>
-          <div class="dashboardReminderActions"><select id="dashboardReminderMinutes" class="filterControl" onchange="saveReminderPreference(this.value)"><option value="10">提前 10 分鐘</option><option value="20">提前 20 分鐘</option><option value="30">提前 30 分鐘</option></select><button class="btnGhost" type="button" onclick="requestDashboardNotifications()">啟用瀏覽器通知</button></div>
-        </div>
       </section>
 
       <div class="sectionTitleRow">
         <div class="sectionTitle">行程安排 <span class="muted">Itinerary</span></div>
-        <button class="btnPill primary" onclick="addItem()">＋ 新增</button>
+        <div class="sectionTitleActions">
+          <button class="btnGhost" type="button" onclick="toggleReminderPanel()">⏰ 提醒</button>
+          <button class="btnPill primary" onclick="addItem()">＋ 新增</button>
+        </div>
+      </div>
+      <div class="reminderPanel" id="itineraryReminderPanel" hidden>
+        <div class="reminderPanelCopy"><strong>行程提醒</strong><span id="dashboardReminderStatus">僅在此頁開啟時檢查，不會宣稱背景推播</span></div>
+        <div class="reminderPanelActions"><select id="dashboardReminderMinutes" class="filterControl" onchange="saveReminderPreference(this.value)"><option value="10">提前 10 分鐘</option><option value="20">提前 20 分鐘</option><option value="30">提前 30 分鐘</option></select><button class="btnGhost" type="button" onclick="requestDashboardNotifications()">啟用通知</button></div>
       </div>
       <div class="tripTools">
         <label class="searchBox" for="tripSearch">
@@ -2800,6 +2996,22 @@
       <div class="list" id="tripList"></div>
       <div class="divider"></div>
       <div class="tiny muted">提示：可在每項行程按「導航 MAP」直接開 Google Maps。</div>
+    </section>
+
+    <section class="page" id="page-weather">
+      <div class="sectionTitleRow">
+        <div class="sectionTitle">分區天氣 <span class="muted">Weather</span></div>
+        <div class="pageWeatherActions">
+          <button class="btnGhost" type="button" onclick="loadRegionalWeather(true)">更新</button>
+          <button class="btnPill" type="button" onclick="openPageWithoutNav('trip')">返回行程</button>
+        </div>
+      </div>
+      <div class="simpleCard weatherDetailsCard">
+        <div class="dashboardPanelHeading"><div><span class="dashboardKicker">REGIONAL FORECAST</span><h2>東京行程分區天氣</h2></div><span class="pill">點擊上方天氣可再次查看</span></div>
+        <p class="weatherDetailsHint">依照各天行程地點整理目前天氣、最高／最低溫與降雨機率，詳細內容只在此頁展開。</p>
+        <div id="regionalWeatherList" class="regionalWeatherList"></div>
+        <div id="dashboardRainPlan" class="dashboardNotice"></div>
+      </div>
     </section>
 
     <section class="page" id="page-map">
@@ -3525,8 +3737,10 @@
           if (event.key === "Enter" || event.key === " ") tab.click();
         };
 
+        tab.setAttribute("aria-label", `Day ${dayNo} ${d.labelJp || d.labelZh || "東京行程"}`);
         tab.innerHTML = `
-      <div class="d">Day ${dayNo}｜${d.labelJp} ${icon}</div>
+      <div class="dayTabDay">Day ${dayNo}</div>
+      <div class="dayTabPlace">${escapeHtml(d.labelJp || d.labelZh || "東京行程")} <span class="dayTabWeather" aria-hidden="true">${icon}</span></div>
       <div class="num">
         ${String(new Date(d.date).getDate()).padStart(2, "0")}
       </div>
@@ -3607,7 +3821,7 @@
         <div class="itemActions">
           <button class="btnMap" onclick="openMap('${escapeAttr(it.place || "")}')">導航 MAP</button>
           <button class="btnGhost" onclick="editItem('${escapeAttr(it.id)}')">✏️ 編輯</button>
-          <button class="doneBtn" onclick="toggleCompleted(${dayIndex}, '${escapeAttr(it.id)}')">${done ? "↩ 未完成" : "✓ 完成"}</button>
+          <button class="doneBtn${done ? " isComplete" : ""}" aria-pressed="${done ? "true" : "false"}" onclick="toggleCompleted(${dayIndex}, '${escapeAttr(it.id)}')">${done ? "↩ 取消完成" : "✓ 標記完成"}</button>
           <button class="btnGhost" onclick="cycleItemStatus('${escapeAttr(it.id)}')">狀態</button>
           ${it.locked ? `<span class="badge">🔒 已預訂固定行程</span>` : `<button class="btnGhost" onclick="moveItemToDay('${escapeAttr(it.id)}')">移動日</button>`}
           <button class="btnGhost" onclick="copyItem('${escapeAttr(it.id)}')">複製</button>
@@ -3720,7 +3934,8 @@
         tab.className = "dayTab" + (dayNo === selected ? " active" : "");
         tab.setAttribute("role", "tab");
         tab.setAttribute("aria-selected", dayNo === selected ? "true" : "false");
-        tab.innerHTML = `<div class="d">Day ${dayNo}</div><div class="num">${String(new Date(d.date).getDate()).padStart(2, "0")}</div>`;
+        tab.setAttribute("aria-label", `Day ${dayNo} ${d.labelJp || d.labelZh || "東京行程"}`);
+        tab.innerHTML = `<div class="dayTabDay">Day ${dayNo}</div><div class="dayTabPlace">${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</div><div class="num">${String(new Date(d.date).getDate()).padStart(2, "0")}</div>`;
         tab.onclick = () => selectMapDay(dayNo);
         box.appendChild(tab);
       });
@@ -4041,7 +4256,25 @@ function shoppingCurrencySummary(items, field) {
       if (tab === "tickets") renderTickets();
       if (tab === "flights") renderFlights();
       if (tab === "accommodations") renderAccommodations();
+      if (tab === "weather") {
+        renderRegionalWeather();
+        loadRegionalWeather();
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openWeatherDetails() {
+      openPageWithoutNav("weather");
+    }
+
+    function toggleReminderPanel() {
+      const panel = document.getElementById("itineraryReminderPanel");
+      if (!panel) return;
+      panel.hidden = !panel.hidden;
+      if (!panel.hidden) {
+        renderDashboardReminder();
+        panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     }
 
     function exportBackup() {
@@ -4125,6 +4358,10 @@ function shoppingCurrencySummary(items, field) {
       if (tab === "tickets") renderTickets();
       if (tab === "flights") renderFlights();
       if (tab === "accommodations") renderAccommodations();
+      if (tab === "weather") {
+        renderRegionalWeather();
+        loadRegionalWeather();
+      }
     }
 
     // ====== Add/Edit ======
