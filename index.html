@@ -1540,6 +1540,21 @@
       font-weight: 900;
     }
 
+    .brandHome {
+      border: 0;
+      padding: 0;
+      color: inherit;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .brandHome:focus-visible {
+      outline: 3px solid rgba(47, 143, 140, .34);
+      outline-offset: 5px;
+      border-radius: 12px;
+    }
+
     .brand .leaf {
       width: 18px;
       height: 18px;
@@ -3137,7 +3152,7 @@
 
   <div class="app">
     <div class="topbar">
-      <div class="brand"><span class="leaf"></span> Japan Tokyo</div>
+      <button class="brand brandHome" type="button" onclick="goHome()" aria-label="回到行程首頁" title="回到行程首頁"><span class="leaf" aria-hidden="true"></span> Japan Tokyo</button>
       <div class="topActions">
         <div class="rate" id="rateBox">匯率讀取中…</div>
         <button class="iconBtn" type="button" onclick="shareTrip()" aria-label="分享行程">↗ 分享</button>
@@ -4722,6 +4737,14 @@ function shoppingCurrencySummary(items, field) {
     }
 
     // ====== Pages ======
+    function goHome() {
+      const tripNav = document.querySelectorAll(".bItem")[0];
+      switchPage("trip", tripNav);
+      renderDayTabs();
+      renderTrip();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     function switchPage(tab, el) {
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       document.querySelectorAll(".bItem").forEach(b => b.classList.remove("active"));
