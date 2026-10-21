@@ -238,6 +238,38 @@
       padding-bottom: 4px;
     }
 
+    .dayTabsNav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .dayTabsNav .dayTabs {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .dayTabArrow {
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, .82);
+      border-radius: 14px;
+      color: var(--ink);
+      background: rgba(255, 253, 248, .78);
+      box-shadow: 0 7px 16px rgba(48, 82, 110, .08);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .dayTabArrow:disabled {
+      opacity: .38;
+      cursor: not-allowed;
+    }
+
     .dayTabs::-webkit-scrollbar {
       height: 0;
     }
@@ -3166,6 +3198,145 @@
       width: 100%;
       min-width: 0;
     }
+
+    .dayTabsWrap {
+      padding: 4px 0 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .expensePage {
+      display: none;
+      gap: 16px;
+    }
+
+    .expensePage.active {
+      display: grid;
+    }
+
+    .expensePage .sectionTitleRow,
+    .expensePage .simpleCard,
+    .expensePage #expenseList {
+      margin: 0;
+    }
+
+    .expenseToolbarActions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .expenseOverviewCard,
+    .expenseReservedCard,
+    .expenseSplitCard,
+    .expenseCategoryCard {
+      padding: 18px;
+    }
+
+    .expenseOverviewHead {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .expenseOverviewHead h2,
+    .expenseReservedCard h2 {
+      margin: 4px 0 0;
+      color: #1d3d59;
+      font-size: 20px;
+    }
+
+    .expenseOverviewHead p,
+    .expenseSectionHint {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .expenseTotalHero {
+      flex: 0 0 auto;
+      min-width: 145px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      color: #294c6a;
+      background: rgba(215, 229, 255, .68);
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.8;
+      text-align: right;
+    }
+
+    .expenseStats {
+      margin-top: 14px;
+    }
+
+    .expenseReservedCard .dashboardPanelHeading {
+      margin-bottom: 14px;
+    }
+
+    .reservedCostGrid {
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .reservedCost {
+      min-height: 108px;
+      border: 1px solid rgba(255, 255, 255, .78);
+      box-shadow: 0 6px 14px rgba(48, 82, 110, .06);
+    }
+
+    .reservedCostHead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .reservedCostEdit {
+      padding: 4px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    .expenseSplitCard,
+    .expenseCategoryCard {
+      background: linear-gradient(145deg, rgba(255, 255, 255, .82), rgba(238, 248, 249, .58));
+    }
+
+    @media (max-width: 600px) {
+      .dayTabsNav {
+        gap: 5px;
+      }
+
+      .dayTabArrow {
+        flex-basis: 34px;
+        width: 34px;
+        height: 38px;
+      }
+
+      .expenseOverviewHead {
+        flex-direction: column;
+      }
+
+      .expenseTotalHero {
+        width: 100%;
+        text-align: left;
+      }
+
+      .expenseToolbarActions {
+        width: 100%;
+      }
+
+      .expenseToolbarActions > button {
+        flex: 1 1 0;
+      }
+    }
   </style>
 </head>
 
@@ -3205,7 +3376,11 @@
           <span class="muted">九天行程</span>
           <button class="btnGhost" type="button" onclick="goToToday()">今天</button>
         </div>
-        <div class="dayTabs" id="dayTabs"></div>
+        <div class="dayTabsNav">
+          <button class="dayTabArrow" id="dayPrev" type="button" aria-label="前一天" onclick="stepDay(-1)">‹</button>
+          <div class="dayTabs" id="dayTabs" role="tablist" aria-label="選擇行程日期"></div>
+          <button class="dayTabArrow" id="dayNext" type="button" aria-label="後一天" onclick="stepDay(1)">›</button>
+        </div>
       </div>
     </div>
 
@@ -3318,50 +3493,49 @@
     <section class="page" id="page-map">
       <div class="sectionTitleRow">
         <div class="sectionTitle">地圖 <span class="muted">Map</span></div>
-        <button class="btnPill" onclick="openTodayRoute()">🧭 目前日期路線</button>
       </div>
       <div class="mapDaySummary" id="mapDaySummary" aria-live="polite"></div>
       <div id="mapList" class="mapGrid"></div>
     </section>
 
-    <section class="page" id="page-expense">
+    <section class="page expensePage" id="page-expense">
       <div class="sectionTitleRow">
         <div class="sectionTitle">記帳 <span class="muted">Expense</span></div>
         <!-- <div class="dayTabs" id="expenseDayTabs"></div> -->
-        <div style="display:flex; gap:8px;">
+        <div class="expenseToolbarActions">
           <button class="btnPill primary" onclick="openExpenseSheet()">＋ 記一筆</button>
           <button class="btnPill" onclick="exportExpenseCSV()">⬇ 匯出</button>
           <button class="btnPill" onclick="exportExpenseJSON()">JSON</button>
         </div>
       </div>
 
-      <div class="simpleCard">
-        <div class="rowBetween">
-          <div><b>旅途支出總計</b></div>
-          <div class="pill">
+      <div class="simpleCard expenseOverviewCard">
+        <div class="expenseOverviewHead">
+          <div><span class="dashboardKicker">LIVE EXPENSES</span><h2>旅途支出總計</h2><p>只計入一般旅途記帳，預訂費用會獨立顯示。</p></div>
+          <div class="expenseTotalHero">
             ¥ <span id="expenseTotalJPY">0</span><br>
             ≈ NT$ <span id="expenseTotalTWD">0</span>
           </div>
         </div>
-        <div id="expenseStats" class="moduleSummary"></div>
+        <div id="expenseStats" class="moduleSummary expenseStats"></div>
         <div id="expenseRateStatus" class="expenseMeta"></div>
       </div>
 
       <div class="simpleCard expenseReservedCard">
         <div class="dashboardPanelHeading">
-          <div><span class="dashboardKicker">TRIP COST OVERVIEW</span><h2>旅行費用概況</h2></div>
-          <span class="muted">預訂費用與實際記帳分開</span>
+          <div><span class="dashboardKicker">TRIP COST OVERVIEW</span><h2>旅行費用概況</h2><p class="expenseSectionHint">預訂費用與實際記帳分開，可逐筆修改金額與付款狀態。</p></div>
+          <button class="btnGhost" type="button" onclick="openReservedExpenseSheet()">＋ 新增費用</button>
         </div>
         <div id="expenseReservedCosts" class="reservedCostGrid"></div>
       </div>
 
-      <div class="simpleCard">
+      <div class="simpleCard expenseSplitCard">
         <div class="rowBetween"><b>旅伴與分帳</b><button class="btnGhost" type="button" onclick="addMember()">＋ 新增旅伴</button></div>
         <div id="memberManager" class="memberList"></div>
         <div id="settlementList" style="margin-top:10px"></div>
       </div>
 
-      <div class="simpleCard">
+      <div class="simpleCard expenseCategoryCard">
         <b>分類比例</b>
         <div id="expensePie" style="margin-top:12px;"></div>
       </div>
@@ -3399,6 +3573,7 @@
           <option value="all">全部狀態</option><option>待確認</option><option>待購買</option><option>已購買</option><option>待取票</option><option>已取票</option><option>已使用</option><option>已取消</option>
         </select>
         <input class="filterControl" id="ticketSearch" placeholder="搜尋活動、平台或訂單" oninput="renderTickets()">
+        <button class="btnGhost" id="ticketShowAllBtn" type="button" onclick="showAllTickets()">顯示全部票券</button>
       </div>
       <div class="moduleSummary" id="ticketSummary"></div>
       <div id="ticketList"></div>
@@ -3735,6 +3910,7 @@
     let shoppingState = safeParse("tokyoShoppingState", {});
     let members = safeParse("tokyoMembers", ["我", "旅伴 A", "旅伴 B", "旅伴 C"]);
     let tickets = safeParse("tokyoTickets", []);
+    let ticketDateMode = "all";
     let shoppingItems = safeParse("tokyoShoppingItems", null);
     completedItems = completedItems && typeof completedItems === "object" ? completedItems : {};
     shoppingState = shoppingState && typeof shoppingState === "object" ? shoppingState : {};
@@ -4058,10 +4234,12 @@
         tab.setAttribute("tabindex", "0");
         tab.onclick = () => {
           data.selectedDay = dayNo;
+          ticketDateMode = "day";
           save();
           renderTrip();
           renderDayTabs();
           if (document.getElementById("page-map")?.classList.contains("active")) renderMapList();
+          if (document.getElementById("page-tickets")?.classList.contains("active")) renderTickets();
         };
         tab.onkeydown = event => {
           if (event.key === "Enter" || event.key === " ") tab.click();
@@ -4077,6 +4255,24 @@
     `;
         box.appendChild(tab);
       });
+      const prev = document.getElementById("dayPrev");
+      const next = document.getElementById("dayNext");
+      if (prev) prev.disabled = data.selectedDay <= 1;
+      if (next) next.disabled = data.selectedDay >= data.days.length;
+      if (window.matchMedia && window.matchMedia("(max-width: 699px)").matches) {
+        requestAnimationFrame(() => box.querySelector(".dayTab.active")?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" }));
+      }
+    }
+
+    function stepDay(offset) {
+      const total = data.days.length || 1;
+      data.selectedDay = Math.min(Math.max(Number(data.selectedDay || 1) + Number(offset || 0), 1), total);
+      ticketDateMode = "day";
+      save();
+      renderDayTabs();
+      renderTrip();
+      if (document.getElementById("page-map")?.classList.contains("active")) renderMapList();
+      if (document.getElementById("page-tickets")?.classList.contains("active")) renderTickets();
     }
 
 
@@ -4279,26 +4475,11 @@
         </div>
         <div class="mapFrameWrap">
           <iframe class="mapFrame" title="Day ${dayNo} Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          <div class="mapMarkerLayer" aria-label="景點地圖標記"></div>
         </div>
-        <p class="mapEmbedNote">地圖以目前日期行程置中；點擊地圖上的圖示可開啟該景點的 Google Maps 導航。</p>
+        <p class="mapEmbedNote">地圖以目前日期行程置中，可自由拖曳與縮放；請由下方時間軸的 MAP 按鈕開啟景點導航。</p>
       `;
       const frame = mapCard.querySelector(".mapFrame");
       frame.src = mapEmbedUrl(entries);
-      const markerLayer = mapCard.querySelector(".mapMarkerLayer");
-      entries.forEach((entry, index) => {
-        const marker = document.createElement("button");
-        const position = mapMarkerPosition(entries, index);
-        marker.type = "button";
-        marker.className = "mapMarker";
-        marker.style.left = position.left;
-        marker.style.top = position.top;
-        marker.title = `導航至：${entry.item.place}`;
-        marker.setAttribute("aria-label", `導航至 ${entry.item.place}`);
-        marker.innerHTML = `<span class="mapMarkerIcon">${mapPlaceIcon(entry.item)}</span><span class="mapMarkerLabel">${index + 1}. ${escapeHtml(entry.item.place)}</span>`;
-        marker.onclick = () => openMap(entry.item.place);
-        markerLayer.appendChild(marker);
-      });
       box.appendChild(mapCard);
 
       const timelineCard = document.createElement("section");
@@ -4462,14 +4643,24 @@
       if (!list) return;
       const query = (document.getElementById("ticketSearch")?.value || "").trim().toLocaleLowerCase();
       const status = document.getElementById("ticketStatusFilter")?.value || "all";
-      const visible = tickets.filter(ticket => (status === "all" || ticket.status === status) && (!query || `${ticket.name} ${ticket.platform} ${ticket.orderNo}`.toLocaleLowerCase().includes(query)));
+      const selectedTicketDate = ticketDateMode === "day" ? data.days[data.selectedDay - 1]?.date || "" : "";
+      const visible = tickets.filter(ticket =>
+        (!selectedTicketDate || ticket.date === selectedTicketDate) &&
+        (status === "all" || ticket.status === status) &&
+        (!query || `${ticket.name} ${ticket.platform} ${ticket.orderNo}`.toLocaleLowerCase().includes(query))
+      );
       const soon = tickets.filter(ticket => {
         if (ticket.status === "已取消") return false;
         const dates = [ticket.date, ticket.pickupDeadline].filter(Boolean).map(value => new Date(value + "T00:00:00"));
         return dates.some(date => (date - new Date()) / 86400000 <= 7 && (date - new Date()) >= -86400000);
       }).length;
       const summary = document.getElementById("ticketSummary");
-      if (summary) summary.innerHTML = `<span class="summaryChip">共 ${tickets.length} 張</span><span class="summaryChip">即將使用 ${soon} 張</span><span class="summaryChip">已購買 ${tickets.filter(ticket => ticket.status === "已購買").length} 張</span>`;
+      const showAllButton = document.getElementById("ticketShowAllBtn");
+      if (showAllButton) {
+        showAllButton.disabled = ticketDateMode === "all";
+        showAllButton.textContent = ticketDateMode === "all" ? "目前顯示全部" : "顯示全部票券";
+      }
+      if (summary) summary.innerHTML = `<span class="summaryChip">${ticketDateMode === "day" ? escapeHtml(fmtYmd(selectedTicketDate)) + " · " : ""}顯示 ${visible.length} 張</span><span class="summaryChip">全部 ${tickets.length} 張</span><span class="summaryChip">即將使用 ${soon} 張</span><span class="summaryChip">已購買 ${tickets.filter(ticket => ticket.status === "已購買").length} 張</span>`;
       list.innerHTML = visible.length ? "" : `<div class="emptyState">尚無符合條件的票券，請按「新增票券」建立資料。</div>`;
       visible.forEach(ticket => {
         const daysToGo = ticket.date ? Math.ceil((new Date(`${ticket.date}T00:00:00`) - new Date()) / 86400000) : Infinity;
@@ -4483,6 +4674,11 @@
           ${ticket.attachment?.dataUrl ? (ticket.attachment.type?.startsWith("image/") ? `<img class="ticketQr" src="${escapeHtml(ticket.attachment.dataUrl)}" alt="票券附件">` : `<a class="btnGhost" style="display:inline-block;margin-top:10px" href="${escapeHtml(ticket.attachment.dataUrl)}" download="${escapeHtml(ticket.attachment.name || "ticket.pdf")}">下載附件</a>`) : ""}`;
         list.appendChild(card);
       });
+    }
+
+    function showAllTickets() {
+      ticketDateMode = "all";
+      renderTickets();
     }
 
     function deleteTicket(index) {
@@ -6013,8 +6209,66 @@ function weatherCodeMain(code) {
       if (costBox) {
         const totalActual = expenses.reduce((sum, expense) => sum + (expense.currency === "TWD" ? Number(expense.amount || 0) : 0), 0);
         const pending = reservedExpenses.filter(item => /待|未知/.test(String(item.paymentStatus || ""))).length;
-        costBox.innerHTML = '<div class="reservedCost"><small>預訂機票</small><strong>TWD 48,729</strong><small>3 人 · 付款待確認</small></div><div class="reservedCost"><small>住宿（JPY）</small><strong>¥252,747</strong><small>APA＋Toyoko · 原幣合計</small></div><div class="reservedCost"><small>日常實際記帳</small><strong>TWD ' + totalActual.toLocaleString() + '</strong><small>不含預訂費用</small></div><div class="reservedCost"><small>尚待確認</small><strong>' + pending + ' 筆</strong><small>未付款或付款狀態待確認</small></div>';
+        const reservedCards = reservedExpenses.map(item => '<div class="reservedCost"><div class="reservedCostHead"><small>預訂費用</small><button class="btnGhost reservedCostEdit" type="button" aria-label="編輯 ' + escapeHtml(item.label || "旅行費用") + '" onclick="openReservedExpenseSheet(' + escapeHtml(JSON.stringify(item.id)) + ')">✏️</button></div><strong>' + escapeHtml(item.currency || "JPY") + ' ' + Number(item.amount || 0).toLocaleString() + '</strong><small>' + escapeHtml(item.label || "未命名費用") + (item.participants ? ' · ' + item.participants + ' 人' : '') + '<br>' + escapeHtml(item.paymentStatus || "待確認") + (item.note ? ' · ' + escapeHtml(item.note) : '') + '</small></div>').join("");
+        costBox.innerHTML = reservedCards + '<div class="reservedCost"><div class="reservedCostHead"><small>日常實際記帳</small><span class="badge">即時</span></div><strong>TWD ' + totalActual.toLocaleString() + '</strong><small>不含預訂費用</small></div><div class="reservedCost"><div class="reservedCostHead"><small>尚待確認</small><span class="badge">提醒</span></div><strong>' + pending + ' 筆</strong><small>未付款或付款狀態待確認</small></div>';
       }
+    }
+
+    let editingReservedExpenseId = null;
+
+    function openReservedExpenseSheet(id = null) {
+      editingReservedExpenseId = id;
+      const item = id ? reservedExpenses.find(record => record.id === id) || {} : {};
+      document.getElementById("reservedExpenseSheetTitle").textContent = id ? "編輯旅行費用" : "新增旅行費用";
+      const values = {
+        reservedLabel: item.label || "",
+        reservedAmount: item.amount ?? "",
+        reservedCurrency: item.currency || "JPY",
+        reservedStatus: item.paymentStatus || "待確認",
+        reservedParticipants: item.participants ?? "",
+        reservedReferenceTwd: item.referenceTwd ?? "",
+        reservedNote: item.note || ""
+      };
+      Object.entries(values).forEach(([field, value]) => {
+        const element = document.getElementById(field);
+        if (element) element.value = value;
+      });
+      const sheet = document.getElementById("reservedExpenseSheet");
+      sheet.classList.add("open");
+      sheet.setAttribute("aria-hidden", "false");
+    }
+
+    function closeReservedExpenseSheet() {
+      editingReservedExpenseId = null;
+      const sheet = document.getElementById("reservedExpenseSheet");
+      sheet.classList.remove("open");
+      sheet.setAttribute("aria-hidden", "true");
+    }
+
+    function saveReservedExpenseSheet() {
+      const label = document.getElementById("reservedLabel").value.trim();
+      if (!label) return alert("請填寫費用名稱");
+      const previous = editingReservedExpenseId ? reservedExpenses.find(record => record.id === editingReservedExpenseId) || {} : {};
+      const record = {
+        ...previous,
+        id: previous.id || makeId("reserved"),
+        category: "旅行已預訂費用",
+        source: previous.source || "manual",
+        label,
+        amount: Math.max(0, Math.round(Number(document.getElementById("reservedAmount").value) || 0)),
+        currency: document.getElementById("reservedCurrency").value,
+        paymentStatus: document.getElementById("reservedStatus").value,
+        participants: Math.max(0, Math.round(Number(document.getElementById("reservedParticipants").value) || 0)),
+        referenceTwd: Math.max(0, Math.round(Number(document.getElementById("reservedReferenceTwd").value) || 0)),
+        note: document.getElementById("reservedNote").value.trim(),
+        updatedAt: new Date().toISOString()
+      };
+      const index = reservedExpenses.findIndex(item => item.id === record.id);
+      if (index < 0) reservedExpenses.push(record); else reservedExpenses[index] = record;
+      safeSet(RESERVED_EXPENSES_KEY, reservedExpenses);
+      closeReservedExpenseSheet();
+      renderDashboardTravelCards();
+      renderExpenses();
     }
 
     let privateTravelKind = "flight";
@@ -6406,6 +6660,7 @@ function weatherCodeMain(code) {
       const state = dashboardTravelState();
       const targetIndex = actualIndex >= 0 ? actualIndex : (state.mode === "after" ? data.days.length - 1 : 0);
       data.selectedDay = Math.max(1, targetIndex + 1);
+      ticketDateMode = "day";
       save();
       renderDayTabs();
       renderTrip();
@@ -6617,6 +6872,25 @@ function weatherCodeMain(code) {
         <div class="formField full"><label for="manualRate">手動匯率（1 JPY = TWD）</label><input class="formControl" id="manualRate" type="number" min="0" step="0.000001" placeholder="留空使用自動匯率"></div>
       </div>
       <div class="modalActions"><button class="btnGhost" type="button" onclick="closeExpenseSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveExpenseSheet()">儲存</button></div>
+    </div>
+  </div>
+
+  <!-- Reserved travel cost editor -->
+  <div id="reservedExpenseSheet" class="modalSheet" aria-hidden="true">
+    <div class="modalBackdrop" onclick="closeReservedExpenseSheet()"></div>
+    <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="reservedExpenseSheetTitle">
+      <div class="rowBetween"><h3 id="reservedExpenseSheetTitle" style="margin:0">新增旅行費用</h3><button class="btnGhost" type="button" onclick="closeReservedExpenseSheet()">關閉</button></div>
+      <p class="muted" style="margin:8px 0 0">預訂費用會獨立顯示，不會自動重複計入一般記帳。</p>
+      <div class="formGrid" style="margin-top:14px">
+        <div class="formField full"><label for="reservedLabel">費用名稱</label><input class="formControl" id="reservedLabel" placeholder="例如：東京迪士尼門票"></div>
+        <div class="formField"><label for="reservedAmount">金額</label><input class="formControl" id="reservedAmount" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="reservedCurrency">幣別</label><select class="formControl" id="reservedCurrency"><option>JPY</option><option>TWD</option><option>USD</option></select></div>
+        <div class="formField"><label for="reservedStatus">付款狀態</label><select class="formControl" id="reservedStatus"><option>待確認</option><option>已付款</option><option>部分付款</option><option>未付款</option></select></div>
+        <div class="formField"><label for="reservedParticipants">人數</label><input class="formControl" id="reservedParticipants" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="reservedReferenceTwd">台幣參考（可選）</label><input class="formControl" id="reservedReferenceTwd" type="number" min="0" step="1"></div>
+        <div class="formField full"><label for="reservedNote">備註</label><textarea class="formControl" id="reservedNote" rows="3" placeholder="付款方式、訂單備註或拆分說明"></textarea></div>
+      </div>
+      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeReservedExpenseSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveReservedExpenseSheet()">儲存費用</button></div>
     </div>
   </div>
 
