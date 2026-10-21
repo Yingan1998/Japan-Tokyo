@@ -4555,7 +4555,6 @@
       mapCard.innerHTML = `
         <div class="mapEmbedHeader">
           <div><h3>Day ${dayNo}｜${escapeHtml(d.labelJp || d.labelZh || "東京行程")}</h3><small>${escapeHtml(fmtYmd(d.date))} · ${escapeHtml(getDayVersion(dayIndex))} 方案 · Google Maps 預覽</small></div>
-          <button class="btnGhost" type="button" onclick="openDayRoute(${dayNo})">🧭 路線</button>
         </div>
         <div class="mapFrameWrap">
           <div class="mapCanvas" aria-label="Google Maps 互動地圖"></div>
