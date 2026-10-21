@@ -3173,7 +3173,7 @@
 
         <div class="locChip">📍 東京｜Tokyo</div>
         <div class="dateChip" id="dateRange"></div>
-        <div class="dateChip" id="countdownBox">⏳ 計算中…</div>
+        <div class="dateChip" id="countdownBox">計算中…</div>
 
       </div>
 
@@ -4038,7 +4038,8 @@
       data.days.forEach((d, idx) => {
         const dayNo = idx + 1;
         const wx = dailyWeather[d.date];
-        const icon = wx ? weatherIcon(wx) : "⏳";
+        // 天氣尚未載入時不顯示沙漏，避免行程日期標籤看起來像尚未完成。
+        const icon = wx ? weatherIcon(wx) : "";
 
         const tab = document.createElement("div");
         tab.className = "dayTab" + (dayNo === data.selectedDay ? " active" : "");
@@ -4058,7 +4059,7 @@
         tab.setAttribute("aria-label", `Day ${dayNo} ${d.labelJp || d.labelZh || "東京行程"}`);
         tab.innerHTML = `
       <div class="dayTabDay">Day ${dayNo}</div>
-      <div class="dayTabPlace">${escapeHtml(d.labelJp || d.labelZh || "東京行程")} <span class="dayTabWeather" aria-hidden="true">${icon}</span></div>
+      <div class="dayTabPlace">${escapeHtml(d.labelJp || d.labelZh || "東京行程")}${icon ? ` <span class="dayTabWeather" aria-hidden="true">${icon}</span>` : ""}</div>
       <div class="num">
         ${String(new Date(d.date).getDate()).padStart(2, "0")}
       </div>
@@ -6348,7 +6349,7 @@ function weatherCodeMain(code) {
         const cached = dashboardWeatherCache[region.id];
         const dataSet = cached?.data;
         if (!dataSet) {
-          return '<div class="regionalWeatherCard"><span class="weatherEmoji">⏳</span><div><strong>' + escapeHtml(region.name) + '</strong><small>載入中或尚無預報</small></div></div>';
+          return '<div class="regionalWeatherCard"><span class="weatherEmoji" aria-hidden="true">…</span><div><strong>' + escapeHtml(region.name) + '</strong><small>載入中或尚無預報</small></div></div>';
         }
         const current = dataSet.current || {};
         const daily = dataSet.daily || {};
