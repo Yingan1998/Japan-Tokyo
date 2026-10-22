@@ -3758,6 +3758,39 @@
         max-width: none;
         scroll-snap-align: center;
       }
+
+      /* Keep itinerary actions together beside the title on mobile. */
+      .itineraryTitleRow {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .itineraryTitleRow::-webkit-scrollbar {
+        display: none;
+      }
+
+      .itineraryTitleRow .sectionTitle {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        font-size: 17px;
+        padding: 8px 10px;
+      }
+
+      .itineraryTitleRow .sectionTitleActions {
+        width: auto;
+        flex: 0 0 auto;
+        flex-wrap: nowrap;
+        gap: 6px;
+      }
+
+      .itineraryTitleRow .sectionTitleActions .btnPill {
+        flex: 0 0 auto;
+        min-height: 40px;
+        padding: 8px 9px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
     }
   </style>
 </head>
@@ -3845,7 +3878,7 @@
 
       </section>
 
-      <div class="sectionTitleRow">
+      <div class="sectionTitleRow itineraryTitleRow">
         <div class="sectionTitle">行程安排 <span class="muted">Itinerary</span></div>
         <div class="sectionTitleActions">
           <button class="btnPill reminderTrigger" type="button" onclick="toggleReminderPanel()">⏰ 提醒</button>
