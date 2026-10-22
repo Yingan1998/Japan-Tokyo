@@ -3792,6 +3792,105 @@
         white-space: nowrap;
       }
     }
+
+    /* Expense entry sheet: make the primary amount and supporting sections easy to scan. */
+    #expenseSheet .modalPanel {
+      background: linear-gradient(145deg, rgba(255, 253, 248, .98), rgba(235, 246, 247, .96));
+    }
+
+    #expenseSheet .expenseSheetIntro {
+      margin-top: 2px;
+      padding: 12px 14px;
+      border: 1px solid rgba(47, 143, 140, .14);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(228, 244, 242, .82), rgba(255, 255, 255, .68));
+    }
+
+    #expenseSheet .expenseSheetIntro p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    #expenseSheet .expenseFormGrid {
+      gap: 13px;
+    }
+
+    #expenseSheet .expenseFormSection {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: 4px;
+      padding: 11px 2px 1px;
+      border-top: 1px solid rgba(47, 143, 140, .16);
+    }
+
+    #expenseSheet .expenseFormSection:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    #expenseSheet .expenseFormSection strong {
+      color: #23435f;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    #expenseSheet .expenseFormSection span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    #expenseSheet .formField label {
+      margin-bottom: 6px;
+      color: #526d7d;
+      letter-spacing: .02em;
+    }
+
+    #expenseSheet .formControl {
+      min-height: 44px;
+      border-radius: 14px;
+      background: rgba(255, 253, 248, .9);
+    }
+
+    #expenseSheet .expenseAmountField .formControl {
+      min-height: 54px;
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      color: #1f3b57;
+    }
+
+    #expenseSheet #exNote {
+      min-height: 76px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    #expenseSheet .modalActions .btnPill.primary {
+      min-width: 132px;
+    }
+
+    @media (max-width: 600px) {
+      #expenseSheet .expenseFormSection {
+        margin-top: 2px;
+      }
+
+      #expenseSheet .expenseFormSection span {
+        font-size: 10px;
+      }
+
+      #expenseSheet .expenseAmountField .formControl {
+        min-height: 50px;
+        font-size: 23px;
+      }
+
+      #expenseSheet .modalActions .btnPill.primary {
+        min-width: 0;
+      }
+    }
   </style>
 </head>
 
@@ -7393,19 +7492,25 @@ function weatherCodeMain(code) {
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="expenseSheetTitle">
 
       <div class="rowBetween"><h3 id="expenseSheetTitle" style="margin:0">💴 記一筆花費</h3><button class="btnGhost" type="button" onclick="closeExpenseSheet()">關閉</button></div>
+      <div class="expenseSheetIntro"><span class="dashboardKicker">LIVE EXPENSE</span><p>記錄旅途中實際支出，預訂費用請到旅行費用概況管理。</p></div>
 
-      <div class="formGrid" style="margin-top:14px">
-        <div class="formField"><label for="exAmount">金額</label><input class="formControl" id="exAmount" type="number" min="0" step="1"></div>
+      <div class="formGrid expenseFormGrid" style="margin-top:14px">
+        <div class="expenseFormSection full"><strong>基本資料</strong><span>金額、日期與付款方式</span></div>
+        <div class="formField expenseAmountField"><label for="exAmount">金額</label><input class="formControl" id="exAmount" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
         <div class="formField"><label for="exCurrency">幣別</label><select class="formControl" id="exCurrency"><option>JPY</option><option>TWD</option></select></div>
         <div class="formField"><label for="exDate">日期</label><input class="formControl" id="exDate" type="date"></div>
         <div class="formField"><label for="exCategory">分類</label><select class="formControl" id="exCategory"><option>🍴 吃</option><option>🚃 交通</option><option>🎁 購物</option><option>🎫 門票</option><option>🏨 住宿</option><option>🛍 購物清單</option><option>旅行已預訂費用</option><option>其他</option></select></div>
         <div class="formField"><label for="exPaymentMethod">付款方式</label><select class="formControl" id="exPaymentMethod"><option>現金</option><option>信用卡</option><option>電子支付</option><option>Suica／PASMO／ICOCA</option></select></div>
         <div class="formField"><label for="exPayer">實際付款者</label><select class="formControl" id="exPayer"></select></div>
+
+        <div class="expenseFormSection full"><strong>分攤與關聯</strong><span>設定誰需要分擔這筆支出</span></div>
         <div class="formField"><label for="exSplitMode">分攤方式</label><select class="formControl" id="exSplitMode"><option value="equal">平均分攤</option><option value="personal">個人支出</option><option value="specified_amount">指定金額</option><option value="specified_ratio">指定比例</option></select></div>
         <div class="formField"><label for="exSplitDetails">指定內容</label><input class="formControl" id="exSplitDetails" placeholder="例如：我=1000,旅伴 A=500；比例請填 1:2"></div>
         <div class="formField full"><label for="exTrip">關聯行程（可選）</label><select class="formControl" id="exTrip"></select></div>
         <div class="formField full"><label for="exSplitMembers">分攤成員</label><div id="exSplitMembers" class="memberList"></div></div>
-        <div class="formField full"><label for="exNote">備註</label><textarea class="formControl" id="exNote" rows="2"></textarea></div>
+
+        <div class="expenseFormSection full"><strong>補充資訊</strong><span>備註與匯率設定</span></div>
+        <div class="formField full"><label for="exNote">備註</label><textarea class="formControl" id="exNote" rows="2" placeholder="例如：含飲料、已由我先付款"></textarea></div>
         <div class="formField full"><label for="manualRate">手動匯率（1 JPY = TWD）</label><input class="formControl" id="manualRate" type="number" min="0" step="0.000001" placeholder="留空使用自動匯率"></div>
       </div>
       <div class="modalActions"><button class="btnGhost" type="button" onclick="closeExpenseSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveExpenseSheet()">儲存</button></div>
