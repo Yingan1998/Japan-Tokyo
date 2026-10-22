@@ -3704,12 +3704,13 @@
         width: 100%;
         min-width: 0;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: stretch;
         justify-content: stretch;
       }
 
       .topActions > .rate {
+        grid-column: 1 / -1;
         width: auto;
         max-width: none;
         min-width: 0;
@@ -3719,11 +3720,12 @@
         text-overflow: clip;
         white-space: normal;
         line-height: 1.35;
-        text-align: center;
+        text-align: left;
       }
 
       .topActions > .iconBtn {
         min-width: 0;
+        width: 100%;
         padding-inline: 9px;
       }
     }
