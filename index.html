@@ -3833,11 +3833,6 @@
             <div><span class="dashboardLabel">行程進度</span><strong id="dashProgress">0%</strong><small id="dashProgressText">0 / 0 項完成</small></div>
             <div class="progressTrack"><span id="dashProgressBar"></span></div>
           </article>
-          <article class="dashboardStat">
-            <div class="dashboardStatIcon">🎟️</div>
-            <div><span class="dashboardLabel">今日票券</span><strong id="dashTicketCount">0 張</strong><small id="dashTicketText">尚未關聯票券</small></div>
-            <button class="dashboardInlineBtn" type="button" onclick="openTodayTickets()">查看票券</button>
-          </article>
         </div>
 
         <div class="dashboardNextCard" id="dashboardNextCard">
@@ -6544,8 +6539,6 @@ function weatherCodeMain(code) {
       document.getElementById("dashProgress").textContent = progress + "%";
       document.getElementById("dashProgressText").textContent = completed + " / " + items.length + " 項完成";
       document.getElementById("dashProgressBar").style.width = progress + "%";
-      document.getElementById("dashTicketCount").textContent = dayTickets.length + " 張";
-      document.getElementById("dashTicketText").textContent = dayTickets.length ? "待使用或待確認" : "此日尚未關聯待使用票券";
 
       const next = dashboardNextItem(viewIndex);
       const nextTitle = document.getElementById("dashNextTitle");
@@ -7012,11 +7005,6 @@ function weatherCodeMain(code) {
       }), 0);
     }
 
-    function openTodayTickets() {
-      const nav = document.querySelector(".bItem:nth-child(4)");
-      switchPage("tickets", nav);
-    }
-
     function toggleDashboardVersion() {
       const current = getDayVersion(dashboardViewedDayIndex());
       const next = current === "A" ? "B" : "A";
@@ -7413,4 +7401,5 @@ function weatherCodeMain(code) {
 </body>
 
 </html>
+
 
