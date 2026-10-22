@@ -3692,6 +3692,41 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
+
+    /* Keep the exchange-rate text fully readable on narrow screens. */
+    @media (max-width: 600px) {
+      .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .topActions {
+        width: 100%;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        align-items: stretch;
+        justify-content: stretch;
+      }
+
+      .topActions > .rate {
+        width: auto;
+        max-width: none;
+        min-width: 0;
+        height: auto;
+        min-height: 42px;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: normal;
+        line-height: 1.35;
+        text-align: center;
+      }
+
+      .topActions > .iconBtn {
+        min-width: 0;
+        padding-inline: 9px;
+      }
+    }
   </style>
 </head>
 
