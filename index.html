@@ -3728,6 +3728,36 @@
         width: 100%;
         padding-inline: 9px;
       }
+
+      /* Let the full nine-day picker become a swipeable horizontal rail. */
+      .dayTabsNav {
+        gap: 0;
+      }
+
+      .dayTabsNav .dayTabArrow {
+        display: none;
+      }
+
+      .dayTabsNav .dayTabs {
+        display: flex;
+        width: 100%;
+        flex: 1 1 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 4px 2px 8px;
+        scroll-snap-type: x proximity;
+        touch-action: pan-x;
+        overscroll-behavior-inline: contain;
+      }
+
+      .dayTabsNav .dayTab,
+      .dayTabsNav .dayTab.active {
+        display: block;
+        flex: 0 0 92px;
+        width: 92px;
+        max-width: none;
+        scroll-snap-align: center;
+      }
     }
   </style>
 </head>
