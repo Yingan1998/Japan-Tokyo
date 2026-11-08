@@ -3903,7 +3903,6 @@
       <div class="topActions">
         <div class="rate" id="rateBox">匯率讀取中…</div>
         <button class="iconBtn" type="button" onclick="shareTrip()" aria-label="分享行程">↗ 分享</button>
-        <button class="iconBtn" type="button" onclick="window.print()" aria-label="列印行程">⎙ 列印</button>
       </div>
     </div>
 
@@ -4106,6 +4105,7 @@
         </select>
         <select class="filterControl" id="shoppingCategoryFilter" onchange="renderShopping()"><option value="all">全部分類</option></select>
         <select class="filterControl" id="shoppingRegionFilter" onchange="renderShopping()"><option value="all">全部地區</option></select>
+        <button class="btnGhost filterResetBtn" type="button" onclick="resetShoppingFilters()">清除篩選</button>
         <button class="btnGhost" type="button" onclick="exportShoppingCSV()">⬇ 匯出清單</button>
       </div>
       <div class="moduleSummary" id="shoppingSummary"></div>
@@ -4126,6 +4126,7 @@
           <option value="all">全部狀態</option><option>待確認</option><option>待購買</option><option>已購買</option><option>待取票</option><option>已取票</option><option>已使用</option><option>已取消</option>
         </select>
         <input class="filterControl" id="ticketSearch" placeholder="搜尋活動、平台或訂單" oninput="renderTickets()">
+        <button class="btnGhost filterResetBtn" type="button" onclick="resetTicketFilters()">清除篩選</button>
       </div>
       <div class="moduleSummary ticketSummary" id="ticketSummary"></div>
       <div id="ticketList" class="ticketList"></div>
@@ -5332,6 +5333,15 @@
       renderTickets();
     }
 
+    function resetTicketFilters() {
+      ticketDateMode = "all";
+      const status = document.getElementById("ticketStatusFilter");
+      const search = document.getElementById("ticketSearch");
+      if (status) status.value = "all";
+      if (search) search.value = "";
+      renderTickets();
+    }
+
     function deleteTicket(index) {
       if (!confirm(`確定刪除「${tickets[index]?.name || "這張票券"}」？`)) return;
       tickets.splice(index, 1);
@@ -5483,6 +5493,18 @@ function shoppingCurrencySummary(items, field) {
           '<div class="shoppingActions"><button class="shoppingToggle' + (item.purchased ? " isPurchased" : "") + '" type="button" aria-pressed="' + (item.purchased ? "true" : "false") + '" onclick="toggleShoppingPurchased(' + index + ')">' + toggleLabel + '</button>' + (item.price ? '<button class="btnGhost" type="button" onclick="recordShoppingExpense(' + index + ')">' + (item.expenseId ? "已建立記帳" : "💴 建立記帳") + '</button>' : "") + '</div>';
         list.appendChild(card);
       });
+    }
+
+    function resetShoppingFilters() {
+      const search = document.getElementById("shoppingSearch");
+      const status = document.getElementById("shoppingStatusFilter");
+      const category = document.getElementById("shoppingCategoryFilter");
+      const region = document.getElementById("shoppingRegionFilter");
+      if (search) search.value = "";
+      if (status) status.value = "all";
+      if (category) category.value = "all";
+      if (region) region.value = "all";
+      renderShopping();
     }
 
     function exportShoppingCSV() {
@@ -7536,6 +7558,30 @@ function weatherCodeMain(code) {
     </div>
   </div>
 
+  <script>
+    (function () {
+      const focusFirstField = sheet => {
+        const field = sheet?.querySelector('input:not([type="file"]):not([type="hidden"]), select, textarea');
+        if (!field) return;
+        requestAnimationFrame(() => field.focus({ preventScroll: true }));
+      };
+
+      document.querySelectorAll(".modalSheet").forEach(sheet => {
+        new MutationObserver(records => {
+          if (records.some(record => record.attributeName === "class" && sheet.classList.contains("open"))) {
+            focusFirstField(sheet);
+          }
+        }).observe(sheet, { attributes: true, attributeFilter: ["class"] });
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key !== "Escape") return;
+        const openSheets = [...document.querySelectorAll(".modalSheet.open")];
+        const sheet = openSheets[openSheets.length - 1];
+        if (sheet) sheet.querySelector(".modalBackdrop")?.click();
+      });
+    }());
+  </script>
 </body>
 
 </html>
