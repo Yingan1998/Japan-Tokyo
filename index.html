@@ -2186,6 +2186,160 @@
       padding: 16px 18px;
     }
 
+    .dashboardGuideCard {
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 22px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .68), rgba(232, 244, 248, .44));
+      box-shadow: 0 14px 28px rgba(49, 83, 110, .09), inset 0 1px 0 rgba(255, 255, 255, .72);
+      backdrop-filter: blur(14px) saturate(115%);
+      -webkit-backdrop-filter: blur(14px) saturate(115%);
+    }
+
+    .dashboardGuideHeading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .dashboardGuideHeading h2 {
+      margin: 4px 0 0;
+      color: #19344f;
+      font-size: 18px;
+    }
+
+    .dashboardGuideCard p {
+      margin: 9px 0 0;
+      color: #5f788b;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .dashboardGuideMeta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      color: #718696;
+      font-size: 11px;
+    }
+
+    .dayGuidePanel {
+      width: min(760px, 100%);
+    }
+
+    .dayGuideSummary {
+      margin: 10px 0 0;
+      color: #536f82;
+      line-height: 1.6;
+    }
+
+    .dayGuideChecklist,
+    .dayGuideLinks {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .dayGuideChecklist h4,
+    .dayGuideLinks h4 {
+      margin: 0;
+      color: #294761;
+      font-size: 13px;
+    }
+
+    .dayGuideChecklist ul {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding-left: 20px;
+      color: #5c7587;
+      line-height: 1.55;
+    }
+
+    .dayGuideItems {
+      display: grid;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .dayGuideItem {
+      padding: 10px 12px;
+      border: 1px solid rgba(135, 172, 190, .22);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .58);
+      color: #526c7e;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .dayGuideLinks a {
+      color: #2f6f70;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .dayGuideSource {
+      margin-top: 14px;
+      color: #7d909d;
+      font-size: 11px;
+    }
+
+    .itemDetails {
+      margin-top: 8px;
+      color: #5d7688;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .itemDetails summary {
+      display: inline-flex;
+      cursor: pointer;
+      color: #2f6f70;
+      font-weight: 800;
+    }
+
+    .itemDetailsBody {
+      margin-top: 7px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      background: rgba(238, 248, 247, .68);
+    }
+
+    .itemDetailsBody a {
+      display: inline-block;
+      margin-top: 5px;
+      color: #2f6f70;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .appToast {
+      position: fixed;
+      right: 18px;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 1200;
+      max-width: min(340px, calc(100vw - 36px));
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, .78);
+      border-radius: 14px;
+      color: #fff;
+      background: rgba(38, 69, 92, .92);
+      box-shadow: 0 12px 28px rgba(26, 57, 79, .24);
+      font-size: 12px;
+      font-weight: 800;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .appToast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .dashboardCardHeading,
     .dashboardPanelHeading,
     .dashboardLocationRow,
@@ -2657,6 +2811,11 @@
 
       .dashboardNextBody,
       .dashboardReminderBar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .dashboardGuideHeading {
         align-items: flex-start;
         flex-direction: column;
       }
@@ -3974,6 +4133,15 @@
           </div>
         </div>
 
+        <div class="dashboardGuideCard" id="dashboardGuideCard">
+          <div class="dashboardGuideHeading">
+            <div><span class="dashboardKicker">DAY GUIDE</span><h2 id="dashboardGuideTitle">本日詳細行程</h2></div>
+            <button class="btnGhost" type="button" onclick="openDayGuideModal()">查看詳細行程</button>
+          </div>
+          <p id="dashboardGuideSummary">切換日期後，這裡會顯示 TXT 行程明細的重點與提醒。</p>
+          <div class="dashboardGuideMeta"><span id="dashboardGuideChecklist">行前提醒載入中…</span><span id="dashboardGuideSource">來源：行程明細 TXT</span></div>
+        </div>
+
       </section>
 
       <div class="sectionTitleRow itineraryTitleRow">
@@ -4264,7 +4432,7 @@
     // 行程資料已由下方 Notion 匯出版本統一管理。
     // ====== Notion 匯出的正式 9 天行程 ======
     // 版本號讓更新後的內容可覆蓋瀏覽器中舊的 localStorage 行程。
-    const DATA_VERSION = "notion-tokyo-2026-v2";
+    const DATA_VERSION = "notion-tokyo-2026-v3-details-20261108";
     const defaultData = {
       version: DATA_VERSION,
       selectedDay: 1,
@@ -4328,6 +4496,97 @@
         ] }
       ]
     };
+
+    // TXT 行程明細的「可操作摘要」。附件內容僅作為資料來源，未把其中的文字指令當成程式指令執行。
+    // 詳細內容採每日摘要 + 站點重點，避免把 1,300 多行原文塞進行程卡片造成閱讀負擔。
+    const TRIP_GUIDES = {
+      "2026-11-28": {
+        title: "抵達東京・巢鴨・上野",
+        summary: "先完成羽田入境、Suica／Pasmo 儲值與行李寄放，再用巢鴨地藏通暖身，晚上到上野採買與用餐。",
+        checklist: ["05:15 抵達松山機場辦理 BR192 登機", "羽田出關後先儲值 Suica／Pasmo", "APA 15:00 起入住；提早抵達可先寄放行李", "高岩寺本堂約 17:00 關門，先參拜再逛小吃"],
+        sourceUrl: "https://app.notion.com/p/d0243df6279b83eb96578184fc333b69",
+        links: [{ label: "羽田 → 巢鴨導航", url: "https://www.google.com/maps/dir/?api=1&origin=Haneda%20Airport%20Terminal%203&destination=APA%20Hotel%20Sugamo%20Ekimae%20Tokyo&travelmode=transit" }, { label: "巢鴨地藏通官網", url: "https://sugamo.or.jp/prayer/" }],
+        items: ["BR192 07:15 松山 T1 → 11:00 羽田 T3；預留 40–60 分鐘入境。", "飯店放行李後走真性寺 → 高岩寺 → 地藏通，抓 45–75 分鐘。", "上野可逛藥妝、零食與上野公園；晚餐可選鰻魚飯、海鮮丼或豬排。", "JR 山手線回巢鴨，單程約 ¥170。"]
+      },
+      "2026-11-29": {
+        title: "哈利波特影城・池袋",
+        summary: "影城是固定票券行程，提早抵達報到；離場後在池袋安排 Sunshine City、Animate 或晚餐。",
+        checklist: ["09:30 巢鴨出發，轉乘池袋／西武線至豐島園", "建議 10:15 抵達，預留 20 分鐘入場", "影城內預留午餐、奶油啤酒與周邊購物", "池袋景點擇一至兩個，避免排隊造成晚餐延誤"],
+        sourceUrl: "https://app.notion.com/p/3ea43df6279b8239adff0187f5a2c93e",
+        links: [{ label: "影城官方交通", url: "https://www.wbstudiotour.jp/en/plan-your-visit/location/" }, { label: "電子票雲端檔案", url: "https://drive.google.com/file/d/1M2RZhzIoiOmiTIi3Glwlt1auPs-paYS5/view?usp=drivesdk" }],
+        items: ["巢鴨 → 池袋轉乘 → 豐島園，交通估算約 ¥360。", "大禮堂、魔法部、九又四分之三月台、斜角巷與室外展區是必拍重點。", "Sunshine City、Animate、寶可夢中心與無敵家可依體力擇一。", "回巢鴨約 ¥170；若影城延誤，優先保留回飯店交通時間。"]
+      },
+      "2026-11-30": {
+        title: "原宿・澀谷・新宿",
+        summary: "以明治神宮的森林步道開場，下午一路步行或搭山手線到澀谷，傍晚再接新宿夜景。",
+        checklist: ["09:30 從巢鴨搭 JR 山手線到原宿", "明治神宮預留 60–90 分鐘", "SHIBUYA SKY 建議提前預約 15:30 時段", "PARCO、MIYASHITA PARK 擇一，避免行程過滿"],
+        sourceUrl: "https://app.notion.com/p/13043df6279b82f29683017a1242b983",
+        links: [{ label: "明治神宮參拜", url: "https://www.meijijingu.or.jp/sanpai/2.php" }, { label: "SHIBUYA SKY", url: "https://www.shibuya-scramble-square.com/sky/" }],
+        items: ["巢鴨 → 原宿約 ¥210；先走鳥居與森林參道，再逛 Kiddy Land／表參道。", "原宿 → 澀谷可步行約 15 分鐘；午餐與八公、十字路口安排在此段。", "SHIBUYA PARCO、MIYASHITA PARK、SHIBUYA SKY 依票券與體力取捨。", "17:30 後到新宿東口、歌舞伎町拍照，19:00 安排晚餐。", "21:30 前從新宿回巢鴨，避免錯過末班車。"]
+      },
+      "2026-12-01": {
+        title: "東京迪士尼樂園（陸地）",
+        summary: "整天以園區為主，先完成入園與熱門設施，再依遊行、晚餐與夜間節目調整順序。",
+        checklist: ["前一晚下載 Tokyo Disney Resort App 並確認票券", "07:30 出發、08:20 排隊，入園後先處理熱門設施／DPA", "準備暖暖包、防風外套與行動電源", "聖誕遊行、夜間節目與煙火依當日公告為準"],
+        sourceUrl: "https://app.notion.com/p/b5643df6279b82d2b82e01c4aff2e186",
+        links: [{ label: "東京迪士尼官方", url: "https://www.tokyodisneyresort.jp/tc/" }],
+        items: ["巢鴨 → 東京 → 舞濱，來回交通估算約 ¥820。", "08:45 早期入園後先處理美女與野獸、維尼或太空山等熱門設施。", "11:30 提早午餐；15:30 聖誕遊行、18:30 夜間節目時預留觀賞位置。", "20:30 離園、22:00 回巢鴨；若體力不足可提早離園。"]
+      },
+      "2026-12-02": {
+        title: "吉卜力美術館・換飯店",
+        summary: "退房後先把大行李寄放在三鷹或新宿，再進吉卜力美術館；晚上前往田原町的新住宿。",
+        checklist: ["10:00 前完成 APA 退房；大行李先寄放", "吉卜力門票需預約，入場時段以票券為準", "豪德寺是可取消的備選，16:30 關門", "田原町站使用 2 號出口，推行李較省力"],
+        sourceUrl: "https://app.notion.com/p/4c043df6279b838db9b432011ee588ba5a",
+        links: [{ label: "吉卜力官方交通", url: "https://www.ghibli-museum.jp/en/hours-and-directions/" }, { label: "東橫 INN 官網", url: "https://www.toyoko-inn.com/china/search/detail/00249/" }],
+        items: ["巢鴨 → 新宿 → 三鷹；建議先處理置物櫃再搭接駁巴士。", "龍貓售票亭、天空之城機器人、土星座影院與手稿展示室是必看。", "吉祥寺 Sunroad、LOFT、Petit Village 與晚餐可依入館時間調整。", "20:30 後入住 Toyoko Inn 東京上野田原町站，確認行李與隔日集合物品。"]
+      },
+      "2026-12-03": {
+        title: "團體淺草・個人雙展",
+        summary: "白天團體走淺草與東京車站，MAPPA／排球少年展屬個人票券路線，請先核對場次再決定是否分流。",
+        checklist: ["10:45 從田原町步行到雷門", "淺草寺、仲見世與淺草橫町安排午餐", "MAPPA／排球少年展的入場時段以票券與 Lawson 訂單為準", "20:30 前回田原町，晚間確認隔日富士山團集合資料"],
+        sourceUrl: "https://app.notion.com/p/db343df6279b828d99e2019d21b4073f",
+        links: [{ label: "淺草神社御朱印", url: "https://asakusajinja.jp/goshuin/" }, { label: "東京車站一番街", url: "https://www.tokyoeki-1bangai.co.jp/en/" }, { label: "MAPPA 展官網", url: "https://expo.mappa.co.jp/title/all" }],
+        items: ["雷門、仲見世、淺草寺本堂與淺草橫町；午餐可選大黑家天丼或花月堂。", "東京 Character Street、吉卜力／蠟筆小新／Chiikawa 與 TOKYO GIFT PALETTE。", "東京鐵塔 17:30 抵達芝公園，抓日落前後的點燈拍攝。", "回田原町後檢查富士山團單、集合時間與保暖衣物。"]
+      },
+      "2026-12-04": {
+        title: "富士山一日遊・山中湖 KABA",
+        summary: "跟團日以集合準時與保暖為優先，河口湖、忍野八海、KABA 的停留時間要跟著導遊與車況調整。",
+        checklist: ["06:30 起床，07:50 前到東京站丸之內北口找導遊", "車上先吃輕便早餐，集合點與團單截圖保持離線可看", "山區比東京低約 5–7°C，準備外套、圍巾與太陽眼鏡", "下車前確認集合時間，避免在景點逛到錯過上車"],
+        sourceUrl: "https://app.notion.com/p/0bc43df6279b835ca5b1016120d0e692",
+        links: [{ label: "富士山團單資料夾", url: "https://drive.google.com/drive/folders/1pl-rW3bL4CuooCsFP5JaYBExS7Ib_LrQ" }, { label: "KABA 官方 FAQ", url: "https://www.kaba-bus.com/yamanakako/faq" }],
+        items: ["07:20 田原町 → 上野 → 東京站；08:00 巴士出發。", "大石公園與河口湖 Lawson 是富士山拍攝重點，視天氣調整。", "忍野八海可吃現烤草餅與富士湧泉豆腐，12:10–13:30。", "KABA 14:00–15:30；湖邊風大，先穿好保暖層。", "日川時計店為彈性景點，時間不足可直接回集合點。", "東京站一番街晚餐與採買後再回田原町。"]
+      },
+      "2026-12-05": {
+        title: "台場購物・彩虹煙火",
+        summary: "上午台場採買，傍晚移到海濱公園卡位；煙火是短時間活動，先確認天氣與官方公告。",
+        checklist: ["10:45 田原町 → 新橋 → 百合海鷗號", "DiverCity、AQUA CiTY 與鋼彈安排採買／午餐", "18:40 前到海濱公園，預留煙火拍攝位置", "回飯店前確認行李重量、退稅單與隔日航班文件"],
+        sourceUrl: "https://app.notion.com/p/35f43df6279b835ca5b1016120d0e692",
+        links: [{ label: "台場海濱公園地圖", url: "https://www.google.com/maps/search/?api=1&query=Odaiba+Marine+Park+Tokyo" }, { label: "彩虹煙火公告（出發前確認）", url: "https://www.tokyo-odaiba.net/" }],
+        items: ["百合海鷗號交通約 ¥510；抵達後先處理鋼彈、購物與午餐。", "彩虹大橋與自由女神像適合 16:30–18:30 拍攝夕陽與點燈。", "煙火預計 19:00–19:10，18:40 前先卡位；活動以當日公告為準。", "AQUA CiTY 拉麵國技館或 bills 用餐，21:30 前回田原町整理行李。"]
+      },
+      "2026-12-06": {
+        title: "田原町退房・羽田返臺",
+        summary: "最後一天以準時離店、直達羽田與預留托運時間為優先，免稅與伴手禮只能在完成登機手續後安排。",
+        checklist: ["07:30 整理行李，08:15 前完成退房", "田原町 → 淺草轉都營淺草線／京急直達羽田", "09:45 前到羽田 T3 櫃檯，預留托運與安檢時間", "BR191 12:15 起飛；護照、票券與免稅品集中放隨身包"],
+        sourceUrl: "https://app.notion.com/p/73a43df6279b838bbae381104237f5de",
+        links: [{ label: "羽田 T3 地圖", url: "https://www.google.com/maps/search/?api=1&query=Haneda+Airport+Terminal+3" }],
+        items: ["08:30 離開田原町，搭都營淺草線／京急直達羽田 T3。", "10:15 辦理登機與托運；完成後再安排江戶小路或免稅採買。", "BR191 12:15 羽田 → 15:05 松山；抵達後再確認行李與退稅文件。"]
+      }
+    };
+
+    function decorateItineraryGuides(days) {
+      return (Array.isArray(days) ? days : []).map(day => {
+        const guide = TRIP_GUIDES[day.date];
+        if (!guide) return day;
+        const decorated = { ...day, guide: clone(guide), detailSource: "Tokyo_2026_Daily_Itinerary_Details.txt（2026/11/08 匯出）" };
+        decorated.items = (Array.isArray(day.items) ? day.items : []).map((item, index) => ({
+          ...item,
+          detail: item.detail || guide.items?.[index] || "",
+          sourceUrl: item.sourceUrl || guide.sourceUrl || ""
+        }));
+        return decorated;
+      });
+    }
 
     function clone(value) {
       return JSON.parse(JSON.stringify(value));
@@ -4405,19 +4664,19 @@
     function migrateData(raw) {
       const source = raw && Array.isArray(raw.days) && raw.days.length ? raw : defaultData;
       const active = source.activeVersion === "B" ? "B" : "A";
-      const versionA = source.versions?.A?.days?.length ? normalizeDays(source.versions.A.days) : normalizeDays(source.days);
-      const versionB = source.versions?.B?.days?.length ? normalizeDays(source.versions.B.days) : buildRelaxedDays(versionA);
+      const versionA = decorateItineraryGuides(source.versions?.A?.days?.length ? normalizeDays(source.versions.A.days) : normalizeDays(source.days));
+      const versionB = decorateItineraryGuides(source.versions?.B?.days?.length ? normalizeDays(source.versions.B.days) : buildRelaxedDays(versionA));
       const activeDays = active === "B" ? versionB : versionA;
       const dayVersions = source.dayVersions && typeof source.dayVersions === "object" ? { ...source.dayVersions } : {};
-      const mixedDays = activeDays.map((day, index) => {
+      const mixedDays = decorateItineraryGuides(activeDays.map((day, index) => {
         const version = dayVersions[day.date] === "B" ? "B" : (dayVersions[day.date] === "A" ? "A" : active);
         return version === active ? clone(day) : clone((version === "B" ? versionB : versionA)[index] || day);
-      });
+      }));
 
       return {
         ...clone(source),
         version: DATA_VERSION,
-        schemaVersion: 2,
+        schemaVersion: 3,
         activeVersion: active,
         versions: { A: { days: versionA }, B: { days: versionB } },
         dayVersions,
@@ -4614,6 +4873,24 @@
     function save() {
       syncVersionStores();
       safeSet("emenuTokyo", data);
+      showAppToast("行程變更已儲存");
+    }
+
+    let appToastTimer = null;
+    function showAppToast(message) {
+      if (!document.body) return;
+      let toast = document.getElementById("appToast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "appToast";
+        toast.className = "appToast";
+        toast.setAttribute("role", "status");
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(appToastTimer);
+      appToastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
     }
 
     // Keep every itinerary projection in sync after a single data mutation.
@@ -4767,7 +5044,11 @@
 
     function openMap(place) {
       const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
-      location.href = url;
+      const opened = window.open(url, "_blank", "noopener,noreferrer");
+      if (!opened) {
+        const shouldLeave = confirm("瀏覽器阻擋了地圖新分頁。要直接開啟地圖嗎？（會離開目前行程頁）");
+        if (shouldLeave) location.href = url;
+      }
     }
 
     function renderHeaderDate() {
@@ -4794,6 +5075,7 @@
           ticketDateMode = "day";
           save();
           refreshItineraryViews();
+          scrollToSelectedTripDay();
         };
         tab.onkeydown = event => {
           if (event.key === "Enter" || event.key === " ") tab.click();
@@ -4824,6 +5106,12 @@
       ticketDateMode = "day";
       save();
       refreshItineraryViews();
+      scrollToSelectedTripDay();
+    }
+
+    function scrollToSelectedTripDay() {
+      const page = document.getElementById("page-trip");
+      if (page?.classList.contains("active")) page.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
 
@@ -4870,6 +5158,7 @@
         <div class="itemMain">
           <div class="itemTitle">${escapeHtml(it.title)}</div>
           <div class="itemSub">${escapeHtml(it.sub || "")}</div>
+          ${it.detail ? `<details class="itemDetails"><summary>查看行程重點</summary><div class="itemDetailsBody">${escapeHtml(it.detail)}${safeExternalUrl(it.sourceUrl) ? `<br><a href="${safeExternalUrl(it.sourceUrl)}" target="_blank" rel="noopener">開啟來源頁面 ↗</a>` : ""}</div></details>` : ""}
           ${safeExternalUrl(it.photo) ? `<img src="${safeExternalUrl(it.photo)}" alt="景點照片" onerror="this.remove()" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:8px">` : ""}
 
           <div class="timelineMeta">
@@ -5178,6 +5467,7 @@
       data.selectedDay = Math.min(Math.max(Number(dayNo) || 1, 1), data.days.length || 1);
       save();
       refreshItineraryViews();
+      document.getElementById("page-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function stepMapDay(offset) {
@@ -6556,6 +6846,31 @@ function weatherCodeMain(code) {
       return Math.min(Math.max(Number(data.selectedDay || 1) - 1, 0), Math.max(data.days.length - 1, 0));
     }
 
+    function closeDayGuideModal() {
+      const sheet = document.getElementById("dayGuideSheet");
+      if (!sheet) return;
+      sheet.classList.remove("open");
+      sheet.setAttribute("aria-hidden", "true");
+    }
+
+    function openDayGuideModal(dayIndex = dashboardViewedDayIndex()) {
+      const day = data.days[Math.min(Math.max(Number(dayIndex) || 0, 0), Math.max(data.days.length - 1, 0))];
+      const guide = day?.guide;
+      const sheet = document.getElementById("dayGuideSheet");
+      if (!sheet || !day || !guide) return alert("這一天尚未建立詳細行程。");
+      document.getElementById("dayGuideSheetTitle").textContent = `Day ${Number(dayIndex) + 1}｜${guide.title || day.labelJp || "詳細行程"}`;
+      document.getElementById("dayGuideSummary").textContent = guide.summary || "尚無摘要。";
+      document.getElementById("dayGuideChecklistList").innerHTML = (guide.checklist || []).map(item => `<li>${escapeHtml(item)}</li>`).join("") || "<li>目前沒有額外提醒。</li>";
+      document.getElementById("dayGuideItems").innerHTML = (guide.items || []).map((item, index) => `<div class="dayGuideItem"><strong>${index + 1}. ${escapeHtml(day.items?.[index]?.title || "行程重點")}</strong><br>${escapeHtml(item)}</div>`).join("");
+      document.getElementById("dayGuideLinkList").innerHTML = (guide.links || []).map(link => {
+        const url = safeExternalUrl(link.url);
+        return url ? `<a class="btnGhost" href="${url}" target="_blank" rel="noopener">${escapeHtml(link.label || "開啟連結")} ↗</a>` : "";
+      }).join("") || "<span class=muted>目前沒有外部連結。</span>";
+      document.getElementById("dayGuideSource").textContent = `${day.detailSource || "來源：行程明細 TXT"} · 內容以票券、訂單與當日公告為準。`;
+      sheet.classList.add("open");
+      sheet.setAttribute("aria-hidden", "false");
+    }
+
     function dashboardFormatDate(dateKey) {
       try {
         return new Intl.DateTimeFormat("zh-TW", {
@@ -6720,6 +7035,16 @@ function weatherCodeMain(code) {
       renderDashboardReminder();
       renderDashboardRainPlan(viewIndex);
       checkDashboardUpcomingReminder();
+
+      const guide = day.guide;
+      const guideTitle = document.getElementById("dashboardGuideTitle");
+      const guideSummary = document.getElementById("dashboardGuideSummary");
+      const guideChecklist = document.getElementById("dashboardGuideChecklist");
+      const guideSource = document.getElementById("dashboardGuideSource");
+      if (guideTitle) guideTitle.textContent = guide?.title || `Day ${viewIndex + 1} 詳細行程`;
+      if (guideSummary) guideSummary.textContent = guide?.summary || "切換日期查看行程明細。";
+      if (guideChecklist) guideChecklist.textContent = guide?.checklist?.length ? `行前提醒 ${guide.checklist.length} 項 · 點擊查看完整內容` : "尚無額外提醒";
+      if (guideSource) guideSource.textContent = guide ? "來源：行程明細 TXT（2026/11/08）" : "來源：目前行程資料";
     }
 
     function renderDashboardTimeline(dayIndex) {
@@ -6741,7 +7066,8 @@ function weatherCodeMain(code) {
           item.transportMethod ? "交通：" + escapeHtml(item.transportMethod) : "",
           item.transportDuration ? "預估：" + escapeHtml(item.transportDuration) : "",
           Number(item.budget) > 0 ? "活動預算：¥" + Number(item.budget).toLocaleString() : "",
-          item.ticketId ? "已關聯票券" : "尚未關聯票券"
+          item.ticketId ? "已關聯票券" : "尚未關聯票券",
+          item.detail ? "行程重點：" + escapeHtml(item.detail) : ""
         ].filter(Boolean).join(" · ");
         const openAttr = completed ? "" : " open";
         const placeArg = escapeHtml(JSON.stringify(String(item.place || "")));
@@ -7536,6 +7862,19 @@ function weatherCodeMain(code) {
         <div class="formField full"><label for="manualRate">手動匯率（1 JPY = TWD）</label><input class="formControl" id="manualRate" type="number" min="0" step="0.000001" placeholder="留空使用自動匯率"></div>
       </div>
       <div class="modalActions"><button class="btnGhost" type="button" onclick="closeExpenseSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveExpenseSheet()">儲存</button></div>
+    </div>
+  </div>
+
+  <!-- Detailed day guide from the attached itinerary TXT -->
+  <div id="dayGuideSheet" class="modalSheet" aria-hidden="true">
+    <div class="modalBackdrop" onclick="closeDayGuideModal()"></div>
+    <div class="modalPanel dayGuidePanel" role="dialog" aria-modal="true" aria-labelledby="dayGuideSheetTitle">
+      <div class="rowBetween"><h3 id="dayGuideSheetTitle" style="margin:0">本日詳細行程</h3><button class="btnGhost" type="button" onclick="closeDayGuideModal()">關閉</button></div>
+      <p id="dayGuideSummary" class="dayGuideSummary"></p>
+      <div class="dayGuideChecklist"><h4>行前提醒</h4><ul id="dayGuideChecklistList"></ul></div>
+      <div class="dayGuideItems" id="dayGuideItems"></div>
+      <div class="dayGuideLinks"><h4>快速連結</h4><div id="dayGuideLinkList" class="linkRow"></div></div>
+      <p id="dayGuideSource" class="dayGuideSource"></p>
     </div>
   </div>
 
