@@ -913,12 +913,12 @@
     }
 
     .shoppingItemCard.isPurchased {
-      border-color: rgba(74, 155, 118, .28);
-      background: linear-gradient(145deg, rgba(239, 250, 244, .84), rgba(255, 255, 255, .62));
+      border-color: rgba(67, 123, 161, .28);
+      background: linear-gradient(145deg, rgba(235, 246, 252, .86), rgba(255, 255, 255, .62));
     }
 
     .shoppingItemCard.isPurchased .shoppingItemName {
-      color: #47705c;
+      color: #315d79;
     }
 
     .shoppingItemName {
@@ -957,9 +957,9 @@
     }
 
     .shoppingStatus.done {
-      color: #2f7655;
-      background: rgba(111, 207, 151, .22);
-      border: 1px solid rgba(74, 155, 118, .22);
+      color: #2f6282;
+      background: rgba(119, 187, 218, .22);
+      border: 1px solid rgba(67, 123, 161, .22);
     }
 
     .shoppingActions {
@@ -989,9 +989,9 @@
     }
 
     .shoppingToggle.isPurchased {
-      color: #47705c;
-      background: rgba(229, 244, 235, .84);
-      border-color: rgba(74, 155, 118, .2);
+      color: #2f6282;
+      background: rgba(226, 241, 249, .92);
+      border-color: rgba(67, 123, 161, .26);
     }
 
     .shoppingActions .btnGhost {
@@ -1008,8 +1008,95 @@
     }
 
     .shoppingSummaryChip.done {
-      color: #2f7655;
-      background: rgba(111, 207, 151, .2);
+      color: #2f6282;
+      background: rgba(119, 187, 218, .2);
+    }
+
+    .shoppingConfirmBar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 10px 0 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(117, 157, 178, .2);
+      border-radius: 16px;
+      background: rgba(245, 251, 253, .72);
+      color: #5d7688;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .shoppingConfirmBar div {
+      display: grid;
+      gap: 2px;
+    }
+
+    .shoppingConfirmBar strong {
+      color: #2b4d67;
+      font-size: 13px;
+    }
+
+    .shoppingProgress {
+      display: grid;
+      gap: 6px;
+      flex: 1 1 240px;
+      min-width: 180px;
+    }
+
+    .shoppingProgressTop {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .shoppingProgressTop strong { color: #2b4d67; }
+    .shoppingProgressTop small { color: #718696; }
+
+    .shoppingProgressTrack {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(53, 90, 113, .11);
+    }
+
+    .shoppingProgressTrack span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #5c91b5, #78b8b0);
+      transition: width .2s ease;
+    }
+
+    .shoppingDetails {
+      margin-top: 10px;
+      color: #607889;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .shoppingDetails summary {
+      display: inline-flex;
+      cursor: pointer;
+      color: #3b7185;
+      font-weight: 800;
+    }
+
+    .shoppingDetailsBody {
+      display: grid;
+      gap: 4px;
+      margin-top: 7px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      background: rgba(239, 248, 250, .78);
+    }
+
+    .shoppingDetailsBody a {
+      color: #2f6f70;
+      font-weight: 800;
+      text-decoration: none;
     }
 
     .travelRecordHint {
@@ -2880,6 +2967,15 @@
         text-align: center;
       }
 
+      .shoppingConfirmBar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .shoppingConfirmBar .btnGhost {
+        width: 100%;
+      }
+
       .backupCard {
         padding: 16px;
       }
@@ -4269,7 +4365,7 @@
       <div class="moduleToolbar">
         <input class="filterControl" id="shoppingSearch" placeholder="搜尋商品或店家" oninput="renderShopping()">
         <select class="filterControl" id="shoppingStatusFilter" onchange="renderShopping()">
-          <option value="all">全部狀態</option><option value="todo">待購買</option><option value="done">已購買</option>
+          <option value="all">全部採購狀態</option><option value="todo">尚未確認</option><option value="done">已確認買到</option>
         </select>
         <select class="filterControl" id="shoppingCategoryFilter" onchange="renderShopping()"><option value="all">全部分類</option></select>
         <select class="filterControl" id="shoppingRegionFilter" onchange="renderShopping()"><option value="all">全部地區</option></select>
@@ -4277,6 +4373,10 @@
         <button class="btnGhost" type="button" onclick="exportShoppingCSV()">⬇ 匯出清單</button>
       </div>
       <div class="moduleSummary" id="shoppingSummary"></div>
+      <div class="shoppingConfirmBar" aria-live="polite">
+        <div><strong>採購確認</strong><span>按「確認已買到」後才會計入已完成；需要修改時可立即撤銷。</span></div>
+        <button class="btnGhost" type="button" onclick="showPendingShopping()">只看尚未確認</button>
+      </div>
       <div id="shoppingList"></div>
     </section>
 
@@ -4690,6 +4790,40 @@
     const RESERVED_EXPENSES_KEY = "tokyoReservedExpenses";
     const privateTravelDrafts = { flight: {}, accommodation: {} };
 
+    // 來源：Tokyo_2026_Shopping_List.txt（2026/11/08 匯出）。附件內容只作為採購資料，未執行其中任何文字指令。
+    const SHOPPING_IMPORT_VERSION = "txt-shopping-20261108-v1";
+    const importedShoppingItems = [
+      { name: "PRETZ 熟成發酵奶油風味", category: "伴手禮", region: "各站零食通路", store: "Glico", price: 0, note: "發酵奶油款現售與現價待確認；烤鹽奶油款 ¥149.04 為不同口味。", sourceUrl: "https://www.glico.com/jp/newscenter/pressrelease/16889/", notionUrl: "https://app.notion.com/p/41043df6279b813a83b2c4b9d8bc9aa7" },
+      { name: "Glico Cheeza 生起司脆餅", category: "伴手禮", region: "東京車站／各站零食通路", store: "Yodobashi", price: 291, note: "以烤起司切達 32g 比價；卡門貝爾與煙燻起司現價需現場核對。", sourceUrl: "https://www.yodobashi.com/product/100000001009182442/", notionUrl: "https://app.notion.com/p/41043df6279b8160a566db2583a989c9" },
+      { name: "Butter Butler 費南雪", category: "伴手禮", region: "東京車站／品牌門市", store: "品牌官網", price: 1080, note: "原味 4／6／8／12 入：¥1,080／1,620／2,160／3,240；限定口味需另核對。", sourceUrl: "https://sucreyshopping.jp/butterbutler", notionUrl: "https://app.notion.com/p/41043df6279b816ca54ec0e67f16dc68" },
+      { name: "銀之葡萄 抹茶巧克力三明治餅乾", category: "伴手禮", region: "東京車站", store: "GRANSTA（歷史資料）", price: 0, note: "2017 年 10 入上市價 ¥1,080；現售與現價待確認。", sourceUrl: "https://straightpress.jp/20171027/208479", notionUrl: "https://app.notion.com/p/41043df6279b81908b62c188b37a954f" },
+      { name: "Glico CRATZ 脆烤培根起司棒", category: "伴手禮", region: "各站零食通路", store: "日本零食通路", price: 0, note: "照片為黑胡椒培根 63g 夾鏈款；名稱、規格與現價需現場核對。", sourceUrl: "https://www.glico.com/jp/product/snack_biscuit_cookie/cratz/46520/", notionUrl: "https://app.notion.com/p/41043df6279b81bd939cc5a84349606c" },
+      { name: "YOKU MOKU 雪茄蛋捲", category: "伴手禮", region: "東京車站／機場", store: "品牌官網", price: 1998, note: "以原味 20 入比價。", sourceUrl: "https://yokumoku.co.jp/products/1010011201030", notionUrl: "https://app.notion.com/p/41043df6279b8156b0a0fe64c901bb39" },
+      { name: "東京晴空戀巧 巧克力", category: "伴手禮", region: "晴空塔", store: "品牌官網", price: 1750, note: "東京カンパネラショコラ 10 入；晴空塔 Solamachi 供貨未核實。", sourceUrl: "https://shop.tokyo-campanella.com/c/1", notionUrl: "https://app.notion.com/p/41043df6279b81a99715d5817acad614" },
+      { name: "戀上喫茶店 焦糖布蕾塔", category: "伴手禮", region: "東京車站／機場", store: "品牌官網", price: 993, note: "4 入 ¥993；8 入 ¥1,890。", sourceUrl: "https://www.kissakoi.tokyo/", notionUrl: "https://app.notion.com/p/41043df6279b81df99d0fcceab79fd9a" },
+      { name: "NEWYORK PERFECT CHEESE 起司奶油脆餅", category: "伴手禮", region: "東京車站", store: "品牌官網", price: 2916, note: "以照片的 18 入盒比價，另有 5／8／12／15 入。", sourceUrl: "https://newyork-perfect-cheese.com/", notionUrl: "https://app.notion.com/p/41043df6279b81f5983bed37bcd3170e" },
+      { name: "Maple Mania 楓糖奶油夾心餅", category: "伴手禮", region: "東京車站／機場", store: "品牌官網", price: 1188, note: "9 入 ¥1,188；18 入 ¥2,376；32 入 ¥4,212。", sourceUrl: "https://sucreyshopping.jp/themaplemania/cookie", notionUrl: "https://app.notion.com/p/41043df6279b81f6b36de6c21d0ce95a" },
+      { name: "御守", category: "伴手禮", region: "明治神宮／淺草寺", store: "神社授與所", price: 0, note: "依神社與款式核對，暫不填價。", notionUrl: "https://app.notion.com/p/41043df6279b8109a498d41713f89530" },
+      { name: "曼秀雷敦 Jinmart 蕁麻疹乳膏", category: "藥妝", region: "上野／池袋", store: "Create SD", price: 1078, note: "15g 外用乳膏。", sourceUrl: "https://netshop.create-sd.co.jp/shop/g/g4987241139217/", notionUrl: "https://app.notion.com/p/41043df6279b8137affad8a2246b35f6" },
+      { name: "久光撒隆巴斯 Ae 中判", category: "藥妝", region: "上野／池袋", store: "松本清", price: 1650, note: "40 枚，6 × 9 cm。", sourceUrl: "https://www.matsukiyococokara-online.com/store/catalog/product/view/id/4987188135129", notionUrl: "https://app.notion.com/p/41043df6279b8140b6e2c9dcd0a4cd02" },
+      { name: "久光撒隆巴斯 Ae 一般款 140 枚", category: "藥妝", region: "上野／池袋", store: "松本清", price: 1738, note: "140 枚，4.2 × 6.5 cm。", sourceUrl: "https://www.matsukiyococokara-online.com/store/catalogsearch/result?search_keyword=%E3%82%B5%E3%83%AD%E3%83%B3%E3%83%91%E3%82%B9ae", notionUrl: "https://app.notion.com/p/41043df6279b816397b4d7e43b9d1d7c" },
+      { name: "合利他命 EX Plus", category: "藥妝", region: "上野／池袋", store: "Bic Camera", price: 6290, note: "EX PLUS 270 錠；通路價 ¥6,290，品牌建議售價 ¥8,778。", sourceUrl: "https://www.biccamera.com/bc/item/1882212/", notionUrl: "https://app.notion.com/p/41043df6279b819bb87bda10a1eb59d4" },
+      { name: "小林製藥 TSUMECURE 指緣角質乳膏", category: "藥妝", region: "上野／池袋", store: "Bic Camera", price: 944, note: "チュメキュア 5g。", sourceUrl: "https://www.biccamera.com/bc/item/14350321/", notionUrl: "https://app.notion.com/p/41043df6279b81a3a662e9fe4dda38b7" },
+      { name: "大正百保能 Gold A", category: "藥妝", region: "上野／池袋", store: "大正製藥", price: 3025, note: "微粒 44 包；品牌建議售價 ¥3,025，通路比價另有 ¥1,628。", sourceUrl: "https://www.catalog-taisho.com/category/02/001/04515/", notionUrl: "https://app.notion.com/p/41043df6279b810dbef2fdab0eaf25fe" },
+      { name: "休足時間 足底凸點貼片", category: "藥妝", region: "上野／池袋", store: "ASKUL", price: 812, note: "足底專用顆粒款，12 枚。", sourceUrl: "https://www.askul.co.jp/p/EP24780/", notionUrl: "https://app.notion.com/p/41043df6279b811fb1befa41d5cbe35f" },
+      { name: "EVE", category: "藥妝", region: "上野／池袋", store: "價格.com", price: 668, note: "以 EVE A 24 錠通路價比價；A EX、Quick、DX 等規格價格不同，現場請核對。", sourceUrl: "https://kakaku.com/medicine-item/K0000545332/", notionUrl: "https://app.notion.com/p/41043df6279b812db85fc6f56e056446" },
+      { name: "興和液體止癢瓶・小孩粉色", category: "藥妝", region: "上野／池袋", store: "Bic Camera", price: 385, note: "プチウナコーワ プチピンク 12mL。", sourceUrl: "https://www.biccamera.com/bc/item/1700971/", notionUrl: "https://app.notion.com/p/41043df6279b813c9943f9df10152411" },
+      { name: "蚊蟲咬傷止癢藥", category: "藥妝", region: "上野／池袋", store: "松本清", price: 812, note: "以新ウナコーワクール 55mL 比價。", sourceUrl: "https://www.matsukiyococokara-online.com/store/catalog/product/view/id/4987067231102", notionUrl: "https://app.notion.com/p/41043df6279b81609c19fef6a884c0b1" },
+      { name: "曼秀雷敦清爽除臭霜", category: "藥妝", region: "上野／池袋", store: "樂敦官網", price: 1518, note: "Refrea 罐裝乳霜 55g。", sourceUrl: "https://cocoapi.rohto.com/refrea/cream", notionUrl: "https://app.notion.com/p/41043df6279b817a936aeb3277929050" },
+      { name: "曼秀雷敦 Medi Quick PRO 濕疹乳膏", category: "藥妝", region: "上野／池袋", store: "松本清", price: 1628, note: "8g 清爽乳膏；通路品名末尾可能有 クリームa。", sourceUrl: "https://www.matsukiyococokara-online.com/store/catalog/product/view/id/4987241196654", notionUrl: "https://app.notion.com/p/41043df6279b81a3a83fdc5781d6073c" },
+      { name: "樂敦 Gold 40 眼藥水", category: "藥妝", region: "上野／池袋", store: "樂敦官網", price: 858, note: "一般版 20mL；溫和版松本清參考價 ¥657，現場請核對。", sourceUrl: "https://www.shop.rohto.co.jp/category/medicine/gold40/195725.html", notionUrl: "https://app.notion.com/p/41043df6279b81c28bb5cea3cece79ff" },
+      { name: "強力若元錠", category: "藥妝", region: "上野／池袋", store: "松本清", price: 2728, note: "1,000 錠通路價；品牌建議售價 ¥3,300。", sourceUrl: "https://www.matsukiyococokara-online.com/store/catalog/category/view/categories/001/11/01?hashtag=%E6%9F%94%E3%82%89%E3%81%8B%E3%81%84", notionUrl: "https://app.notion.com/p/41043df6279b81c68d00de94cc457dd2" },
+      { name: "樂敦 V 頂級眼藥水", category: "藥妝", region: "上野／池袋", store: "松本清", price: 1650, note: "以 Vロートプレミアム 15mL 比價，現場核對 V Premium 包裝。", sourceUrl: "https://www.matsukiyococokara-online.com/store/catalog/product/view/id/4987241174454", notionUrl: "https://app.notion.com/p/41043df6279b813cb62ef96fad2cb4eb" },
+      { name: "SHIRO 香水", category: "奢侈品", region: "澀谷／表參道", store: "SHIRO 日本官網", price: 4180, note: "以 SAVON 淡香精 40mL 比價，香味尚未指定。", sourceUrl: "https://shiro-shiro.jp/item/12702.html", notionUrl: "https://app.notion.com/p/41043df6279b81b8b7f8c47246878f6c" },
+      { name: "nininono 2WAY 多功能包", category: "奢侈品", region: "東京市區／網路比價", store: "nininono 台灣官網", price: 0, currency: "TWD", note: "斜背後背雙用包 NT$1,980；多頁長夾托特包 NT$1,880，款式待確認。", sourceUrl: "https://www.nininono.co/zh-hant/categories/2way-to-way", notionUrl: "https://app.notion.com/p/41043df6279b81c5bd01e4bc715dc4fb" },
+      { name: "Aesop 體香噴霧", category: "奢侈品", region: "澀谷／表參道", store: "Aesop 日本官網", price: 4620, note: "以日本官網體香噴霧系列比價，款式尚未指定。", sourceUrl: "https://www.aesop.co.jp/hand-body/oral-care-deodorants/", notionUrl: "https://app.notion.com/p/41043df6279b81eabd43fcac0f4519dd" }
+    ].map((item, index) => ({ ...item, importKey: `txt-shopping-${String(index + 1).padStart(2, "0")}`, currency: item.currency || "JPY", quantity: 1, buyer: "我", purchased: false }));
+
     const defaultFlights = [
       { id: "flight-br192-20261128", direction: "去程", airline: "EVA Air 長榮航空", flightNo: "BR192", date: "2026-11-28", aircraft: "Boeing 787-10", cabin: "經濟艙", depart: { airport: "台北松山 TSA", code: "TSA", terminal: "Terminal 1", time: "07:15", timezone: "Asia/Taipei" }, arrive: { airport: "東京羽田 HND", code: "HND", terminal: "Terminal 3", time: "11:00", timezone: "Asia/Tokyo" }, duration: "2 小時 45 分", passengerCount: 3, passengers: ["LAI YINGAN", "CHEN TZU YING", "LI HOUCHING"], totalAmount: 48729, currency: "TWD", perPersonAmount: 16243, paymentStatus: "待確認", checkInReminder: "線上 Check-in 提醒時間待設定" },
       { id: "flight-br191-20261206", direction: "回程", airline: "EVA Air 長榮航空", flightNo: "BR191", date: "2026-12-06", aircraft: "Boeing 787-10", cabin: "經濟艙", passengers: ["LAI YINGAN", "CHEN TZU YING", "LI HOUCHING"], depart: { airport: "東京羽田 HND", code: "HND", terminal: "Terminal 3", time: "12:15", timezone: "Asia/Tokyo" }, arrive: { airport: "台北松山 TSA", code: "TSA", terminal: "Terminal 1", time: "15:05", timezone: "Asia/Taipei" }, duration: "3 小時 50 分", passengerCount: 3, totalAmount: 48729, currency: "TWD", perPersonAmount: 16243, paymentStatus: "待確認", checkInReminder: "線上 Check-in 提醒時間待設定" }
@@ -4843,8 +4977,46 @@
       proxyPaid: Boolean(item.proxyPaid),
       weight: Math.max(0, Number(item.weight) || 0),
       purchased: Boolean(item.purchased),
-      expenseId: item.expenseId || ""
+      expenseId: item.expenseId || "",
+      importKey: item.importKey || "",
+      note: item.note || "",
+      sourceUrl: item.sourceUrl || "",
+      notionUrl: item.notionUrl || "",
+      referencePricePending: Boolean(item.referencePricePending)
     }));
+
+    function isLegacyShoppingSeed(item) {
+      const names = new Set(["藥妝與日用品", "零食與伴手禮", "吉卜力、蠟筆小新、Chiikawa 周邊", "鋼彈與動漫商品", "New York Perfect Cheese、Sugar Butter Tree", "行李重量與退稅確認"]);
+      return names.has(item?.name) && Number(item?.price || 0) === 0 && Number(item?.actualPrice || 0) === 0 && !item?.expenseId && !item?.image && !item?.purchased;
+    }
+
+    function mergeImportedShoppingItems() {
+      if (localStorage.getItem("tokyoShoppingImportVersion") === SHOPPING_IMPORT_VERSION) return;
+      shoppingItems = shoppingItems.filter(item => !isLegacyShoppingSeed(item));
+      const byName = new Map(shoppingItems.map(item => [String(item.name || "").trim().toLocaleLowerCase(), item]));
+      importedShoppingItems.forEach(imported => {
+        const key = imported.name.toLocaleLowerCase();
+        const existing = byName.get(key);
+        if (existing) {
+          existing.category = existing.category || imported.category;
+          existing.region = existing.region || imported.region;
+          existing.store = existing.store || imported.store;
+          existing.price = Number(existing.price) > 0 ? existing.price : imported.price;
+          existing.currency = existing.currency || imported.currency;
+          existing.note = existing.note || imported.note;
+          existing.sourceUrl = existing.sourceUrl || imported.sourceUrl;
+          existing.notionUrl = existing.notionUrl || imported.notionUrl;
+          existing.importKey = existing.importKey || imported.importKey;
+          existing.referencePricePending = !Number(existing.price);
+          return;
+        }
+        shoppingItems.push({ ...clone(imported), id: `shop-${imported.importKey}`, referencePricePending: !Number(imported.price) });
+      });
+      safeSet("tokyoShoppingItems", shoppingItems);
+      localStorage.setItem("tokyoShoppingImportVersion", SHOPPING_IMPORT_VERSION);
+    }
+
+    mergeImportedShoppingItems();
     safeSet("tokyoShoppingItems", shoppingItems);
 
     // 週別顯示（中/日）
@@ -5694,8 +5866,18 @@
     }
 
     function toggleShoppingPurchased(index) {
-      shoppingItems[index].purchased = !shoppingItems[index].purchased;
+      const item = shoppingItems[index];
+      if (!item) return;
+      if (!item.purchased && !confirm(`確認已買到「${item.name}」？\n此標記只代表採購完成，可再撤銷。`)) return;
+      item.purchased = !item.purchased;
       safeSet("tokyoShoppingItems", shoppingItems);
+      renderShopping();
+      showAppToast(item.purchased ? "已確認買到，可在篩選器查看" : "已撤銷採購確認");
+    }
+
+    function showPendingShopping() {
+      const status = document.getElementById("shoppingStatusFilter");
+      if (status) status.value = "todo";
       renderShopping();
     }
 
@@ -5753,7 +5935,7 @@ function shoppingCurrencySummary(items, field) {
         regionSelect.value = regions.includes(region) ? region : "all";
       }
       const visible = shoppingItems.filter(item =>
-        (!query || `${item.name} ${item.store} ${item.category} ${item.region}`.toLocaleLowerCase().includes(query)) &&
+        (!query || `${item.name} ${item.store} ${item.category} ${item.region} ${item.note}`.toLocaleLowerCase().includes(query)) &&
         (status === "all" || (status === "done" ? item.purchased : !item.purchased)) &&
         (category === "all" || item.category === category) &&
         (region === "all" || item.region === region)
@@ -5762,9 +5944,11 @@ function shoppingCurrencySummary(items, field) {
       const purchased = shoppingItems.filter(item => item.purchased);
       const weight = shoppingItems.reduce((sum, item) => sum + (Number(item.weight) || 0) * (Number(item.quantity) || 1), 0);
       const proxyOutstandingItems = shoppingItems.filter(item => item.proxy && !item.proxyPaid);
+      const completionRate = shoppingItems.length ? Math.round((purchased.length / shoppingItems.length) * 100) : 0;
       document.getElementById("shoppingSummary").innerHTML =
-        '<span class="summaryChip shoppingSummaryChip todo">○ 待購買 ' + pending.length + ' 項</span>' +
-        '<span class="summaryChip shoppingSummaryChip done">✓ 已購買 ' + purchased.length + ' 項</span>' +
+        '<div class="shoppingProgress"><div class="shoppingProgressTop"><strong>採購進度 ' + purchased.length + '／' + shoppingItems.length + ' 項</strong><small>' + completionRate + '% 已確認買到</small></div><div class="shoppingProgressTrack"><span style="width:' + completionRate + '%"></span></div></div>' +
+        '<span class="summaryChip shoppingSummaryChip todo">○ 尚未確認 ' + pending.length + ' 項</span>' +
+        '<span class="summaryChip shoppingSummaryChip done">✓ 已確認買到 ' + purchased.length + ' 項</span>' +
         '<span class="summaryChip">預算 ' + shoppingCurrencySummary(shoppingItems, "price") + '</span>' +
         '<span class="summaryChip">實際 ' + shoppingCurrencySummary(purchased, "actualPrice") + '</span>' +
         '<span class="summaryChip">估算重量 ' + weight.toLocaleString() + ' g</span>' +
@@ -5777,11 +5961,15 @@ function shoppingCurrencySummary(items, field) {
         const image = item.image?.dataUrl ? '<img class="ticketQr" style="width:72px;height:72px;object-fit:cover;float:right;margin-left:10px" src="' + escapeHtml(item.image.dataUrl) + '" alt="商品圖片">' : "";
         const actual = item.actualPrice ? '｜實際 ' + escapeHtml(item.currency) + ' ' + Number(item.actualPrice).toLocaleString() : "";
         const proxy = item.proxy ? '<span class="badge">代購：' + escapeHtml(item.proxy) + (item.proxyFee ? '（費用 ' + Number(item.proxyFee).toLocaleString() + (item.proxyPaid ? '，已付' : '，待付') + '）' : "") + '</span>' : "";
-        const statusLabel = item.purchased ? "✓ 已購買" : "○ 待購買";
-        const toggleLabel = item.purchased ? "↩ 改為待購買" : "✓ 設為已購買";
+        const statusLabel = item.purchased ? "✓ 已確認買到" : "○ 尚未確認";
+        const toggleLabel = item.purchased ? "↩ 撤銷採購確認" : "✓ 確認已買到";
+        const referencePrice = Number(item.price || 0) > 0 ? escapeHtml(item.currency) + ' ' + Number(item.price).toLocaleString() : "價格待確認";
+        const sourceLink = safeExternalUrl(item.sourceUrl);
+        const notionLink = safeExternalUrl(item.notionUrl);
         card.innerHTML =
           '<div class="rowBetween shoppingItemHeader"><div class="shoppingItemName">' + image + '<b>' + (item.purchased ? "✅" : "🛍️") + ' ' + escapeHtml(item.name) + '</b><div class="expenseMeta">' + escapeHtml(item.category) + (item.region ? '｜' + escapeHtml(item.region) : "") + '｜' + escapeHtml(item.store || "店家待補") + '</div></div><div class="expenseActions"><button class="btnGhost" type="button" aria-label="編輯商品" onclick="openShoppingSheet(' + index + ')">✏️</button><button class="btnGhost" type="button" aria-label="刪除商品" onclick="deleteShoppingItem(' + index + ')">🗑</button></div></div>' +
-          '<div class="shoppingStatusRow"><span class="shoppingStatus ' + (item.purchased ? "done" : "todo") + '">' + statusLabel + '</span><span class="badge">' + escapeHtml(item.currency) + ' ' + Number(item.price || 0).toLocaleString() + ' × ' + item.quantity + actual + '</span><span class="badge">購買者：' + escapeHtml(item.buyer || "未指定") + '</span>' + proxy + '</div>' +
+          '<div class="shoppingStatusRow"><span class="shoppingStatus ' + (item.purchased ? "done" : "todo") + '">' + statusLabel + '</span><span class="badge">參考 ' + referencePrice + ' × ' + item.quantity + actual + '</span><span class="badge">購買者：' + escapeHtml(item.buyer || "未指定") + '</span>' + proxy + '</div>' +
+          (item.note || sourceLink || notionLink ? '<details class="shoppingDetails"><summary>查看規格與比價</summary><div class="shoppingDetailsBody">' + (item.note ? '<span>' + escapeHtml(item.note) + '</span>' : '') + (sourceLink ? '<a href="' + sourceLink + '" target="_blank" rel="noopener">開啟查價來源 ↗</a>' : '') + (notionLink ? '<a href="' + notionLink + '" target="_blank" rel="noopener">開啟原始品項 ↗</a>' : '') + '</div></details>' : '') +
           '<div class="shoppingActions"><button class="shoppingToggle' + (item.purchased ? " isPurchased" : "") + '" type="button" aria-pressed="' + (item.purchased ? "true" : "false") + '" onclick="toggleShoppingPurchased(' + index + ')">' + toggleLabel + '</button>' + (item.price ? '<button class="btnGhost" type="button" onclick="recordShoppingExpense(' + index + ')">' + (item.expenseId ? "已建立記帳" : "💴 建立記帳") + '</button>' : "") + '</div>';
         list.appendChild(card);
       });
