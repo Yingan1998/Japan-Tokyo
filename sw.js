@@ -6,8 +6,7 @@ const APP_SHELL = [
   "./assets/app-icon.svg",
   "./assets/app-icon-192.png",
   "./assets/app-icon-512.png",
-  "./assets/fuji-winter-watercolor.jpg",
-  "./assets/fuji-winter-watercolor.png"
+  "./assets/fuji-winter-watercolor.jpg"
 ];
 
 self.addEventListener("install", event => {
