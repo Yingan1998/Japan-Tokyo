@@ -1186,18 +1186,131 @@
       padding: 9px 12px;
     }
 
-    .shoppingSummaryChip {
+    .moduleSummary.shoppingSummary {
+      display: grid;
+      gap: 12px;
+      margin: 12px 0;
+      padding: 15px;
+      border: 1px solid rgba(117, 157, 178, .18);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .58);
+    }
+
+    .shoppingSummaryHead {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .shoppingSummaryTitle {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      color: #294761;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .shoppingSummaryCount {
+      font-size: 21px;
+      letter-spacing: .2px;
+    }
+
+    .shoppingSummaryCount small {
+      color: #718696;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .shoppingSummaryPercent {
+      color: #718696;
+      font-size: 12px;
       font-weight: 800;
+      white-space: nowrap;
     }
 
-    .shoppingSummaryChip.todo {
-      color: #5d6670;
+    .shoppingSummary .shoppingProgressTrack {
+      height: 10px;
+      background: rgba(53, 90, 113, .12);
+    }
+
+    .shoppingSummary .shoppingProgressTrack span {
+      background: linear-gradient(90deg, #6b9fc1, #74b6a6);
+    }
+
+    .shoppingStats {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .shoppingStat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid rgba(117, 157, 178, .16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .62);
+    }
+
+    .shoppingStatIcon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+      border-radius: 9px;
+      color: #55768b;
       background: rgba(108, 125, 140, .12);
+      font-size: 12px;
+      font-weight: 900;
     }
 
-    .shoppingSummaryChip.done {
+    .shoppingStatCopy {
+      display: grid;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .shoppingStatCopy small {
+      overflow: hidden;
+      color: #718696;
+      font-size: 10px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .shoppingStatCopy strong {
+      overflow: hidden;
+      color: #294761;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .shoppingStat.todo .shoppingStatIcon {
+      color: #66747e;
+      background: rgba(108, 125, 140, .16);
+    }
+
+    .shoppingStat.done .shoppingStatIcon {
       color: #2f6282;
-      background: rgba(119, 187, 218, .2);
+      background: rgba(119, 187, 218, .24);
+    }
+
+    .shoppingStat.money .shoppingStatIcon {
+      color: #8b6a37;
+      background: rgba(237, 201, 133, .26);
+    }
+
+    .shoppingStat.weight .shoppingStatIcon {
+      color: #557b69;
+      background: rgba(130, 189, 157, .24);
     }
 
     .shoppingConfirmBar {
@@ -1215,14 +1328,33 @@
       line-height: 1.45;
     }
 
-    .shoppingConfirmBar div {
+    .shoppingConfirmCopy {
       display: grid;
       gap: 2px;
     }
 
-    .shoppingConfirmBar strong {
+    .shoppingConfirmKicker {
+      color: #718696;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .shoppingConfirmCopy strong {
       color: #2b4d67;
       font-size: 13px;
+    }
+
+    .shoppingConfirmCopy small {
+      color: #718696;
+      font-size: 11px;
+    }
+
+    .shoppingPendingBtn {
+      flex: 0 0 auto;
+      border-color: rgba(91, 125, 145, .2);
+      background: rgba(255, 255, 255, .78);
     }
 
     .shoppingProgress {
@@ -3338,7 +3470,32 @@
         flex-direction: column;
       }
 
-      .shoppingConfirmBar .btnGhost {
+      .shoppingSummary {
+        padding: 13px;
+      }
+
+      .shoppingSummaryHead {
+        align-items: flex-start;
+      }
+
+      .shoppingSummaryTitle {
+        font-size: 15px;
+      }
+
+      .shoppingSummaryCount {
+        font-size: 19px;
+      }
+
+      .shoppingStats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .shoppingStat:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+
+      .shoppingConfirmBar .btnGhost,
+      .shoppingPendingBtn {
         width: 100%;
       }
 
@@ -4857,10 +5014,10 @@
         <button class="btnGhost filterResetBtn" type="button" onclick="resetShoppingFilters()">清除篩選</button>
         <button class="btnGhost" type="button" onclick="exportShoppingCSV()">⬇ 匯出清單</button>
       </div>
-      <div class="moduleSummary" id="shoppingSummary"></div>
+      <div class="moduleSummary shoppingSummary" id="shoppingSummary"></div>
       <div class="shoppingConfirmBar" aria-live="polite">
-        <div><strong>採購確認</strong><span>按「確認已買到」後才會計入已完成；需要修改時可立即撤銷。</span></div>
-        <button class="btnGhost" type="button" onclick="showPendingShopping()">只看尚未確認</button>
+        <div class="shoppingConfirmCopy"><span class="shoppingConfirmKicker">採購確認</span><strong>買到後再按「確認已買到」</strong><small>狀態會記錄在本機，也可以隨時撤銷。</small></div>
+        <button class="btnGhost shoppingPendingBtn" type="button" onclick="showPendingShopping()">○ 查看待確認</button>
       </div>
       <div id="shoppingList"></div>
     </section>
@@ -6532,14 +6689,19 @@
       const weight = shoppingItems.reduce((sum, item) => sum + (Number(item.weight) || 0) * (Number(item.quantity) || 1), 0);
       const proxyOutstandingItems = shoppingItems.filter(item => item.proxy && !item.proxyPaid);
       const completionRate = shoppingItems.length ? Math.round((purchased.length / shoppingItems.length) * 100) : 0;
+      const shoppingSummaryStat = (kind, icon, label, value) =>
+        '<div class="shoppingStat ' + kind + '"><span class="shoppingStatIcon" aria-hidden="true">' + icon + '</span><span class="shoppingStatCopy"><small>' + escapeHtml(label) + '</small><strong>' + escapeHtml(value) + '</strong></span></div>';
       document.getElementById("shoppingSummary").innerHTML =
-        '<div class="shoppingProgress"><div class="shoppingProgressTop"><strong>採購進度 ' + purchased.length + '／' + shoppingItems.length + ' 項</strong><small>' + completionRate + '% 已確認買到</small></div><div class="shoppingProgressTrack"><span style="width:' + completionRate + '%"></span></div></div>' +
-        '<span class="summaryChip shoppingSummaryChip todo">○ 尚未確認 ' + pending.length + ' 項</span>' +
-        '<span class="summaryChip shoppingSummaryChip done">✓ 已確認買到 ' + purchased.length + ' 項</span>' +
-        '<span class="summaryChip">預算 ' + shoppingCurrencySummary(shoppingItems, "price") + '</span>' +
-        '<span class="summaryChip">實際 ' + shoppingCurrencySummary(purchased, "actualPrice") + '</span>' +
-        '<span class="summaryChip">估算重量 ' + weight.toLocaleString() + ' g</span>' +
-        (proxyOutstandingItems.length ? '<span class="summaryChip">待付代購費 ' + shoppingCurrencySummary(proxyOutstandingItems, "proxyFee") + '</span>' : "");
+        '<div class="shoppingSummaryHead"><div><span class="dashboardKicker">PURCHASE PROGRESS</span><div class="shoppingSummaryTitle"><span>採購進度</span><span class="shoppingSummaryCount">' + purchased.length + '<small>／' + shoppingItems.length + ' 項</small></span></div></div><span class="shoppingSummaryPercent">' + completionRate + '% 已確認買到</span></div>' +
+        '<div class="shoppingProgressTrack" role="progressbar" aria-label="採購完成度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + completionRate + '"><span style="width:' + completionRate + '%"></span></div>' +
+        '<div class="shoppingStats">' +
+        shoppingSummaryStat("todo", "○", "待確認", pending.length + " 項") +
+        shoppingSummaryStat("done", "✓", "已確認買到", purchased.length + " 項") +
+        shoppingSummaryStat("money", "¥", "預算", shoppingCurrencySummary(shoppingItems, "price")) +
+        shoppingSummaryStat("money", "↗", "實際支出", shoppingCurrencySummary(purchased, "actualPrice")) +
+        shoppingSummaryStat("weight", "▣", "估算重量", weight.toLocaleString() + " g") +
+        (proxyOutstandingItems.length ? shoppingSummaryStat("money", "代", "待付代購費", shoppingCurrencySummary(proxyOutstandingItems, "proxyFee")) : "") +
+        '</div>';
       list.innerHTML = visible.length ? "" : '<div class="emptyState">尚無符合條件的商品。</div>';
       let lastCategory = "";
       visible.forEach(item => {
