@@ -4164,7 +4164,231 @@
 
     .expenseSplitCard,
     .expenseCategoryCard {
+      padding: 20px;
       background: linear-gradient(145deg, rgba(255, 255, 255, .82), rgba(238, 248, 249, .58));
+    }
+
+    .expensePanelHeading,
+    .expenseCategoryHead {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .expensePanelHeading h2,
+    .expenseCategoryHead h2 {
+      margin: 4px 0 0;
+      color: #1d3d59;
+      font-size: 19px;
+    }
+
+    .expensePanelHeading p,
+    .expenseCategoryHead p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .expensePanelHeading .btnGhost {
+      flex: 0 0 auto;
+    }
+
+    .expenseCategoryBadge {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border: 1px solid rgba(76, 144, 151, .14);
+      border-radius: 12px;
+      color: #3f7780;
+      background: rgba(220, 242, 240, .78);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .expenseMemberList {
+      margin-top: 0;
+      padding: 9px;
+      border: 1px solid rgba(255, 255, 255, .82);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .46);
+    }
+
+    .expenseMemberList .memberChip {
+      padding: 7px 9px;
+      border: 1px solid rgba(76, 144, 151, .12);
+      border-radius: 11px;
+      background: rgba(240, 250, 250, .86);
+      color: #3a5d73;
+      font-weight: 700;
+    }
+
+    .expenseSettlementBox {
+      margin-top: 14px;
+    }
+
+    .expenseSettlementLabel,
+    .settlementSubheading {
+      display: block;
+      margin-bottom: 8px;
+      color: #71879a;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    .settlementNetGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .settlementMember {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      padding: 10px 11px;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .56);
+    }
+
+    .settlementMemberName {
+      overflow: hidden;
+      color: #4b6b80;
+      font-size: 11px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .settlementMemberAmount {
+      color: #397b70;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .settlementMemberAmount.isPayable {
+      color: #b26552;
+    }
+
+    .settlementRepayments {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 13px;
+      border-top: 1px dashed rgba(79, 117, 137, .18);
+    }
+
+    .settlementRepayment {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, .82);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .62);
+    }
+
+    .settlementRepayment b {
+      color: #294b68;
+      white-space: nowrap;
+    }
+
+    .settlementEmpty,
+    .expenseEmptyPanel {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 16px;
+      color: #5d778b;
+      background: rgba(255, 255, 255, .58);
+    }
+
+    .settlementEmptyIcon,
+    .expenseEmptyIcon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      border-radius: 50%;
+      color: #397b70;
+      background: rgba(202, 237, 224, .82);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .settlementEmpty strong,
+    .expenseEmptyPanel strong {
+      display: block;
+      color: #365870;
+      font-size: 13px;
+    }
+
+    .settlementEmpty small,
+    .expenseEmptyPanel small {
+      display: block;
+      margin-top: 3px;
+      color: #8193a0;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .categoryRows {
+      display: grid;
+      gap: 10px;
+    }
+
+    .categoryRow {
+      display: grid;
+      gap: 6px;
+    }
+
+    .categoryRowHead {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      color: #48677c;
+      font-size: 12px;
+    }
+
+    .categoryRowHead b {
+      color: #294b68;
+      white-space: nowrap;
+    }
+
+    .categoryRowPercent {
+      margin-left: 5px;
+      color: #7b909e;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .categoryBar {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(25, 50, 75, .1);
+    }
+
+    .categoryBar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #6ea8fe, #8fd3c7);
+    }
+
+    .expensePie {
+      margin-top: 0 !important;
     }
 
     @media (max-width: 600px) {
@@ -4227,6 +4451,30 @@
 
       .expenseToolbarActions>button {
         flex: 1 1 0;
+      }
+
+      .expensePanelHeading,
+      .expenseCategoryHead {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .expensePanelHeading .btnGhost {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .expenseCategoryBadge {
+        align-self: flex-start;
+      }
+
+      .settlementNetGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .settlementRepayment {
+        align-items: flex-start;
+        flex-direction: column;
       }
     }
 
@@ -4996,15 +5244,26 @@
       </div>
 
       <div class="simpleCard expenseSplitCard">
-        <div class="rowBetween"><b>旅伴與分帳</b><button class="btnGhost" type="button" onclick="addMember()">＋ 新增旅伴</button>
+        <div class="expensePanelHeading">
+          <div><span class="dashboardKicker">TRAVEL SPLIT</span>
+            <h2>旅伴與分帳</h2>
+            <p>先確認成員，再由每筆記帳自動計算應收／應付。</p>
+          </div>
+          <button class="btnGhost" type="button" onclick="addMember()">＋ 新增旅伴</button>
         </div>
-        <div id="memberManager" class="memberList"></div>
-        <div id="settlementList" style="margin-top:10px"></div>
+        <div id="memberManager" class="memberList expenseMemberList"></div>
+        <div id="settlementList" class="expenseSettlementBox"></div>
       </div>
 
       <div class="simpleCard expenseCategoryCard">
-        <b>分類比例</b>
-        <div id="expensePie" style="margin-top:12px;"></div>
+        <div class="expenseCategoryHead">
+          <div><span class="dashboardKicker">CATEGORY BREAKDOWN</span>
+            <h2>分類比例</h2>
+            <p>依台幣換算後的金額整理支出方向。</p>
+          </div>
+          <span id="expenseCategoryStatus" class="expenseCategoryBadge">等待記帳</span>
+        </div>
+        <div id="expensePie" class="expensePie"></div>
       </div>
 
       <div id="expenseList"></div>
@@ -7584,15 +7843,18 @@
     function renderPie(categoryTotals) {
       const box = document.getElementById("expensePie");
       if (!box) return;
+      const status = document.getElementById("expenseCategoryStatus");
       const entries = Object.entries(categoryTotals || {}).sort((a, b) => b[1] - a[1]);
       const total = entries.reduce((sum, entry) => sum + Number(entry[1] || 0), 0);
       if (!entries.length || total <= 0) {
-        box.innerHTML = '<div class="emptyState">尚無可分析的支出。</div>';
+        if (status) status.textContent = "等待記帳";
+        box.innerHTML = '<div class="expenseEmptyPanel"><span class="expenseEmptyIcon">＋</span><div><strong>還沒有可分析的支出</strong><small>完成第一筆記帳後，這裡會顯示各分類比例。</small></div></div>';
         return;
       }
+      if (status) status.textContent = entries.length + " 個分類";
       box.innerHTML = entries.map(([category, amount]) => {
         const percent = Math.max(1, Math.round((amount / total) * 100));
-        return '<div style="margin:9px 0"><div class="rowBetween"><span>' + escapeHtml(category) + '</span><b>NT$ ' + Math.round(amount).toLocaleString() + '</b></div><div style="height:8px;border-radius:99px;background:rgba(25,50,75,.1);overflow:hidden"><div style="width:' + percent + '%;height:100%;background:linear-gradient(90deg,#6ea8fe,#8fd3c7);border-radius:99px"></div></div></div>';
+        return '<div class="categoryRow"><div class="categoryRowHead"><span>' + escapeHtml(category) + '<span class="categoryRowPercent">' + percent + '%</span></span><b>NT$ ' + Math.round(amount).toLocaleString() + '</b></div><div class="categoryBar"><span style="width:' + percent + '%"></span></div></div>';
       }).join("");
     }
 
@@ -7657,7 +7919,7 @@
       const paid = {};
       const owed = {};
       members.forEach(member => { paid[member] = 0; owed[member] = 0; });
-      expenses.forEach(expense => {
+      expenses.filter(expense => !expense.isReserved).forEach(expense => {
         paid[expense.payer] = roundMoney((paid[expense.payer] || 0) + toTwd(expense.amount, expense.currency));
         Object.entries(expense.splits || {}).forEach(([member, amount]) => {
           owed[member] = roundMoney((owed[member] || 0) + toTwd(amount, expense.currency));
@@ -7677,15 +7939,15 @@
         }
       }));
       const netHtml = net.map(item =>
-        '<span class="summaryChip">' + escapeHtml(item.member) + "：" + (item.value >= 0 ? "應收 " : "應付 ") +
-        "NT$ " + Math.abs(item.value).toLocaleString() + "</span>"
+        '<div class="settlementMember"><span class="settlementMemberName">' + escapeHtml(item.member) + '</span><b class="settlementMemberAmount' + (item.value < 0 ? ' isPayable' : '') + '">' +
+        (item.value >= 0 ? "應收 " : "應付 ") + "NT$ " + Math.abs(item.value).toLocaleString() + "</b></div>"
       ).join("");
       const repayHtml = repayments.length ? repayments.map((item, index) =>
-        '<div class="simpleCard"><div class="rowBetween"><span>💸 ' + escapeHtml(item.from) + " → " + escapeHtml(item.to) +
-        '</span><b>NT$ ' + item.amount.toLocaleString() + '</b></div><button class="btnGhost" style="margin-top:8px" onclick="toggleSettlement(' +
-        index + ')">' + (settlementsState[index] ? "標記未結清" : "標記已結清") + "</button></div>"
-      ).join("") : '<div class="emptyState">目前沒有需要互相還款的差額。</div>';
-      box.innerHTML = '<div class="moduleSummary">' + netHtml + "</div>" + repayHtml;
+        '<div class="settlementRepayment"><div><span>💸 ' + escapeHtml(item.from) + " → " + escapeHtml(item.to) +
+        '</span><small class="expenseMeta">建議還款</small></div><div><b>NT$ ' + item.amount.toLocaleString() + '</b><br><button class="btnGhost" style="margin-top:7px" onclick="toggleSettlement(' +
+        index + ')">' + (settlementsState[index] ? "標記未結清" : "標記已結清") + "</button></div></div>"
+      ).join("") : '<div class="settlementEmpty"><span class="settlementEmptyIcon">✓</span><div><strong>目前不用互相還款</strong><small>新增共同支出後，這裡會自動計算差額。</small></div></div>';
+      box.innerHTML = '<span class="expenseSettlementLabel">目前分帳狀態</span><div class="settlementNetGrid">' + netHtml + '</div>' + (repayments.length ? '<div class="settlementRepayments"><span class="settlementSubheading">待處理還款</span>' + repayHtml + '</div>' : repayHtml);
       box.dataset.repayments = JSON.stringify(repayments);
     }
 
