@@ -120,6 +120,18 @@
       transform: rotate(-12deg);
     }
 
+    .brand .fujiMark {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      font-size: 22px;
+      line-height: 1;
+      filter: drop-shadow(0 5px 8px rgba(65, 112, 143, .18));
+    }
+
     .rate {
       font-size: 12px;
       opacity: .9;
@@ -4341,13 +4353,27 @@
     /* Keep the exchange-rate text fully readable on narrow screens. */
     @media (max-width: 600px) {
       .topbar {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: nowrap;
+        min-width: 0;
+      }
+
+      .brand {
+        min-width: 0;
+        flex: 1 1 auto;
+        font-size: clamp(18px, 5.2vw, 21px);
+        letter-spacing: .04em;
+        white-space: nowrap;
       }
 
       .topActions {
         width: auto;
         min-width: 0;
+        flex: 0 0 auto;
+        margin-left: auto;
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -4355,15 +4381,17 @@
 
       .topActions>.rate {
         width: auto;
-        max-width: 100%;
+        max-width: none;
         min-width: 0;
         height: auto;
         min-height: 42px;
         overflow: visible;
         text-overflow: clip;
-        white-space: normal;
+        white-space: nowrap;
         line-height: 1.35;
         text-align: center;
+        font-size: 10px;
+        padding: 8px 9px;
       }
 
       /* Let the full nine-day picker become a swipeable horizontal rail. */
@@ -4537,7 +4565,7 @@
   <div class="app">
     <div class="topbar">
       <button class="brand brandHome" type="button" onclick="goHome()" aria-label="回到行程首頁" title="回到行程首頁"><span
-          class="leaf" aria-hidden="true"></span> Japan Tokyo</button>
+          class="fujiMark" aria-hidden="true">🗻</span> Japan Tokyo</button>
       <div class="topActions">
         <div class="rate" id="rateBox">匯率讀取中…</div>
       </div>
