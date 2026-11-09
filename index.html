@@ -5,6 +5,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Japan Tokyo｜旅する手帳（Web）</title>
+  <meta name="theme-color" content="#d9edf0" />
+  <meta name="description" content="2026 東京九天八夜的行程、地圖、票券、記帳與購物清單。" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/app-icon-192.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="./assets/app-icon-192.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Japan Tokyo" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <link
     href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Noto+Sans+TC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
@@ -1025,6 +1034,15 @@
       padding: 20px;
       background: linear-gradient(145deg, rgba(255, 255, 255, .92), rgba(239, 248, 252, .78));
       border: 1px solid rgba(255, 255, 255, .9);
+    }
+
+    .installCard {
+      background: linear-gradient(145deg, rgba(241, 250, 251, .95), rgba(218, 238, 244, .82));
+    }
+
+    .installCard .btnPill:disabled {
+      opacity: .72;
+      cursor: default;
     }
 
     .backupHeader {
@@ -5102,6 +5120,20 @@
             onclick="openPageWithoutNav('accommodations')"><span>🏨</span>住宿管理<small>飯店、地址與換宿</small></button>
         </div>
       </div>
+      <div class="simpleCard backupCard installCard" id="installCard">
+        <div class="backupHeader">
+          <div>
+            <span class="backupKicker">TRAVEL APP</span>
+            <h2>📱 安裝到手機</h2>
+          </div>
+          <span class="backupFormat">PWA</span>
+        </div>
+        <p class="backupDescription">把 Japan Tokyo 加到手機主畫面，像 App 一樣快速開啟；請用 GitHub Pages 的 HTTPS 網址開啟，行程資料仍保存在你的裝置中。</p>
+        <div class="backupActions">
+          <button class="btnPill primary" id="installAppBtn" type="button" onclick="installApp()">📲 安裝旅遊 App</button>
+        </div>
+        <div id="installStatus" class="backupStatus" aria-live="polite">正在檢查手機安裝功能…</div>
+      </div>
       <div class="simpleCard backupCard">
         <div class="backupHeader">
           <div>
@@ -6762,6 +6794,66 @@
       link.click();
       URL.revokeObjectURL(link.href);
     }
+
+    // ====== PWA 安裝與離線快取 ======
+    let deferredInstallPrompt = null;
+
+    function isStandaloneApp() {
+      return Boolean(window.matchMedia?.("(display-mode: standalone)").matches || window.navigator.standalone === true);
+    }
+
+    function updateInstallPromptUI() {
+      const button = document.getElementById("installAppBtn");
+      const status = document.getElementById("installStatus");
+      if (!button || !status) return;
+      if (isStandaloneApp()) {
+        button.textContent = "✓ 已安裝到手機";
+        button.disabled = true;
+        status.textContent = "目前以旅遊 App 模式開啟；資料仍保存在本機。";
+        return;
+      }
+      button.disabled = false;
+      if (deferredInstallPrompt) {
+        button.textContent = "📲 安裝旅遊 App";
+        status.textContent = "可直接加入手機主畫面，並使用專屬富士山圖示。";
+      } else {
+        button.textContent = "📲 查看安裝方式";
+        status.textContent = "Android：開啟瀏覽器選單選「安裝應用程式」；iPhone：分享 → 加入主畫面。";
+      }
+    }
+
+    async function installApp() {
+      if (isStandaloneApp()) return;
+      if (!deferredInstallPrompt) {
+        alert("Android：請在瀏覽器選單選「安裝應用程式」或「加到主畫面」。\n\niPhone：請點 Safari 分享按鈕，再選「加入主畫面」。");
+        return;
+      }
+      const promptEvent = deferredInstallPrompt;
+      deferredInstallPrompt = null;
+      await promptEvent.prompt();
+      const choice = await promptEvent.userChoice;
+      updateInstallPromptUI();
+      if (choice?.outcome === "accepted") showAppToast("已送出 Japan Tokyo 安裝");
+    }
+
+    function registerAppServiceWorker() {
+      if (!("serviceWorker" in navigator) || !["http:", "https:"].includes(location.protocol)) return;
+      navigator.serviceWorker.register("./sw.js", { scope: "./" })
+        .then(registration => registration.update().catch(() => {}))
+        .catch(error => console.warn("離線快取註冊失敗", error));
+    }
+
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      updateInstallPromptUI();
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      updateInstallPromptUI();
+      showAppToast("Japan Tokyo 已安裝到手機");
+    });
 
     // ====== Backup / page navigation ======
     function openPageWithoutNav(tab) {
@@ -8619,6 +8711,8 @@
     renderTickets();
     renderFlights();
     renderAccommodations();
+    updateInstallPromptUI();
+    registerAppServiceWorker();
 
 
     // API資料
