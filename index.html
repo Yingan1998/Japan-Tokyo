@@ -4336,18 +4336,16 @@
       }
 
       .topActions {
-        width: 100%;
+        width: auto;
         min-width: 0;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        align-items: stretch;
-        justify-content: stretch;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
       }
 
       .topActions>.rate {
-        grid-column: 1 / -1;
         width: auto;
-        max-width: none;
+        max-width: 100%;
         min-width: 0;
         height: auto;
         min-height: 42px;
@@ -4355,13 +4353,7 @@
         text-overflow: clip;
         white-space: normal;
         line-height: 1.35;
-        text-align: left;
-      }
-
-      .topActions>.iconBtn {
-        min-width: 0;
-        width: 100%;
-        padding-inline: 9px;
+        text-align: center;
       }
 
       /* Let the full nine-day picker become a swipeable horizontal rail. */
@@ -4538,7 +4530,6 @@
           class="leaf" aria-hidden="true"></span> Japan Tokyo</button>
       <div class="topActions">
         <div class="rate" id="rateBox">匯率讀取中…</div>
-        <button class="iconBtn" type="button" onclick="shareTrip()" aria-label="分享行程">↗ 分享</button>
       </div>
     </div>
 
@@ -5658,27 +5649,6 @@
       save();
       refreshItineraryViews();
       document.getElementById("page-trip")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    async function shareTrip() {
-      const shareData = {
-        title: "2026 日本東京九天八夜自由行",
-        text: "我的東京九天八夜行程｜2026/11/28–12/06",
-        url: location.href
-      };
-
-      try {
-        if (navigator.share) {
-          await navigator.share(shareData);
-        } else if (navigator.clipboard) {
-          await navigator.clipboard.writeText(location.href);
-          alert("行程連結已複製");
-        } else {
-          alert("請複製瀏覽器網址分享行程");
-        }
-      } catch (err) {
-        if (err.name !== "AbortError") console.warn("分享失敗", err);
-      }
     }
 
     function toggleShopping(input) {
