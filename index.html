@@ -461,7 +461,8 @@
     }
 
     .bItem {
-      width: 20%;
+      flex: 1 1 0;
+      min-width: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -568,32 +569,192 @@
       border-bottom: none;
     }
 
-    .dashboardTravelCardBody { display: grid; gap: 10px; }
-    .travelFlightRow, .travelHotelRow { padding: 12px; border-radius: 16px; background: rgba(255,255,255,.58); border: 1px solid rgba(80,120,150,.12); }
-    .travelFlightRow strong, .travelHotelRow strong { display:block; color:#1f3b57; }
-    .travelFlightRow small, .travelHotelRow small { display:block; margin-top:4px; color:var(--muted); line-height:1.55; }
-    .travelCardActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
-    .travelCardActions .btnGhost { padding:8px 10px; }
-    .reservedCostGrid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
-    .reservedCost { padding:12px; border-radius:16px; background:rgba(255,255,255,.58); }
-    .reservedCost strong { display:block; margin-top:4px; }
-    .reservedCost small { color:var(--muted); line-height:1.45; }
-    .travelPrivacyNote { border:1px dashed rgba(70,105,130,.25); }
-    .travelPrivacyNote p { color:var(--muted); line-height:1.6; margin:8px 0 12px; }
-    .moreToolsGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:12px; }
-    .moreToolsGrid button { min-height:72px; border:1px solid rgba(90,120,145,.15); border-radius:18px; background:rgba(255,255,255,.68); color:#29445f; font-weight:800; cursor:pointer; box-shadow:0 8px 18px rgba(0,0,0,.06); }
-    .moreToolsGrid button span { display:block; font-size:21px; margin-bottom:5px; }
-    .moreToolsGrid button small { display:block; color:var(--muted); font-size:11px; font-weight:500; margin-top:3px; }
-    .flightCard, .hotelCard { background:rgba(255,255,255,.84); border-radius:22px; padding:16px; box-shadow:var(--shadow2); margin:12px 0; }
-    .flightRoute { display:flex; align-items:center; gap:10px; margin:12px 0; }
-    .flightRoute .airport { flex:1; padding:12px; border-radius:16px; background:rgba(225,242,255,.66); }
-    .flightRoute .airport strong { display:block; font-size:22px; }
-    .flightRoute .arrow { font-size:22px; color:#5473ff; }
-    .hotelMeta { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
-    .hotelMeta span { display:block; padding:8px 10px; border-radius:12px; background:rgba(255,255,255,.58); font-size:13px; }
-    .hotelMeta b { display:block; font-size:11px; color:var(--muted); margin-bottom:2px; }
-    @media (max-width: 700px) { .reservedCostGrid { grid-template-columns:repeat(2,minmax(0,1fr)); } .moreToolsGrid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-    @media (max-width: 460px) { .reservedCostGrid, .hotelMeta { grid-template-columns:1fr; } .moreToolsGrid { grid-template-columns:repeat(2,minmax(0,1fr)); } .flightRoute { gap:6px; } .flightRoute .airport strong { font-size:18px; } }
+    .dashboardTravelCardBody {
+      display: grid;
+      gap: 10px;
+    }
+
+    .travelFlightRow,
+    .travelHotelRow {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .58);
+      border: 1px solid rgba(80, 120, 150, .12);
+    }
+
+    .travelFlightRow strong,
+    .travelHotelRow strong {
+      display: block;
+      color: #1f3b57;
+    }
+
+    .travelFlightRow small,
+    .travelHotelRow small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .travelCardActions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .travelCardActions .btnGhost {
+      padding: 8px 10px;
+    }
+
+    .reservedCostGrid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .reservedCost {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .58);
+    }
+
+    .reservedCost strong {
+      display: block;
+      margin-top: 4px;
+    }
+
+    .reservedCost small {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .travelPrivacyNote {
+      border: 1px dashed rgba(70, 105, 130, .25);
+    }
+
+    .travelPrivacyNote p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 8px 0 12px;
+    }
+
+    .moreToolsGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .moreToolsGrid button {
+      min-height: 72px;
+      border: 1px solid rgba(90, 120, 145, .15);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .68);
+      color: #29445f;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .06);
+    }
+
+    .moreToolsGrid button span {
+      display: block;
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .moreToolsGrid button small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 3px;
+    }
+
+    .flightCard,
+    .hotelCard {
+      background: rgba(255, 255, 255, .84);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow2);
+      margin: 12px 0;
+    }
+
+    .flightRoute {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .flightRoute .airport {
+      flex: 1;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(225, 242, 255, .66);
+    }
+
+    .flightRoute .airport strong {
+      display: block;
+      font-size: 22px;
+    }
+
+    .flightRoute .arrow {
+      font-size: 22px;
+      color: #5473ff;
+    }
+
+    .hotelMeta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .hotelMeta span {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .58);
+      font-size: 13px;
+    }
+
+    .hotelMeta b {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 700px) {
+      .reservedCostGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .moreToolsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 460px) {
+
+      .reservedCostGrid,
+      .hotelMeta {
+        grid-template-columns: 1fr;
+      }
+
+      .moreToolsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flightRoute {
+        gap: 6px;
+      }
+
+      .flightRoute .airport strong {
+        font-size: 18px;
+      }
+    }
 
     .expenseMeta {
       font-size: 12px;
@@ -729,9 +890,20 @@
       color: #3854a5;
     }
 
-    .statusBadge.completed { background: rgba(111, 207, 151, .22); color: #2d6845; }
-    .statusBadge.in_progress { background: rgba(255, 198, 92, .25); color: #855b00; }
-    .statusBadge.cancelled { background: rgba(255, 107, 107, .18); color: #9e3434; }
+    .statusBadge.completed {
+      background: rgba(111, 207, 151, .22);
+      color: #2d6845;
+    }
+
+    .statusBadge.in_progress {
+      background: rgba(255, 198, 92, .25);
+      color: #855b00;
+    }
+
+    .statusBadge.cancelled {
+      background: rgba(255, 107, 107, .18);
+      color: #9e3434;
+    }
 
     .overlapWarning {
       color: #9e3434;
@@ -777,7 +949,9 @@
       -webkit-backdrop-filter: blur(12px);
     }
 
-    .reminderPanel[hidden] { display: none; }
+    .reminderPanel[hidden] {
+      display: none;
+    }
 
     .reminderPanelCopy {
       min-width: 0;
@@ -787,7 +961,9 @@
     }
 
     .reminderPanelCopy strong,
-    .reminderPanelCopy span { display: block; }
+    .reminderPanelCopy span {
+      display: block;
+    }
 
     .reminderPanelCopy span {
       margin-top: 2px;
@@ -1051,8 +1227,13 @@
       gap: 8px;
     }
 
-    .shoppingProgressTop strong { color: #2b4d67; }
-    .shoppingProgressTop small { color: #718696; }
+    .shoppingProgressTop strong {
+      color: #2b4d67;
+    }
+
+    .shoppingProgressTop small {
+      color: #718696;
+    }
 
     .shoppingProgressTrack {
       height: 8px;
@@ -1099,6 +1280,33 @@
       text-decoration: none;
     }
 
+    #shoppingList {
+      display: grid;
+      gap: 12px;
+    }
+
+    .shoppingGroupHeading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 8px 2px 0;
+      padding: 4px 2px;
+      color: #294761;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .shoppingGroupHeading small {
+      color: #718696;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .shoppingToolbar .filterControl {
+      min-width: 0;
+    }
+
     .travelRecordHint {
       margin: 8px 0 0;
       line-height: 1.55;
@@ -1136,7 +1344,9 @@
       margin-top: 10px;
     }
 
-    .ticketCard.isSoon { border: 2px solid rgba(255, 159, 58, .5); }
+    .ticketCard.isSoon {
+      border: 2px solid rgba(255, 159, 58, .5);
+    }
 
     .formGrid {
       display: grid;
@@ -1144,9 +1354,21 @@
       gap: 10px;
     }
 
-    .formField { min-width: 0; }
-    .formField.full { grid-column: 1 / -1; }
-    .formField label { display: block; margin-bottom: 5px; font-size: 12px; color: var(--muted); font-weight: 800; }
+    .formField {
+      min-width: 0;
+    }
+
+    .formField.full {
+      grid-column: 1 / -1;
+    }
+
+    .formField label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+    }
 
     .memberList {
       display: flex;
@@ -1171,7 +1393,7 @@
       background: rgba(255, 255, 255, .66);
     }
 
-    #expenseSheet .memberList .checkRow input:checked + span {
+    #expenseSheet .memberList .checkRow input:checked+span {
       color: #2f6f70;
       font-weight: 800;
       text-decoration: none;
@@ -1204,8 +1426,16 @@
       display: none;
     }
 
-    .modalSheet.open { display: block; }
-    .modalBackdrop { position: absolute; inset: 0; background: rgba(10, 30, 55, .36); }
+    .modalSheet.open {
+      display: block;
+    }
+
+    .modalBackdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 30, 55, .36);
+    }
+
     .modalPanel {
       position: absolute;
       left: 50%;
@@ -1236,7 +1466,7 @@
       z-index: 3;
     }
 
-    #expenseSheet .modalPanel > .rowBetween {
+    #expenseSheet .modalPanel>.rowBetween {
       position: sticky;
       top: -20px;
       margin: -20px -20px 12px;
@@ -1406,12 +1636,17 @@
       flex: 0 0 auto;
     }
 
-    .checkRow input:checked + span {
+    .checkRow input:checked+span {
       color: var(--muted);
       text-decoration: line-through;
     }
 
     @media (max-width: 600px) {
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
       .app {
         padding: 10px 10px calc(128px + env(safe-area-inset-bottom));
       }
@@ -1462,6 +1697,23 @@
         flex-wrap: wrap;
       }
 
+      .sectionTitleActions {
+        max-width: 100%;
+        overflow-x: auto;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        padding-bottom: 3px;
+        scrollbar-width: none;
+      }
+
+      .sectionTitleActions::-webkit-scrollbar {
+        display: none;
+      }
+
+      .sectionTitleActions > * {
+        flex: 0 0 auto;
+      }
+
       .rowBetween {
         flex-wrap: wrap;
       }
@@ -1500,13 +1752,47 @@
       .bottomNav {
         bottom: max(10px, env(safe-area-inset-bottom));
         padding: 8px 6px;
+        gap: 2px;
+        left: 10px;
+        width: calc(100% - 20px);
+        transform: none;
       }
 
       .bIcon {
-        width: 44px;
-        height: 44px;
-        border-radius: 20px;
-        font-size: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 18px;
+        font-size: 18px;
+      }
+
+      .bItem {
+        gap: 4px;
+        font-size: 10px;
+        flex: 0 0 56px;
+      }
+
+      .dashboardHero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 10px;
+      }
+
+      .dashboardHero > div:first-child {
+        min-width: 0;
+      }
+
+      .dashboardHero h1 {
+        overflow-wrap: anywhere;
+      }
+
+      .infoRow .dateChip,
+      .infoRow .locChip {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        overflow-wrap: anywhere;
+        line-height: 1.35;
       }
     }
 
@@ -1538,6 +1824,15 @@
         gap: 16px;
       }
 
+      #shoppingList {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .shoppingGroupHeading {
+        grid-column: 1 / -1;
+      }
+
       #tripList .itemCard,
       #mapList .simpleCard {
         margin: 0;
@@ -1566,6 +1861,7 @@
     }
 
     @media print {
+
       .bg,
       .bottomNav,
       .topActions,
@@ -1600,6 +1896,7 @@
         border: 1px solid #ddd;
       }
     }
+
     /* ===== Tokyo editorial visual refresh ===== */
     :root {
       --ink: #172b43;
@@ -1871,6 +2168,17 @@
 
       .bottomNav {
         bottom: max(8px, env(safe-area-inset-bottom));
+        left: 10px;
+        right: 10px;
+        width: auto;
+        transform: none;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .bottomNav::-webkit-scrollbar {
+        display: none;
       }
 
       .bIcon {
@@ -1891,6 +2199,7 @@
         max-width: 1180px;
       }
     }
+
     /* ===== Fuji winter glass illustration refresh ===== */
     .bg {
       background-color: #d8eaf4;
@@ -2190,7 +2499,7 @@
       font-size: 19px;
     }
 
-    .dashboardStat > div:nth-child(2) {
+    .dashboardStat>div:nth-child(2) {
       min-width: 0;
     }
 
@@ -2522,7 +2831,9 @@
       gap: 14px;
     }
 
-    .dashboardGrid.singleColumn { grid-template-columns: 1fr; }
+    .dashboardGrid.singleColumn {
+      grid-template-columns: 1fr;
+    }
 
     .dashboardPanelHeading {
       align-items: flex-start;
@@ -2758,8 +3069,15 @@
       display: block;
     }
 
-    .dashboardTicketRow > div:first-child { flex: 1; min-width: 0; }
-    .dashboardTicketRow .btnGhost { padding: 6px 8px; font-size: 11px; }
+    .dashboardTicketRow>div:first-child {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dashboardTicketRow .btnGhost {
+      padding: 6px 8px;
+      font-size: 11px;
+    }
 
     .dashboardTicketRow strong {
       color: #284963;
@@ -2853,7 +3171,7 @@
         padding: 16px;
       }
 
-      .dashboardHero > div:first-child {
+      .dashboardHero>div:first-child {
         min-width: 0;
       }
 
@@ -2976,6 +3294,66 @@
         width: 100%;
       }
 
+      .shoppingToolbar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .shoppingToolbar #shoppingSearch {
+        grid-column: 1 / -1;
+      }
+
+      .shoppingToolbar .filterResetBtn,
+      .shoppingToolbar > button:last-child {
+        width: 100%;
+      }
+
+      #shoppingList {
+        gap: 10px;
+      }
+
+      .shoppingGroupHeading {
+        margin-top: 12px;
+        font-size: 14px;
+      }
+
+      .shoppingItemCard {
+        padding: 13px;
+      }
+
+      .shoppingItemHeader {
+        align-items: flex-start;
+        gap: 9px;
+      }
+
+      .shoppingItemName {
+        min-width: 0;
+      }
+
+      .shoppingItemName b {
+        display: block;
+        line-height: 1.4;
+      }
+
+      .shoppingItemHeader .expenseActions {
+        flex: 0 0 auto;
+      }
+
+      .shoppingActions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .shoppingActions > * {
+        width: 100%;
+      }
+
+      .shoppingDetailsBody a {
+        display: block;
+        padding: 4px 0;
+      }
+
       .backupCard {
         padding: 16px;
       }
@@ -2984,8 +3362,8 @@
         grid-template-columns: 1fr;
       }
 
-      .backupActions > .btnPill,
-      .backupActions > label.btnPill {
+      .backupActions>.btnPill,
+      .backupActions>label.btnPill {
         flex: 1 1 140px;
         justify-content: center;
         text-align: center;
@@ -3001,13 +3379,13 @@
         border-radius: 22px 22px 0 0;
       }
 
-      .modalPanel > .rowBetween {
+      .modalPanel>.rowBetween {
         flex-wrap: nowrap;
         align-items: center;
         min-width: 0;
       }
 
-      .modalPanel > .rowBetween h3 {
+      .modalPanel>.rowBetween h3 {
         min-width: 0;
         flex: 1 1 auto;
         font-size: 18px;
@@ -3016,16 +3394,16 @@
         white-space: nowrap;
       }
 
-      .modalPanel > .rowBetween .btnGhost {
+      .modalPanel>.rowBetween .btnGhost {
         flex: 0 0 auto;
       }
 
-      #expenseSheet .modalPanel > .rowBetween {
+      #expenseSheet .modalPanel>.rowBetween {
         margin: -16px -16px 12px;
         padding: 14px 16px 12px;
       }
 
-      #expenseSheet .modalPanel > .rowBetween .btnGhost {
+      #expenseSheet .modalPanel>.rowBetween .btnGhost {
         margin-right: 4px;
       }
 
@@ -3056,6 +3434,7 @@
         flex: 1 1 140px;
       }
     }
+
     /* ===== Interaction and spacing refinements ===== */
     .list {
       gap: 20px;
@@ -3268,7 +3647,7 @@
       font-size: 19px;
     }
 
-    .leafletTripMarkerInner > span {
+    .leafletTripMarkerInner>span {
       transform: rotate(45deg);
     }
 
@@ -3453,8 +3832,8 @@
     }
 
     /* 頂部操作維持一致高度；地圖改為全寬後接續時間軸。 */
-    .topActions > .rate,
-    .topActions > .iconBtn {
+    .topActions>.rate,
+    .topActions>.iconBtn {
       min-height: 42px;
       height: 42px;
       display: inline-flex;
@@ -3622,7 +4001,7 @@
         width: 100%;
       }
 
-      .expenseToolbarActions > button {
+      .expenseToolbarActions>button {
         flex: 1 1 0;
       }
     }
@@ -3671,15 +4050,15 @@
       gap: 7px;
     }
 
-    #tripList .itemActions > button,
-    #tripList .itemActions > .badge {
+    #tripList .itemActions>button,
+    #tripList .itemActions>.badge {
       width: 100%;
       min-width: 0;
       max-width: 100%;
       box-sizing: border-box;
     }
 
-    #tripList .itemActions > .badge {
+    #tripList .itemActions>.badge {
       grid-column: 1 / -1;
       justify-content: center;
       text-align: center;
@@ -3854,7 +4233,7 @@
       margin-top: 14px;
     }
 
-    .ticketCardDetails > div {
+    .ticketCardDetails>div {
       min-width: 0;
       padding: 9px 11px;
       border-radius: 14px;
@@ -3908,6 +4287,7 @@
     }
 
     @media (max-width: 600px) {
+
       .expensePage,
       .ticketPage {
         padding-top: 12px;
@@ -3964,7 +4344,7 @@
         justify-content: stretch;
       }
 
-      .topActions > .rate {
+      .topActions>.rate {
         grid-column: 1 / -1;
         width: auto;
         max-width: none;
@@ -3978,7 +4358,7 @@
         text-align: left;
       }
 
-      .topActions > .iconBtn {
+      .topActions>.iconBtn {
         min-width: 0;
         width: 100%;
         padding-inline: 9px;
@@ -4154,7 +4534,8 @@
 
   <div class="app">
     <div class="topbar">
-      <button class="brand brandHome" type="button" onclick="goHome()" aria-label="回到行程首頁" title="回到行程首頁"><span class="leaf" aria-hidden="true"></span> Japan Tokyo</button>
+      <button class="brand brandHome" type="button" onclick="goHome()" aria-label="回到行程首頁" title="回到行程首頁"><span
+          class="leaf" aria-hidden="true"></span> Japan Tokyo</button>
       <div class="topActions">
         <div class="rate" id="rateBox">匯率讀取中…</div>
         <button class="iconBtn" type="button" onclick="shareTrip()" aria-label="分享行程">↗ 分享</button>
@@ -4164,7 +4545,8 @@
     <!-- Info Card -->
     <div class="infoCard">
       <div class="infoRow">
-        <button class="weatherBox weatherTrigger" type="button" onclick="openWeatherDetails()" aria-label="查看分區天氣詳細資訊" title="點擊查看分區天氣">
+        <button class="weatherBox weatherTrigger" type="button" onclick="openWeatherDetails()" aria-label="查看分區天氣詳細資訊"
+          title="點擊查看分區天氣">
           <div class="wxIcon">⛅</div>
           <div class="wxMain">
             <div class="temp" id="tempBox">12°C</div>
@@ -4205,37 +4587,50 @@
             <strong id="dashboardDayNo">Day 1</strong>
             <span id="dashboardTravelState">旅行倒數</span>
           </div>
-          <button class="btnGhost dashboardReviewBtn" id="dashboardReviewBtn" type="button" onclick="openPageWithoutNav('info')" hidden>查看回顧</button>
+          <button class="btnGhost dashboardReviewBtn" id="dashboardReviewBtn" type="button"
+            onclick="openPageWithoutNav('info')" hidden>查看回顧</button>
         </div>
 
         <div class="dashboardStats" aria-label="今日旅行摘要">
           <article class="dashboardStat dashboardBudgetStat">
             <div class="dashboardStatIcon">💴</div>
-            <div><span class="dashboardLabel">今日支出</span><strong id="dashSpent">尚無記錄</strong><small id="dashBudgetRemaining">預算尚未設定</small><button class="dashboardInlineBtn" type="button" onclick="setDailyBudget()">設定預算</button></div>
-            <div class="dashboardStatFoot"><span id="dashBudget">每日預算 —</span><span id="dashBudgetHint">只計實際支出</span></div>
+            <div><span class="dashboardLabel">今日支出</span><strong id="dashSpent">尚無記錄</strong><small
+                id="dashBudgetRemaining">預算尚未設定</small><button class="dashboardInlineBtn" type="button"
+                onclick="setDailyBudget()">設定預算</button></div>
+            <div class="dashboardStatFoot"><span id="dashBudget">每日預算 —</span><span id="dashBudgetHint">只計實際支出</span>
+            </div>
           </article>
           <article class="dashboardStat">
             <div class="dashboardStatIcon">🗓️</div>
-            <div><span class="dashboardLabel">行程進度</span><strong id="dashProgress">0%</strong><small id="dashProgressText">0 / 0 項完成</small></div>
+            <div><span class="dashboardLabel">行程進度</span><strong id="dashProgress">0%</strong><small
+                id="dashProgressText">0 / 0 項完成</small></div>
             <div class="progressTrack"><span id="dashProgressBar"></span></div>
           </article>
         </div>
 
         <div class="dashboardNextCard" id="dashboardNextCard">
-          <div class="dashboardCardHeading"><span>下一個行程</span><span class="dashboardLiveDot" aria-hidden="true"></span><span id="dashNextCountdown">等待行程</span></div>
+          <div class="dashboardCardHeading"><span>下一個行程</span><span class="dashboardLiveDot"
+              aria-hidden="true"></span><span id="dashNextCountdown">等待行程</span></div>
           <div class="dashboardNextBody">
-            <div><h2 id="dashNextTitle">尚未安排下一個行程</h2><p id="dashNextMeta">可切換日期查看行程安排</p></div>
-            <div class="dashboardNextActions"><button class="btnPill primary" type="button" onclick="navigateNextItem()">導航</button></div>
+            <div>
+              <h2 id="dashNextTitle">尚未安排下一個行程</h2>
+              <p id="dashNextMeta">可切換日期查看行程安排</p>
+            </div>
+            <div class="dashboardNextActions"><button class="btnPill primary" type="button"
+                onclick="navigateNextItem()">導航</button></div>
           </div>
         </div>
 
         <div class="dashboardGuideCard" id="dashboardGuideCard">
           <div class="dashboardGuideHeading">
-            <div><span class="dashboardKicker">DAY GUIDE</span><h2 id="dashboardGuideTitle">本日詳細行程</h2></div>
+            <div><span class="dashboardKicker">DAY GUIDE</span>
+              <h2 id="dashboardGuideTitle">本日詳細行程</h2>
+            </div>
             <button class="btnGhost" type="button" onclick="openDayGuideModal()">查看詳細行程</button>
           </div>
           <p id="dashboardGuideSummary">切換日期後，這裡會顯示 TXT 行程明細的重點與提醒。</p>
-          <div class="dashboardGuideMeta"><span id="dashboardGuideChecklist">行前提醒載入中…</span><span id="dashboardGuideSource">來源：行程明細 TXT</span></div>
+          <div class="dashboardGuideMeta"><span id="dashboardGuideChecklist">行前提醒載入中…</span><span
+              id="dashboardGuideSource">來源：行程明細 TXT</span></div>
         </div>
 
       </section>
@@ -4249,8 +4644,14 @@
         </div>
       </div>
       <div class="reminderPanel" id="itineraryReminderPanel" hidden>
-        <div class="reminderPanelCopy"><strong>行程提醒</strong><span id="dashboardReminderStatus">僅在此頁開啟時檢查，不會宣稱背景推播</span></div>
-        <div class="reminderPanelActions"><select id="dashboardReminderMinutes" class="filterControl" onchange="saveReminderPreference(this.value)"><option value="10">提前 10 分鐘</option><option value="20">提前 20 分鐘</option><option value="30">提前 30 分鐘</option></select><button class="btnGhost" type="button" onclick="requestDashboardNotifications()">啟用通知</button></div>
+        <div class="reminderPanelCopy"><strong>行程提醒</strong><span id="dashboardReminderStatus">僅在此頁開啟時檢查，不會宣稱背景推播</span>
+        </div>
+        <div class="reminderPanelActions"><select id="dashboardReminderMinutes" class="filterControl"
+            onchange="saveReminderPreference(this.value)">
+            <option value="10">提前 10 分鐘</option>
+            <option value="20">提前 20 分鐘</option>
+            <option value="30">提前 30 分鐘</option>
+          </select><button class="btnGhost" type="button" onclick="requestDashboardNotifications()">啟用通知</button></div>
       </div>
       <div class="tripTools">
         <label class="searchBox" for="tripSearch">
@@ -4268,17 +4669,29 @@
       <div class="list" id="tripList"></div>
       <div class="dashboardGrid dashboardTravelCards itinerarySupportingCards">
         <article class="dashboardPanelCard">
-          <div class="dashboardPanelHeading"><div><span class="dashboardKicker">FLIGHTS</span><h2>航班與 Check-in</h2></div><button class="btnGhost" type="button" onclick="openPageWithoutNav('flights')">管理</button></div>
+          <div class="dashboardPanelHeading">
+            <div><span class="dashboardKicker">FLIGHTS</span>
+              <h2>航班與 Check-in</h2>
+            </div><button class="btnGhost" type="button" onclick="openPageWithoutNav('flights')">管理</button>
+          </div>
           <div id="dashboardFlightCard" class="dashboardTravelCardBody"></div>
         </article>
         <article class="dashboardPanelCard">
-          <div class="dashboardPanelHeading"><div><span class="dashboardKicker">ACCOMMODATION</span><h2>今日住宿</h2></div></div>
+          <div class="dashboardPanelHeading">
+            <div><span class="dashboardKicker">ACCOMMODATION</span>
+              <h2>今日住宿</h2>
+            </div>
+          </div>
           <div id="dashboardAccommodationCard" class="dashboardTravelCardBody"></div>
         </article>
       </div>
       <div class="dashboardGrid dashboardTicketOnly itinerarySupportingCards">
         <article class="dashboardPanelCard">
-          <div class="dashboardPanelHeading"><div><span class="dashboardKicker">TICKETS & RESERVATIONS</span><h2>今日票券與預約</h2></div></div>
+          <div class="dashboardPanelHeading">
+            <div><span class="dashboardKicker">TICKETS & RESERVATIONS</span>
+              <h2>今日票券與預約</h2>
+            </div>
+          </div>
           <div id="dashboardTicketList" class="dashboardTicketList"></div>
         </article>
       </div>
@@ -4295,7 +4708,11 @@
         </div>
       </div>
       <div class="simpleCard weatherDetailsCard">
-        <div class="dashboardPanelHeading"><div><span class="dashboardKicker">REGIONAL FORECAST</span><h2>東京行程分區天氣</h2></div><span class="pill">點擊上方天氣可再次查看</span></div>
+        <div class="dashboardPanelHeading">
+          <div><span class="dashboardKicker">REGIONAL FORECAST</span>
+            <h2>東京行程分區天氣</h2>
+          </div><span class="pill">點擊上方天氣可再次查看</span>
+        </div>
         <p class="weatherDetailsHint">依照各天行程地點整理目前天氣、最高／最低溫與降雨機率，詳細內容只在此頁展開。</p>
         <div id="regionalWeatherList" class="regionalWeatherList"></div>
         <div id="dashboardRainPlan" class="dashboardNotice"></div>
@@ -4323,7 +4740,10 @@
 
       <div class="simpleCard expenseOverviewCard">
         <div class="expenseOverviewHead">
-          <div><span class="dashboardKicker">LIVE EXPENSES</span><h2>旅途支出總計</h2><p>只計入一般旅途記帳，預訂費用會獨立顯示。</p></div>
+          <div><span class="dashboardKicker">LIVE EXPENSES</span>
+            <h2>旅途支出總計</h2>
+            <p>只計入一般旅途記帳，預訂費用會獨立顯示。</p>
+          </div>
           <div class="expenseTotalHero">
             ¥ <span id="expenseTotalJPY">0</span><br>
             ≈ NT$ <span id="expenseTotalTWD">0</span>
@@ -4335,14 +4755,18 @@
 
       <div class="simpleCard expenseReservedCard">
         <div class="dashboardPanelHeading">
-          <div><span class="dashboardKicker">TRIP COST OVERVIEW</span><h2>旅行費用概況</h2><p class="expenseSectionHint">預訂費用與實際記帳分開，可逐筆修改金額與付款狀態。</p></div>
+          <div><span class="dashboardKicker">TRIP COST OVERVIEW</span>
+            <h2>旅行費用概況</h2>
+            <p class="expenseSectionHint">預訂費用與實際記帳分開，可逐筆修改金額與付款狀態。</p>
+          </div>
           <button class="btnGhost" type="button" onclick="openReservedExpenseSheet()">＋ 新增費用</button>
         </div>
         <div id="expenseReservedCosts" class="reservedCostGrid"></div>
       </div>
 
       <div class="simpleCard expenseSplitCard">
-        <div class="rowBetween"><b>旅伴與分帳</b><button class="btnGhost" type="button" onclick="addMember()">＋ 新增旅伴</button></div>
+        <div class="rowBetween"><b>旅伴與分帳</b><button class="btnGhost" type="button" onclick="addMember()">＋ 新增旅伴</button>
+        </div>
         <div id="memberManager" class="memberList"></div>
         <div id="settlementList" style="margin-top:10px"></div>
       </div>
@@ -4362,13 +4786,19 @@
         <div class="sectionTitle">購物清單 <span class="muted">Shopping</span></div>
         <button class="btnPill primary" type="button" onclick="openShoppingSheet()">＋ 新增商品</button>
       </div>
-      <div class="moduleToolbar">
+      <div class="moduleToolbar shoppingToolbar">
         <input class="filterControl" id="shoppingSearch" placeholder="搜尋商品或店家" oninput="renderShopping()">
         <select class="filterControl" id="shoppingStatusFilter" onchange="renderShopping()">
-          <option value="all">全部採購狀態</option><option value="todo">尚未確認</option><option value="done">已確認買到</option>
+          <option value="all">全部採購狀態</option>
+          <option value="todo">尚未確認</option>
+          <option value="done">已確認買到</option>
         </select>
-        <select class="filterControl" id="shoppingCategoryFilter" onchange="renderShopping()"><option value="all">全部分類</option></select>
-        <select class="filterControl" id="shoppingRegionFilter" onchange="renderShopping()"><option value="all">全部地區</option></select>
+        <select class="filterControl" id="shoppingCategoryFilter" onchange="renderShopping()">
+          <option value="all">全部分類</option>
+        </select>
+        <select class="filterControl" id="shoppingRegionFilter" onchange="renderShopping()">
+          <option value="all">全部地區</option>
+        </select>
         <button class="btnGhost filterResetBtn" type="button" onclick="resetShoppingFilters()">清除篩選</button>
         <button class="btnGhost" type="button" onclick="exportShoppingCSV()">⬇ 匯出清單</button>
       </div>
@@ -4386,12 +4816,20 @@
         <button class="btnPill primary" type="button" onclick="openTicketSheet()">＋ 新增票券</button>
       </div>
       <div class="ticketScopeBar">
-        <div><span class="dashboardKicker">VIEWING</span><strong id="ticketScopeLabel">全部票券</strong><small id="ticketScopeDescription">可用日期、狀態與關鍵字快速篩選</small></div>
+        <div><span class="dashboardKicker">VIEWING</span><strong id="ticketScopeLabel">全部票券</strong><small
+            id="ticketScopeDescription">可用日期、狀態與關鍵字快速篩選</small></div>
         <button class="btnGhost" id="ticketShowAllBtn" type="button" onclick="showAllTickets()">顯示全部票券</button>
       </div>
       <div class="moduleToolbar ticketToolbar">
         <select class="filterControl" id="ticketStatusFilter" onchange="renderTickets()">
-          <option value="all">全部狀態</option><option>待確認</option><option>待購買</option><option>已購買</option><option>待取票</option><option>已取票</option><option>已使用</option><option>已取消</option>
+          <option value="all">全部狀態</option>
+          <option>待確認</option>
+          <option>待購買</option>
+          <option>已購買</option>
+          <option>待取票</option>
+          <option>已取票</option>
+          <option>已使用</option>
+          <option>已取消</option>
         </select>
         <input class="filterControl" id="ticketSearch" placeholder="搜尋活動、平台或訂單" oninput="renderTickets()">
         <button class="btnGhost filterResetBtn" type="button" onclick="resetTicketFilters()">清除篩選</button>
@@ -4403,19 +4841,28 @@
     <section class="page" id="page-flights">
       <div class="sectionTitleRow">
         <div class="sectionTitle">航班 <span class="muted">Flights</span></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btnPill" type="button" onclick="openTravelRecordEditor('flight')">＋ 新增航班</button><button class="btnPill primary" type="button" onclick="openPrivateTravelSheet('flight')">🔒 私密訂位資料</button></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btnPill" type="button"
+            onclick="openTravelRecordEditor('flight')">＋ 新增航班</button><button class="btnPill primary" type="button"
+            onclick="openPrivateTravelSheet('flight')">🔒 私密訂位資料</button></div>
       </div>
       <div id="flightList"></div>
-      <div class="simpleCard travelPrivacyNote"><b>私密資料保護</b><p>訂位代號與電子機票號碼不寫入公開程式碼或一般備份；目前只在此頁記憶體暫存，重新整理後會清除。此專案尚未提供帳號認證。</p><button class="btnGhost" type="button" onclick="openExternal('https://www.evaair.com/')">長榮航空官方網站</button></div>
+      <div class="simpleCard travelPrivacyNote"><b>私密資料保護</b>
+        <p>訂位代號與電子機票號碼不寫入公開程式碼或一般備份；目前只在此頁記憶體暫存，重新整理後會清除。此專案尚未提供帳號認證。</p><button class="btnGhost" type="button"
+          onclick="openExternal('https://www.evaair.com/')">長榮航空官方網站</button>
+      </div>
     </section>
 
     <section class="page" id="page-accommodations">
       <div class="sectionTitleRow">
         <div class="sectionTitle">住宿管理 <span class="muted">Hotels</span></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btnPill" type="button" onclick="openTravelRecordEditor('accommodation')">＋ 新增住宿</button><button class="btnPill primary" type="button" onclick="openPrivateTravelSheet('accommodation')">🔒 私密訂單資料</button></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btnPill" type="button"
+            onclick="openTravelRecordEditor('accommodation')">＋ 新增住宿</button><button class="btnPill primary"
+            type="button" onclick="openPrivateTravelSheet('accommodation')">🔒 私密訂單資料</button></div>
       </div>
       <div id="accommodationList"></div>
-      <div class="simpleCard travelPrivacyNote"><b>入住與費用提醒</b><p>住宿金額保留原幣，台幣僅作參考，不會重複計入實際記帳。付款狀態未提供的項目維持「待確認」。</p></div>
+      <div class="simpleCard travelPrivacyNote"><b>入住與費用提醒</b>
+        <p>住宿金額保留原幣，台幣僅作參考，不會重複計入實際記帳。付款狀態未提供的項目維持「待確認」。</p>
+      </div>
     </section>
 
     <section class="page" id="page-info">
@@ -4423,11 +4870,18 @@
         <div class="sectionTitle">資訊 <span class="muted">Info</span></div>
       </div>
       <div class="simpleCard">
-        <div class="rowBetween"><div><b>更多功能</b><div class="muted" style="margin-top:4px">較少使用的工具集中在這裡，首頁保持清爽。</div></div><span class="pill">More</span></div>
+        <div class="rowBetween">
+          <div><b>更多功能</b>
+            <div class="muted" style="margin-top:4px">較少使用的工具集中在這裡，首頁保持清爽。</div>
+          </div><span class="pill">More</span>
+        </div>
         <div class="moreToolsGrid" aria-label="更多功能">
-          <button type="button" onclick="openPageWithoutNav('flights')"><span>✈️</span>航班資訊<small>航廈、時區與 Check-in</small></button>
-          <button type="button" onclick="openPageWithoutNav('accommodations')"><span>🏨</span>住宿管理<small>飯店、地址與換宿</small></button>
-          <button type="button" onclick="openPageWithoutNav('shopping')"><span>🛍️</span>購物清單<small>採買與代購紀錄</small></button>
+          <button type="button" onclick="openPageWithoutNav('flights')"><span>✈️</span>航班資訊<small>航廈、時區與
+              Check-in</small></button>
+          <button type="button"
+            onclick="openPageWithoutNav('accommodations')"><span>🏨</span>住宿管理<small>飯店、地址與換宿</small></button>
+          <button type="button"
+            onclick="openPageWithoutNav('shopping')"><span>🛍️</span>購物清單<small>採買與代購紀錄</small></button>
         </div>
       </div>
       <div class="simpleCard backupCard">
@@ -4473,6 +4927,10 @@
     <div class="bItem" onclick="switchPage('tickets', this)">
       <div class="bIcon">🎫</div>
       票券
+    </div>
+    <div class="bItem" onclick="switchPage('shopping', this)">
+      <div class="bIcon">🛍️</div>
+      購物
     </div>
     <div class="bItem" onclick="switchPage('info', this)">
       <div class="bIcon">☰</div>
@@ -4537,63 +4995,81 @@
       version: DATA_VERSION,
       selectedDay: 1,
       days: [
-        { labelZh: "DAY1", labelJp: "巢鴨・上野", date: "2026-11-28", items: [
-          { title: "抵達東京 ✈️｜入住巢鴨", sub: "07:15 TSA → 11:00 HND；12:20 京急線／JR 山手線前往巢鴨，13:30 寄放行李", place: "APA Hotel Sugamo Ekimae" },
-          { title: "巢鴨地藏通商店街｜14:30–16:00", sub: "高岩寺、洗地藏、Sugamon；元祖塩大福與巢鴨小吃", place: "巣鴨地蔵通り商店街" },
-          { title: "上野・阿美橫町｜16:30–21:00", sub: "藥妝、零食、上野公園；晚餐可選鰻魚飯、海鮮丼或豬排", place: "アメヤ横丁" },
-          { title: "返回巢鴨飯店｜21:30", sub: "JR 山手線；單程約 170 日圓", place: "APA Hotel Sugamo Ekimae" }
-        ] },
-        { labelZh: "DAY2", labelJp: "哈利波特・池袋", date: "2026-11-29", items: [
-          { title: "前往豐島園影城｜09:30", sub: "巢鴨 → 池袋轉乘 → 豐島園；交通約 360 日圓", place: "としまえん駅" },
-          { title: "東京華納兄弟哈利波特影城｜10:30–15:30", sub: "大禮堂、魔法部、九又四分之三月台、斜角巷；門票需預約", place: "ワーナー ブラザース スタジオツアー東京" },
-          { title: "池袋逛街與晚餐｜16:30–19:30", sub: "寶可夢中心、水族館、Animate、吉卜力共和國；無敵家／燒肉／居酒屋", place: "池袋サンシャインシティ" },
-          { title: "返回巢鴨飯店｜21:30", sub: "JR 山手線；單程約 170 日圓", place: "APA Hotel Sugamo Ekimae" }
-        ] },
-        { labelZh: "DAY3", labelJp: "原宿・澀谷・新宿", date: "2026-11-30", items: [
-          { title: "前往原宿｜09:30", sub: "巢鴨站搭乘 JR 山手線；交通約 210 日圓", place: "原宿駅" },
-          { title: "原宿・明治神宮｜10:00–12:30", sub: "明治神宮森林參道、Kiddy Land（蠟筆小新）、表參道街拍", place: "明治神宮" },
-          { title: "澀谷潮流巡禮｜13:00–17:00", sub: "忠犬八公、Shibuya Crossing、SHIBUYA PARCO 任天堂／寶可夢、SHIBUYA SKY", place: "SHIBUYA SKY" },
-          { title: "新宿霓虹之夜｜17:30–21:00", sub: "3D 三色貓、北村相機、歌舞伎町；晚餐安排高品質燒肉", place: "歌舞伎町一番街" },
-          { title: "返回巢鴨飯店｜21:30", sub: "新宿 → 巢鴨約 180 日圓", place: "APA Hotel Sugamo Ekimae" }
-        ] },
-        { labelZh: "DAY4", labelJp: "東京迪士尼", date: "2026-12-01", items: [
-          { title: "前往舞濱｜07:30", sub: "巢鴨 → 東京 → 舞濱；來回交通約 820 日圓", place: "舞浜駅" },
-          { title: "東京迪士尼樂園｜08:30–21:00", sub: "提早入園搶 DPA；美女與野獸、維尼、太空山、聖誕遊行、夜間遊行與煙火", place: "東京ディズニーランド" },
-          { title: "迪士尼實用提醒", sub: "提前下載 Tokyo Disney Resort App；準備暖暖包、防風外套，門票與 DPA 預算約 17,000–18,000 日圓", place: "東京ディズニーランド" },
-          { title: "返回巢鴨飯店｜22:00", sub: "舞濱 → 東京 → 巢鴨", place: "APA Hotel Sugamo Ekimae" }
-        ] },
-        { labelZh: "DAY5", labelJp: "吉卜力・吉祥寺", date: "2026-12-02", items: [
-          { title: "退房與前往三鷹｜09:45–10:45", sub: "巢鴨 → 新宿 → 三鷹；大行李建議寄放三鷹或新宿置物櫃", place: "三鷹駅" },
-          { title: "三鷹之森吉卜力美術館｜11:00–13:30", sub: "龍貓售票亭、天空之城機器人、土星座影院、手稿展示室；門票需提前預約", place: "三鷹の森ジブリ美術館" },
-          { title: "吉祥寺漫遊與晚餐｜17:30–18:30", sub: "Sunroad、LOFT、Petit Village；Satou 牛肉丸或名代炸豬排", place: "吉祥寺サンロード商店街" },
-          { title: "田原町飯店 Check-in｜20:30", sub: "Toyoko Inn 東京上野田原町站；田原町站 2 號出口，入住 12/02–12/06 共 4 晚", place: "東横INN上野田原町駅" }
-        ] },
-        { labelZh: "DAY6", labelJp: "淺草・東京鐵塔", date: "2026-12-03", items: [
-          { title: "淺草寺與下町巡禮｜11:00–13:30", sub: "雷門、仲見世商店街、淺草寺本堂、淺草橫町；大黑家天丼與花月堂", place: "浅草寺" },
-          { title: "東京車站一番街｜14:30–16:30", sub: "Tokyo Character Street、吉卜力／蠟筆小新／Chiikawa、TOKYO Me+ 伴手禮", place: "東京駅一番街" },
-          { title: "東京鐵塔｜17:30–20:30", sub: "芝公園 4 號地、赤羽橋站階梯拍攝夕陽與點燈；可安排豆腐屋 Ukai 或雞白湯拉麵", place: "東京タワー" },
-          { title: "返回田原町飯店｜20:30", sub: "濱松町 → 神田 → 田原町", place: "東横INN上野田原町駅" }
-        ] },
-        { labelZh: "DAY7", labelJp: "富士山・河口湖", date: "2026-12-04", items: [
-          { title: "跟團集合｜07:20–08:00", sub: "田原町 → 上野 → 東京站丸之內北口；08:00 巴士出發，記得保暖", place: "東京駅丸の内北口" },
-          { title: "富士山・河口湖｜10:30–12:00", sub: "大石公園、河口湖 Lawson；可吃不動餺飥，留意山區低溫與天氣", place: "大石公園" },
-          { title: "忍野八海｜12:10–13:30", sub: "清澈湧泉池、現烤草餅、富士湧泉豆腐", place: "忍野八海" },
-          { title: "山中湖 KABA 水陸巴士｜14:00–15:30", sub: "體驗兩棲巴士衝入湖中，從湖面遠眺富士山", place: "山中湖" },
-          { title: "日川時計店與階梯街景｜16:00–16:30", sub: "下吉田街道、復古招牌與通往富士山的街景", place: "日川時計店" },
-          { title: "東京車站一番街與晚餐｜17:00–20:30", sub: "拉麵、Calbee+ 現炸薯條、New York Perfect Cheese；先寄放行李再逛", place: "東京駅一番街" }
-        ] },
-        { labelZh: "DAY8", labelJp: "台場・彩虹煙火", date: "2026-12-05", items: [
-          { title: "前往台場｜10:45", sub: "田原町 → 新橋 → 百合海鷗號；交通約 510 日圓", place: "台場駅" },
-          { title: "台場鋼彈與海濱採買｜11:00–16:30", sub: "DiverCity 1:1 獨角獸鋼彈、AQUA CiTY；午餐可選金子半之助或雞三和", place: "ダイバーシティ東京 プラザ" },
-          { title: "彩虹大橋與自由女神像｜16:30–18:30", sub: "夕陽與點燈後拍攝彩虹大橋", place: "お台場海浜公園" },
-          { title: "冬季限定台場彩虹煙火｜19:00–19:10", sub: "18:40 前到海濱公園卡位；煙火配合彩虹大橋點燈", place: "お台場海浜公園" },
-          { title: "晚餐、回飯店整理行李｜19:30–21:30", sub: "AQUA CiTY 拉麵國技館或 bills；21:30 回田原町，確認行李重量", place: "東横INN上野田原町駅" }
-        ] },
-        { labelZh: "DAY9", labelJp: "告別東京", date: "2026-12-06", items: [
-          { title: "退房與前往羽田｜07:30–09:45", sub: "08:15 退房；田原町 → 淺草轉都營淺草線／京急直達羽田，建議 09:45 前到櫃檯", place: "羽田空港 第3ターミナル" },
-          { title: "羽田機場最後採買｜10:15–11:45", sub: "BR191 辦理登機與托運；可到 4 樓江戶小路用餐或免稅店採買", place: "羽田空港 第3ターミナル" },
-          { title: "返程 ✈️｜12:15–15:05", sub: "BR191 東京羽田 → 台北松山；交通約 760 日圓", place: "松山空港" }
-        ] }
+        {
+          labelZh: "DAY1", labelJp: "巢鴨・上野", date: "2026-11-28", items: [
+            { title: "抵達東京 ✈️｜入住巢鴨", sub: "07:15 TSA → 11:00 HND；12:20 京急線／JR 山手線前往巢鴨，13:30 寄放行李", place: "APA Hotel Sugamo Ekimae" },
+            { title: "巢鴨地藏通商店街｜14:30–16:00", sub: "高岩寺、洗地藏、Sugamon；元祖塩大福與巢鴨小吃", place: "巣鴨地蔵通り商店街" },
+            { title: "上野・阿美橫町｜16:30–21:00", sub: "藥妝、零食、上野公園；晚餐可選鰻魚飯、海鮮丼或豬排", place: "アメヤ横丁" },
+            { title: "返回巢鴨飯店｜21:30", sub: "JR 山手線；單程約 170 日圓", place: "APA Hotel Sugamo Ekimae" }
+          ]
+        },
+        {
+          labelZh: "DAY2", labelJp: "哈利波特・池袋", date: "2026-11-29", items: [
+            { title: "前往豐島園影城｜09:30", sub: "巢鴨 → 池袋轉乘 → 豐島園；交通約 360 日圓", place: "としまえん駅" },
+            { title: "東京華納兄弟哈利波特影城｜10:30–15:30", sub: "大禮堂、魔法部、九又四分之三月台、斜角巷；門票需預約", place: "ワーナー ブラザース スタジオツアー東京" },
+            { title: "池袋逛街與晚餐｜16:30–19:30", sub: "寶可夢中心、水族館、Animate、吉卜力共和國；無敵家／燒肉／居酒屋", place: "池袋サンシャインシティ" },
+            { title: "返回巢鴨飯店｜21:30", sub: "JR 山手線；單程約 170 日圓", place: "APA Hotel Sugamo Ekimae" }
+          ]
+        },
+        {
+          labelZh: "DAY3", labelJp: "原宿・澀谷・新宿", date: "2026-11-30", items: [
+            { title: "前往原宿｜09:30", sub: "巢鴨站搭乘 JR 山手線；交通約 210 日圓", place: "原宿駅" },
+            { title: "原宿・明治神宮｜10:00–12:30", sub: "明治神宮森林參道、Kiddy Land（蠟筆小新）、表參道街拍", place: "明治神宮" },
+            { title: "澀谷潮流巡禮｜13:00–17:00", sub: "忠犬八公、Shibuya Crossing、SHIBUYA PARCO 任天堂／寶可夢、SHIBUYA SKY", place: "SHIBUYA SKY" },
+            { title: "新宿霓虹之夜｜17:30–21:00", sub: "3D 三色貓、北村相機、歌舞伎町；晚餐安排高品質燒肉", place: "歌舞伎町一番街" },
+            { title: "返回巢鴨飯店｜21:30", sub: "新宿 → 巢鴨約 180 日圓", place: "APA Hotel Sugamo Ekimae" }
+          ]
+        },
+        {
+          labelZh: "DAY4", labelJp: "東京迪士尼", date: "2026-12-01", items: [
+            { title: "前往舞濱｜07:30", sub: "巢鴨 → 東京 → 舞濱；來回交通約 820 日圓", place: "舞浜駅" },
+            { title: "東京迪士尼樂園｜08:30–21:00", sub: "提早入園搶 DPA；美女與野獸、維尼、太空山、聖誕遊行、夜間遊行與煙火", place: "東京ディズニーランド" },
+            { title: "迪士尼實用提醒", sub: "提前下載 Tokyo Disney Resort App；準備暖暖包、防風外套，門票與 DPA 預算約 17,000–18,000 日圓", place: "東京ディズニーランド" },
+            { title: "返回巢鴨飯店｜22:00", sub: "舞濱 → 東京 → 巢鴨", place: "APA Hotel Sugamo Ekimae" }
+          ]
+        },
+        {
+          labelZh: "DAY5", labelJp: "吉卜力・吉祥寺", date: "2026-12-02", items: [
+            { title: "退房與前往三鷹｜09:45–10:45", sub: "巢鴨 → 新宿 → 三鷹；大行李建議寄放三鷹或新宿置物櫃", place: "三鷹駅" },
+            { title: "三鷹之森吉卜力美術館｜11:00–13:30", sub: "龍貓售票亭、天空之城機器人、土星座影院、手稿展示室；門票需提前預約", place: "三鷹の森ジブリ美術館" },
+            { title: "吉祥寺漫遊與晚餐｜17:30–18:30", sub: "Sunroad、LOFT、Petit Village；Satou 牛肉丸或名代炸豬排", place: "吉祥寺サンロード商店街" },
+            { title: "田原町飯店 Check-in｜20:30", sub: "Toyoko Inn 東京上野田原町站；田原町站 2 號出口，入住 12/02–12/06 共 4 晚", place: "東横INN上野田原町駅" }
+          ]
+        },
+        {
+          labelZh: "DAY6", labelJp: "淺草・東京鐵塔", date: "2026-12-03", items: [
+            { title: "淺草寺與下町巡禮｜11:00–13:30", sub: "雷門、仲見世商店街、淺草寺本堂、淺草橫町；大黑家天丼與花月堂", place: "浅草寺" },
+            { title: "東京車站一番街｜14:30–16:30", sub: "Tokyo Character Street、吉卜力／蠟筆小新／Chiikawa、TOKYO Me+ 伴手禮", place: "東京駅一番街" },
+            { title: "東京鐵塔｜17:30–20:30", sub: "芝公園 4 號地、赤羽橋站階梯拍攝夕陽與點燈；可安排豆腐屋 Ukai 或雞白湯拉麵", place: "東京タワー" },
+            { title: "返回田原町飯店｜20:30", sub: "濱松町 → 神田 → 田原町", place: "東横INN上野田原町駅" }
+          ]
+        },
+        {
+          labelZh: "DAY7", labelJp: "富士山・河口湖", date: "2026-12-04", items: [
+            { title: "跟團集合｜07:20–08:00", sub: "田原町 → 上野 → 東京站丸之內北口；08:00 巴士出發，記得保暖", place: "東京駅丸の内北口" },
+            { title: "富士山・河口湖｜10:30–12:00", sub: "大石公園、河口湖 Lawson；可吃不動餺飥，留意山區低溫與天氣", place: "大石公園" },
+            { title: "忍野八海｜12:10–13:30", sub: "清澈湧泉池、現烤草餅、富士湧泉豆腐", place: "忍野八海" },
+            { title: "山中湖 KABA 水陸巴士｜14:00–15:30", sub: "體驗兩棲巴士衝入湖中，從湖面遠眺富士山", place: "山中湖" },
+            { title: "日川時計店與階梯街景｜16:00–16:30", sub: "下吉田街道、復古招牌與通往富士山的街景", place: "日川時計店" },
+            { title: "東京車站一番街與晚餐｜17:00–20:30", sub: "拉麵、Calbee+ 現炸薯條、New York Perfect Cheese；先寄放行李再逛", place: "東京駅一番街" }
+          ]
+        },
+        {
+          labelZh: "DAY8", labelJp: "台場・彩虹煙火", date: "2026-12-05", items: [
+            { title: "前往台場｜10:45", sub: "田原町 → 新橋 → 百合海鷗號；交通約 510 日圓", place: "台場駅" },
+            { title: "台場鋼彈與海濱採買｜11:00–16:30", sub: "DiverCity 1:1 獨角獸鋼彈、AQUA CiTY；午餐可選金子半之助或雞三和", place: "ダイバーシティ東京 プラザ" },
+            { title: "彩虹大橋與自由女神像｜16:30–18:30", sub: "夕陽與點燈後拍攝彩虹大橋", place: "お台場海浜公園" },
+            { title: "冬季限定台場彩虹煙火｜19:00–19:10", sub: "18:40 前到海濱公園卡位；煙火配合彩虹大橋點燈", place: "お台場海浜公園" },
+            { title: "晚餐、回飯店整理行李｜19:30–21:30", sub: "AQUA CiTY 拉麵國技館或 bills；21:30 回田原町，確認行李重量", place: "東横INN上野田原町駅" }
+          ]
+        },
+        {
+          labelZh: "DAY9", labelJp: "告別東京", date: "2026-12-06", items: [
+            { title: "退房與前往羽田｜07:30–09:45", sub: "08:15 退房；田原町 → 淺草轉都營淺草線／京急直達羽田，建議 09:45 前到櫃檯", place: "羽田空港 第3ターミナル" },
+            { title: "羽田機場最後採買｜10:15–11:45", sub: "BR191 辦理登機與托運；可到 4 樓江戶小路用餐或免稅店採買", place: "羽田空港 第3ターミナル" },
+            { title: "返程 ✈️｜12:15–15:05", sub: "BR191 東京羽田 → 台北松山；交通約 760 日圓", place: "松山空港" }
+          ]
+        }
       ]
     };
 
@@ -5375,7 +5851,7 @@
     function moveItemToDay(itemId) {
       const location = findItemLocation(itemId);
       if (!location) return;
-      if (data.days[location.dayIndex].items[location.index]?.locked) return alert("這是已預訂的固定行程，請先確認票券後再調整。" );
+      if (data.days[location.dayIndex].items[location.index]?.locked) return alert("這是已預訂的固定行程，請先確認票券後再調整。");
       const answer = prompt("要移到第幾天？（1-9）", String(location.dayIndex + 1));
       if (answer === null) return;
       const targetDay = Number(answer);
@@ -5905,7 +6381,7 @@
       renderExpenses();
     }
 
-function shoppingCurrencySummary(items, field) {
+    function shoppingCurrencySummary(items, field) {
       return ["JPY", "TWD"].map(currency => {
         const amount = items.filter(item => (item.currency || "JPY") === currency).reduce((sum, item) => {
           const raw = field === "actualPrice" ? (Number(item.actualPrice) || Number(item.price) || 0) : Number(item[field] || 0);
@@ -5954,8 +6430,17 @@ function shoppingCurrencySummary(items, field) {
         '<span class="summaryChip">估算重量 ' + weight.toLocaleString() + ' g</span>' +
         (proxyOutstandingItems.length ? '<span class="summaryChip">待付代購費 ' + shoppingCurrencySummary(proxyOutstandingItems, "proxyFee") + '</span>' : "");
       list.innerHTML = visible.length ? "" : '<div class="emptyState">尚無符合條件的商品。</div>';
+      let lastCategory = "";
       visible.forEach(item => {
         const index = shoppingItems.indexOf(item);
+        if (item.category !== lastCategory) {
+          const group = document.createElement("div");
+          const groupCount = visible.filter(entry => entry.category === item.category).length;
+          group.className = "shoppingGroupHeading";
+          group.innerHTML = `<span>${escapeHtml(item.category || "其他")}</span><small>${groupCount} 項 · 點卡片可展開規格</small>`;
+          list.appendChild(group);
+          lastCategory = item.category;
+        }
         const card = document.createElement("div");
         card.className = `simpleCard shoppingItemCard${item.purchased ? " isPurchased" : ""}`;
         const image = item.image?.dataUrl ? '<img class="ticketQr" style="width:72px;height:72px;object-fit:cover;float:right;margin-left:10px" src="' + escapeHtml(item.image.dataUrl) + '" alt="商品圖片">' : "";
@@ -6315,7 +6800,7 @@ function shoppingCurrencySummary(items, field) {
       const source = findItemLocation(sourceId);
       const target = findItemLocation(targetId);
       if (!source || !target) return;
-      if (data.days[source.dayIndex].items[source.index]?.locked) return alert("這是已預訂的固定行程，不能拖曳移動。" );
+      if (data.days[source.dayIndex].items[source.index]?.locked) return alert("這是已預訂的固定行程，不能拖曳移動。");
       const [item] = data.days[source.dayIndex].items.splice(source.index, 1);
       const targetIndex = data.days[target.dayIndex].items.findIndex(entry => entry.id === targetId);
       data.days[target.dayIndex].items.splice(Math.max(0, targetIndex), 0, item);
@@ -6335,7 +6820,7 @@ function shoppingCurrencySummary(items, field) {
     function deleteItem(itemId) {
       const location = findItemLocation(itemId);
       if (!location) return;
-      if (data.days[location.dayIndex].items[location.index]?.locked) return alert("這是已預訂的固定行程，不能直接刪除。" );
+      if (data.days[location.dayIndex].items[location.index]?.locked) return alert("這是已預訂的固定行程，不能直接刪除。");
       const item = data.days[location.dayIndex].items[location.index];
       if (!confirm(`確定刪除「${item.title}」？此動作只刪除目前 A/B 版本的行程。`)) return;
       data.days[location.dayIndex].items.splice(location.index, 1);
@@ -6399,7 +6884,7 @@ function shoppingCurrencySummary(items, field) {
       }
     }
 
-function weatherCodeMain(code) {
+    function weatherCodeMain(code) {
       if (code === 0) return "Clear";
       if ([1, 2, 3].includes(code)) return "Clouds";
       if ([45, 48].includes(code)) return "Fog";
@@ -7874,30 +8359,63 @@ function weatherCodeMain(code) {
   <div id="itinerarySheet" class="modalSheet" aria-hidden="true">
     <div class="modalBackdrop" onclick="closeItinerarySheet()"></div>
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="itinerarySheetTitle">
-      <div class="rowBetween"><h3 id="itinerarySheetTitle" style="margin:0">🗓 新增行程</h3><button class="btnGhost" type="button" onclick="closeItinerarySheet()">關閉</button></div>
-      <div class="formGrid" style="margin-top:14px">
-        <div class="formField full"><label for="itineraryName">行程名稱</label><input class="formControl" id="itineraryName" required></div>
-        <div class="formField"><label for="itineraryDay">日期／Day</label><select class="formControl" id="itineraryDay" onchange="updateItineraryDatePreview()"></select></div>
-        <div class="formField"><label for="itineraryDate">行程日期</label><input class="formControl" id="itineraryDate" type="date" readonly></div>
-        <div class="formField"><label for="itineraryVersion">A/B 版本</label><select class="formControl" id="itineraryVersion"><option value="A">A｜充實版</option><option value="B">B｜輕鬆版</option></select></div>
-        <div class="formField"><label for="itineraryCategory">景點分類</label><input class="formControl" id="itineraryCategory" placeholder="景點／交通／餐廳"></div>
-        <div class="formField"><label for="itineraryStartTime">開始時間</label><input class="formControl" id="itineraryStartTime" type="time"></div>
-        <div class="formField"><label for="itineraryEndTime">結束時間</label><input class="formControl" id="itineraryEndTime" type="time"></div>
-        <div class="formField"><label for="itineraryPlace">景點地點</label><input class="formControl" id="itineraryPlace" placeholder="Google Maps 可搜尋的名稱"></div>
-        <div class="formField"><label for="itineraryTransport">交通方式</label><input class="formControl" id="itineraryTransport" placeholder="JR／地鐵／步行／巴士"></div>
-        <div class="formField"><label for="itineraryTransportDuration">交通預估時間</label><input class="formControl" id="itineraryTransportDuration" placeholder="約 30 分鐘"></div>
-        <div class="formField"><label for="itineraryTransferCount">轉乘次數</label><input class="formControl" id="itineraryTransferCount" placeholder="例如：1 次"></div>
-        <div class="formField"><label for="itineraryWalkingDistance">步行距離</label><input class="formControl" id="itineraryWalkingDistance" placeholder="例如：約 600 公尺"></div>
-        <div class="formField"><label for="itineraryStationExit">車站出口備註</label><input class="formControl" id="itineraryStationExit" placeholder="例如：巢鴨站 A3 出口"></div>
-        <div class="formField"><label for="itineraryTransportCost">預估交通費（JPY）</label><input class="formControl" id="itineraryTransportCost" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="itineraryBudget">預估活動花費（JPY）</label><input class="formControl" id="itineraryBudget" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="itineraryStatus">完成狀態</label><select class="formControl" id="itineraryStatus"><option value="not_started">未開始</option><option value="in_progress">進行中</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select></div>
-        <div class="formField"><label for="itineraryTicketId">關聯票券 ID</label><input class="formControl" id="itineraryTicketId" placeholder="可填票券管理中的 ID"></div>
-        <div class="formField full"><label for="itineraryIndoorAlternative">雨天／室內備案</label><input class="formControl" id="itineraryIndoorAlternative" placeholder="例如：東京車站一番街"></div>
-        <div class="formField full"><label for="itineraryPhoto">景點照片網址（可選）</label><input class="formControl" id="itineraryPhoto" type="url" placeholder="https://"></div>
-        <div class="formField full"><label for="itineraryNote">備註</label><textarea class="formControl" id="itineraryNote" rows="3"></textarea></div>
+      <div class="rowBetween">
+        <h3 id="itinerarySheetTitle" style="margin:0">🗓 新增行程</h3><button class="btnGhost" type="button"
+          onclick="closeItinerarySheet()">關閉</button>
       </div>
-      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeItinerarySheet()">取消</button><button class="btnPill primary" type="button" onclick="saveItinerarySheet()">儲存行程</button></div>
+      <div class="formGrid" style="margin-top:14px">
+        <div class="formField full"><label for="itineraryName">行程名稱</label><input class="formControl" id="itineraryName"
+            required></div>
+        <div class="formField"><label for="itineraryDay">日期／Day</label><select class="formControl" id="itineraryDay"
+            onchange="updateItineraryDatePreview()"></select></div>
+        <div class="formField"><label for="itineraryDate">行程日期</label><input class="formControl" id="itineraryDate"
+            type="date" readonly></div>
+        <div class="formField"><label for="itineraryVersion">A/B 版本</label><select class="formControl"
+            id="itineraryVersion">
+            <option value="A">A｜充實版</option>
+            <option value="B">B｜輕鬆版</option>
+          </select></div>
+        <div class="formField"><label for="itineraryCategory">景點分類</label><input class="formControl"
+            id="itineraryCategory" placeholder="景點／交通／餐廳"></div>
+        <div class="formField"><label for="itineraryStartTime">開始時間</label><input class="formControl"
+            id="itineraryStartTime" type="time"></div>
+        <div class="formField"><label for="itineraryEndTime">結束時間</label><input class="formControl"
+            id="itineraryEndTime" type="time"></div>
+        <div class="formField"><label for="itineraryPlace">景點地點</label><input class="formControl" id="itineraryPlace"
+            placeholder="Google Maps 可搜尋的名稱"></div>
+        <div class="formField"><label for="itineraryTransport">交通方式</label><input class="formControl"
+            id="itineraryTransport" placeholder="JR／地鐵／步行／巴士"></div>
+        <div class="formField"><label for="itineraryTransportDuration">交通預估時間</label><input class="formControl"
+            id="itineraryTransportDuration" placeholder="約 30 分鐘"></div>
+        <div class="formField"><label for="itineraryTransferCount">轉乘次數</label><input class="formControl"
+            id="itineraryTransferCount" placeholder="例如：1 次"></div>
+        <div class="formField"><label for="itineraryWalkingDistance">步行距離</label><input class="formControl"
+            id="itineraryWalkingDistance" placeholder="例如：約 600 公尺"></div>
+        <div class="formField"><label for="itineraryStationExit">車站出口備註</label><input class="formControl"
+            id="itineraryStationExit" placeholder="例如：巢鴨站 A3 出口"></div>
+        <div class="formField"><label for="itineraryTransportCost">預估交通費（JPY）</label><input class="formControl"
+            id="itineraryTransportCost" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="itineraryBudget">預估活動花費（JPY）</label><input class="formControl"
+            id="itineraryBudget" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="itineraryStatus">完成狀態</label><select class="formControl"
+            id="itineraryStatus">
+            <option value="not_started">未開始</option>
+            <option value="in_progress">進行中</option>
+            <option value="completed">已完成</option>
+            <option value="cancelled">已取消</option>
+          </select></div>
+        <div class="formField"><label for="itineraryTicketId">關聯票券 ID</label><input class="formControl"
+            id="itineraryTicketId" placeholder="可填票券管理中的 ID"></div>
+        <div class="formField full"><label for="itineraryIndoorAlternative">雨天／室內備案</label><input class="formControl"
+            id="itineraryIndoorAlternative" placeholder="例如：東京車站一番街"></div>
+        <div class="formField full"><label for="itineraryPhoto">景點照片網址（可選）</label><input class="formControl"
+            id="itineraryPhoto" type="url" placeholder="https://"></div>
+        <div class="formField full"><label for="itineraryNote">備註</label><textarea class="formControl"
+            id="itineraryNote" rows="3"></textarea></div>
+      </div>
+      <div class="modalActions"><button class="btnGhost" type="button"
+          onclick="closeItinerarySheet()">取消</button><button class="btnPill primary" type="button"
+          onclick="saveItinerarySheet()">儲存行程</button></div>
     </div>
   </div>
 
@@ -7905,14 +8423,23 @@ function weatherCodeMain(code) {
   <div id="privateTravelSheet" class="modalSheet" aria-hidden="true">
     <div class="modalBackdrop" onclick="closePrivateTravelSheet()"></div>
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="privateTravelSheetTitle">
-      <div class="rowBetween"><h3 id="privateTravelSheetTitle" style="margin:0">🔒 私密訂位資料</h3><button class="btnGhost" type="button" onclick="closePrivateTravelSheet()">關閉</button></div>
-      <p class="muted" style="line-height:1.55">此專案目前沒有帳號認證。資料只保留在本次頁面工作階段的記憶體，重新整理會清除，也不會寫入一般 localStorage 或 JSON 備份。</p>
-      <div class="formGrid" style="margin-top:14px">
-        <div class="formField full"><label for="privateTravelBooking">訂位代號／訂單確認碼</label><input class="formControl" id="privateTravelBooking" autocomplete="off"></div>
-        <div class="formField"><label for="privateTravelPin">PIN（遮罩）</label><input class="formControl" id="privateTravelPin" type="password" autocomplete="new-password"></div>
-        <div class="formField"><label for="privateTravelTicketNo">電子機票號碼（可選）</label><input class="formControl" id="privateTravelTicketNo" type="password" autocomplete="off"></div>
+      <div class="rowBetween">
+        <h3 id="privateTravelSheetTitle" style="margin:0">🔒 私密訂位資料</h3><button class="btnGhost" type="button"
+          onclick="closePrivateTravelSheet()">關閉</button>
       </div>
-      <div class="modalActions"><button class="btnGhost" type="button" onclick="clearPrivateTravelData()">清除</button><button class="btnPill primary" type="button" onclick="savePrivateTravelData()">暫存於本頁</button></div>
+      <p class="muted" style="line-height:1.55">此專案目前沒有帳號認證。資料只保留在本次頁面工作階段的記憶體，重新整理會清除，也不會寫入一般 localStorage 或 JSON 備份。
+      </p>
+      <div class="formGrid" style="margin-top:14px">
+        <div class="formField full"><label for="privateTravelBooking">訂位代號／訂單確認碼</label><input class="formControl"
+            id="privateTravelBooking" autocomplete="off"></div>
+        <div class="formField"><label for="privateTravelPin">PIN（遮罩）</label><input class="formControl"
+            id="privateTravelPin" type="password" autocomplete="new-password"></div>
+        <div class="formField"><label for="privateTravelTicketNo">電子機票號碼（可選）</label><input class="formControl"
+            id="privateTravelTicketNo" type="password" autocomplete="off"></div>
+      </div>
+      <div class="modalActions"><button class="btnGhost" type="button"
+          onclick="clearPrivateTravelData()">清除</button><button class="btnPill primary" type="button"
+          onclick="savePrivateTravelData()">暫存於本頁</button></div>
     </div>
   </div>
 
@@ -7920,56 +8447,121 @@ function weatherCodeMain(code) {
   <div id="travelRecordSheet" class="modalSheet" aria-hidden="true">
     <div class="modalBackdrop" onclick="closeTravelRecordSheet()"></div>
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="travelRecordSheetTitle">
-      <div class="rowBetween"><h3 id="travelRecordSheetTitle" style="margin:0">編輯旅遊資料</h3><button class="btnGhost" type="button" onclick="closeTravelRecordSheet()">關閉</button></div>
+      <div class="rowBetween">
+        <h3 id="travelRecordSheetTitle" style="margin:0">編輯旅遊資料</h3><button class="btnGhost" type="button"
+          onclick="closeTravelRecordSheet()">關閉</button>
+      </div>
       <p id="travelRecordSheetHint" class="muted travelRecordHint">修改後會保留原有 ID、私密資料與其他未變更欄位。</p>
 
       <div id="travelFlightFields" class="formGrid" style="margin-top:14px">
-        <div class="formField"><label for="travelFlightDirection">航班方向</label><select class="formControl" id="travelFlightDirection"><option>去程</option><option>回程</option><option>航班</option></select></div>
-        <div class="formField"><label for="travelFlightAirline">航空公司</label><input class="formControl" id="travelFlightAirline"></div>
-        <div class="formField"><label for="travelFlightNo">航班編號</label><input class="formControl" id="travelFlightNo" required></div>
-        <div class="formField"><label for="travelFlightDate">日期</label><input class="formControl" id="travelFlightDate" type="date" required></div>
-        <div class="formField"><label for="travelFlightAircraft">機型</label><input class="formControl" id="travelFlightAircraft"></div>
-        <div class="formField"><label for="travelFlightCabin">艙等</label><input class="formControl" id="travelFlightCabin"></div>
+        <div class="formField"><label for="travelFlightDirection">航班方向</label><select class="formControl"
+            id="travelFlightDirection">
+            <option>去程</option>
+            <option>回程</option>
+            <option>航班</option>
+          </select></div>
+        <div class="formField"><label for="travelFlightAirline">航空公司</label><input class="formControl"
+            id="travelFlightAirline"></div>
+        <div class="formField"><label for="travelFlightNo">航班編號</label><input class="formControl" id="travelFlightNo"
+            required></div>
+        <div class="formField"><label for="travelFlightDate">日期</label><input class="formControl" id="travelFlightDate"
+            type="date" required></div>
+        <div class="formField"><label for="travelFlightAircraft">機型</label><input class="formControl"
+            id="travelFlightAircraft"></div>
+        <div class="formField"><label for="travelFlightCabin">艙等</label><input class="formControl"
+            id="travelFlightCabin"></div>
         <div class="formField full"><b class="travelRecordSectionTitle">出發地</b></div>
-        <div class="formField"><label for="travelFlightDepartAirport">機場</label><input class="formControl" id="travelFlightDepartAirport" required></div>
-        <div class="formField"><label for="travelFlightDepartCode">機場代碼</label><input class="formControl" id="travelFlightDepartCode" maxlength="4" required></div>
-        <div class="formField"><label for="travelFlightDepartTerminal">航廈</label><input class="formControl" id="travelFlightDepartTerminal"></div>
-        <div class="formField"><label for="travelFlightDepartTime">起飛時間</label><input class="formControl" id="travelFlightDepartTime" type="time"></div>
-        <div class="formField full"><label for="travelFlightDepartTimezone">時區</label><input class="formControl" id="travelFlightDepartTimezone" placeholder="Asia/Taipei"></div>
+        <div class="formField"><label for="travelFlightDepartAirport">機場</label><input class="formControl"
+            id="travelFlightDepartAirport" required></div>
+        <div class="formField"><label for="travelFlightDepartCode">機場代碼</label><input class="formControl"
+            id="travelFlightDepartCode" maxlength="4" required></div>
+        <div class="formField"><label for="travelFlightDepartTerminal">航廈</label><input class="formControl"
+            id="travelFlightDepartTerminal"></div>
+        <div class="formField"><label for="travelFlightDepartTime">起飛時間</label><input class="formControl"
+            id="travelFlightDepartTime" type="time"></div>
+        <div class="formField full"><label for="travelFlightDepartTimezone">時區</label><input class="formControl"
+            id="travelFlightDepartTimezone" placeholder="Asia/Taipei"></div>
         <div class="formField full"><b class="travelRecordSectionTitle">抵達地</b></div>
-        <div class="formField"><label for="travelFlightArriveAirport">機場</label><input class="formControl" id="travelFlightArriveAirport" required></div>
-        <div class="formField"><label for="travelFlightArriveCode">機場代碼</label><input class="formControl" id="travelFlightArriveCode" maxlength="4" required></div>
-        <div class="formField"><label for="travelFlightArriveTerminal">航廈</label><input class="formControl" id="travelFlightArriveTerminal"></div>
-        <div class="formField"><label for="travelFlightArriveTime">抵達時間</label><input class="formControl" id="travelFlightArriveTime" type="time"></div>
-        <div class="formField full"><label for="travelFlightArriveTimezone">時區</label><input class="formControl" id="travelFlightArriveTimezone" placeholder="Asia/Tokyo"></div>
-        <div class="formField"><label for="travelFlightDuration">飛行時間</label><input class="formControl" id="travelFlightDuration" placeholder="例如：2 小時 45 分"></div>
-        <div class="formField"><label for="travelFlightPassengers">旅客人數</label><input class="formControl" id="travelFlightPassengers" type="number" min="1" step="1"></div>
-        <div class="formField"><label for="travelFlightAmount">總金額</label><input class="formControl" id="travelFlightAmount" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="travelFlightCurrency">幣別</label><select class="formControl" id="travelFlightCurrency"><option>TWD</option><option>JPY</option><option>USD</option></select></div>
-        <div class="formField"><label for="travelFlightPaymentStatus">付款狀態</label><select class="formControl" id="travelFlightPaymentStatus"><option>待確認</option><option>已付款</option><option>部分付款</option><option>未付款</option></select></div>
-        <div class="formField full"><label for="travelFlightReminder">Check-in／備註</label><textarea class="formControl" id="travelFlightReminder" rows="2"></textarea></div>
+        <div class="formField"><label for="travelFlightArriveAirport">機場</label><input class="formControl"
+            id="travelFlightArriveAirport" required></div>
+        <div class="formField"><label for="travelFlightArriveCode">機場代碼</label><input class="formControl"
+            id="travelFlightArriveCode" maxlength="4" required></div>
+        <div class="formField"><label for="travelFlightArriveTerminal">航廈</label><input class="formControl"
+            id="travelFlightArriveTerminal"></div>
+        <div class="formField"><label for="travelFlightArriveTime">抵達時間</label><input class="formControl"
+            id="travelFlightArriveTime" type="time"></div>
+        <div class="formField full"><label for="travelFlightArriveTimezone">時區</label><input class="formControl"
+            id="travelFlightArriveTimezone" placeholder="Asia/Tokyo"></div>
+        <div class="formField"><label for="travelFlightDuration">飛行時間</label><input class="formControl"
+            id="travelFlightDuration" placeholder="例如：2 小時 45 分"></div>
+        <div class="formField"><label for="travelFlightPassengers">旅客人數</label><input class="formControl"
+            id="travelFlightPassengers" type="number" min="1" step="1"></div>
+        <div class="formField"><label for="travelFlightAmount">總金額</label><input class="formControl"
+            id="travelFlightAmount" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="travelFlightCurrency">幣別</label><select class="formControl"
+            id="travelFlightCurrency">
+            <option>TWD</option>
+            <option>JPY</option>
+            <option>USD</option>
+          </select></div>
+        <div class="formField"><label for="travelFlightPaymentStatus">付款狀態</label><select class="formControl"
+            id="travelFlightPaymentStatus">
+            <option>待確認</option>
+            <option>已付款</option>
+            <option>部分付款</option>
+            <option>未付款</option>
+          </select></div>
+        <div class="formField full"><label for="travelFlightReminder">Check-in／備註</label><textarea class="formControl"
+            id="travelFlightReminder" rows="2"></textarea></div>
       </div>
 
       <div id="travelAccommodationFields" class="formGrid" style="margin-top:14px;display:none">
-        <div class="formField"><label for="travelHotelNameZh">住宿中文名稱</label><input class="formControl" id="travelHotelNameZh" required></div>
-        <div class="formField"><label for="travelHotelName">住宿英文名稱</label><input class="formControl" id="travelHotelName" required></div>
-        <div class="formField full"><label for="travelHotelAddress">地址</label><input class="formControl" id="travelHotelAddress" required></div>
-        <div class="formField"><label for="travelHotelPhone">電話</label><input class="formControl" id="travelHotelPhone"></div>
-        <div class="formField"><label for="travelHotelGuests">入住人數</label><input class="formControl" id="travelHotelGuests" type="number" min="1" step="1"></div>
-        <div class="formField"><label for="travelHotelCheckInDate">入住日期</label><input class="formControl" id="travelHotelCheckInDate" type="date" required></div>
-        <div class="formField"><label for="travelHotelCheckOutDate">退房日期</label><input class="formControl" id="travelHotelCheckOutDate" type="date" required></div>
-        <div class="formField"><label for="travelHotelCheckInTime">入住時間</label><input class="formControl" id="travelHotelCheckInTime"></div>
-        <div class="formField"><label for="travelHotelCheckOutTime">退房時間</label><input class="formControl" id="travelHotelCheckOutTime"></div>
-        <div class="formField"><label for="travelHotelAmount">住宿金額</label><input class="formControl" id="travelHotelAmount" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="travelHotelReferenceTwd">台幣參考</label><input class="formControl" id="travelHotelReferenceTwd" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="travelHotelCurrency">幣別</label><select class="formControl" id="travelHotelCurrency"><option>JPY</option><option>TWD</option><option>USD</option></select></div>
-        <div class="formField"><label for="travelHotelPaymentStatus">付款狀態</label><select class="formControl" id="travelHotelPaymentStatus"><option>待確認</option><option>已付款</option><option>部分付款</option><option>未付款</option></select></div>
-        <div class="formField full"><label for="travelHotelPaymentMethod">付款方式</label><input class="formControl" id="travelHotelPaymentMethod"></div>
-        <div class="formField full"><label for="travelHotelCancellation">取消期限</label><input class="formControl" id="travelHotelCancellation"></div>
-        <div class="formField full"><label for="travelHotelNotes">備註</label><textarea class="formControl" id="travelHotelNotes" rows="3"></textarea></div>
+        <div class="formField"><label for="travelHotelNameZh">住宿中文名稱</label><input class="formControl"
+            id="travelHotelNameZh" required></div>
+        <div class="formField"><label for="travelHotelName">住宿英文名稱</label><input class="formControl"
+            id="travelHotelName" required></div>
+        <div class="formField full"><label for="travelHotelAddress">地址</label><input class="formControl"
+            id="travelHotelAddress" required></div>
+        <div class="formField"><label for="travelHotelPhone">電話</label><input class="formControl" id="travelHotelPhone">
+        </div>
+        <div class="formField"><label for="travelHotelGuests">入住人數</label><input class="formControl"
+            id="travelHotelGuests" type="number" min="1" step="1"></div>
+        <div class="formField"><label for="travelHotelCheckInDate">入住日期</label><input class="formControl"
+            id="travelHotelCheckInDate" type="date" required></div>
+        <div class="formField"><label for="travelHotelCheckOutDate">退房日期</label><input class="formControl"
+            id="travelHotelCheckOutDate" type="date" required></div>
+        <div class="formField"><label for="travelHotelCheckInTime">入住時間</label><input class="formControl"
+            id="travelHotelCheckInTime"></div>
+        <div class="formField"><label for="travelHotelCheckOutTime">退房時間</label><input class="formControl"
+            id="travelHotelCheckOutTime"></div>
+        <div class="formField"><label for="travelHotelAmount">住宿金額</label><input class="formControl"
+            id="travelHotelAmount" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="travelHotelReferenceTwd">台幣參考</label><input class="formControl"
+            id="travelHotelReferenceTwd" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="travelHotelCurrency">幣別</label><select class="formControl"
+            id="travelHotelCurrency">
+            <option>JPY</option>
+            <option>TWD</option>
+            <option>USD</option>
+          </select></div>
+        <div class="formField"><label for="travelHotelPaymentStatus">付款狀態</label><select class="formControl"
+            id="travelHotelPaymentStatus">
+            <option>待確認</option>
+            <option>已付款</option>
+            <option>部分付款</option>
+            <option>未付款</option>
+          </select></div>
+        <div class="formField full"><label for="travelHotelPaymentMethod">付款方式</label><input class="formControl"
+            id="travelHotelPaymentMethod"></div>
+        <div class="formField full"><label for="travelHotelCancellation">取消期限</label><input class="formControl"
+            id="travelHotelCancellation"></div>
+        <div class="formField full"><label for="travelHotelNotes">備註</label><textarea class="formControl"
+            id="travelHotelNotes" rows="3"></textarea></div>
       </div>
 
-      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeTravelRecordSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveTravelRecordSheet()">儲存資料</button></div>
+      <div class="modalActions"><button class="btnGhost" type="button"
+          onclick="closeTravelRecordSheet()">取消</button><button class="btnPill primary" type="button"
+          onclick="saveTravelRecordSheet()">儲存資料</button></div>
     </div>
   </div>
 
@@ -7977,24 +8569,58 @@ function weatherCodeMain(code) {
   <div id="ticketSheet" class="modalSheet" aria-hidden="true">
     <div class="modalBackdrop" onclick="closeTicketSheet()"></div>
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="ticketSheetTitle">
-      <div class="rowBetween"><h3 id="ticketSheetTitle" style="margin:0">🎫 新增票券</h3><button class="btnGhost" type="button" onclick="closeTicketSheet()">關閉</button></div>
-      <div class="formGrid" style="margin-top:14px">
-        <div class="formField full"><label for="ticketName">活動名稱</label><input class="formControl" id="ticketName" placeholder="例如：東京迪士尼樂園"></div>
-        <div class="formField"><label for="ticketType">類型</label><select class="formControl" id="ticketType"><option>主題樂園</option><option>展覽</option><option>交通</option><option>活動</option><option>景點</option></select></div>
-        <div class="formField"><label for="ticketStatus">購票狀態</label><select class="formControl" id="ticketStatus"><option>待確認</option><option>待購買</option><option>已購買</option><option>待取票</option><option>已取票</option><option>已使用</option><option>已取消</option></select></div>
-        <div class="formField"><label for="ticketDate">日期</label><input class="formControl" id="ticketDate" type="date"></div>
-        <div class="formField"><label for="ticketEntryTime">入場時間</label><input class="formControl" id="ticketEntryTime" type="time"></div>
-        <div class="formField"><label for="ticketPlatform">購買平台</label><input class="formControl" id="ticketPlatform" placeholder="官方／Klook／KKday"></div>
-        <div class="formField"><label for="ticketOrderNo">訂單編號</label><input class="formControl" id="ticketOrderNo"></div>
-        <div class="formField"><label for="ticketPrice">票價</label><input class="formControl" id="ticketPrice" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="ticketCurrency">幣別</label><select class="formControl" id="ticketCurrency"><option>JPY</option><option>TWD</option></select></div>
-        <div class="formField"><label for="ticketPickupDeadline">取票期限</label><input class="formControl" id="ticketPickupDeadline" type="date"></div>
-        <div class="formField"><label for="ticketTripItem">關聯行程</label><select class="formControl" id="ticketTripItem"></select></div>
-        <div class="formField full"><label for="ticketUrl">官方網站／購票網址</label><input class="formControl" id="ticketUrl" type="url" placeholder="https://"></div>
-        <div class="formField full"><label for="ticketNote">備註</label><textarea class="formControl" id="ticketNote" rows="3"></textarea></div>
-        <div class="formField full"><label for="ticketAttachment">QR Code 圖片或 PDF（只儲存在本機）</label><input class="formControl" id="ticketAttachment" type="file" accept="image/*,application/pdf"><div id="ticketAttachmentInfo" class="muted" style="margin-top:5px"></div></div>
+      <div class="rowBetween">
+        <h3 id="ticketSheetTitle" style="margin:0">🎫 新增票券</h3><button class="btnGhost" type="button"
+          onclick="closeTicketSheet()">關閉</button>
       </div>
-      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeTicketSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveTicketSheet()">儲存票券</button></div>
+      <div class="formGrid" style="margin-top:14px">
+        <div class="formField full"><label for="ticketName">活動名稱</label><input class="formControl" id="ticketName"
+            placeholder="例如：東京迪士尼樂園"></div>
+        <div class="formField"><label for="ticketType">類型</label><select class="formControl" id="ticketType">
+            <option>主題樂園</option>
+            <option>展覽</option>
+            <option>交通</option>
+            <option>活動</option>
+            <option>景點</option>
+          </select></div>
+        <div class="formField"><label for="ticketStatus">購票狀態</label><select class="formControl" id="ticketStatus">
+            <option>待確認</option>
+            <option>待購買</option>
+            <option>已購買</option>
+            <option>待取票</option>
+            <option>已取票</option>
+            <option>已使用</option>
+            <option>已取消</option>
+          </select></div>
+        <div class="formField"><label for="ticketDate">日期</label><input class="formControl" id="ticketDate" type="date">
+        </div>
+        <div class="formField"><label for="ticketEntryTime">入場時間</label><input class="formControl" id="ticketEntryTime"
+            type="time"></div>
+        <div class="formField"><label for="ticketPlatform">購買平台</label><input class="formControl" id="ticketPlatform"
+            placeholder="官方／Klook／KKday"></div>
+        <div class="formField"><label for="ticketOrderNo">訂單編號</label><input class="formControl" id="ticketOrderNo">
+        </div>
+        <div class="formField"><label for="ticketPrice">票價</label><input class="formControl" id="ticketPrice"
+            type="number" min="0" step="1"></div>
+        <div class="formField"><label for="ticketCurrency">幣別</label><select class="formControl" id="ticketCurrency">
+            <option>JPY</option>
+            <option>TWD</option>
+          </select></div>
+        <div class="formField"><label for="ticketPickupDeadline">取票期限</label><input class="formControl"
+            id="ticketPickupDeadline" type="date"></div>
+        <div class="formField"><label for="ticketTripItem">關聯行程</label><select class="formControl"
+            id="ticketTripItem"></select></div>
+        <div class="formField full"><label for="ticketUrl">官方網站／購票網址</label><input class="formControl" id="ticketUrl"
+            type="url" placeholder="https://"></div>
+        <div class="formField full"><label for="ticketNote">備註</label><textarea class="formControl" id="ticketNote"
+            rows="3"></textarea></div>
+        <div class="formField full"><label for="ticketAttachment">QR Code 圖片或 PDF（只儲存在本機）</label><input
+            class="formControl" id="ticketAttachment" type="file" accept="image/*,application/pdf">
+          <div id="ticketAttachmentInfo" class="muted" style="margin-top:5px"></div>
+        </div>
+      </div>
+      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeTicketSheet()">取消</button><button
+          class="btnPill primary" type="button" onclick="saveTicketSheet()">儲存票券</button></div>
     </div>
   </div>
 
@@ -8002,25 +8628,49 @@ function weatherCodeMain(code) {
   <div id="shoppingSheet" class="modalSheet" aria-hidden="true">
     <div class="modalBackdrop" onclick="closeShoppingSheet()"></div>
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="shoppingSheetTitle">
-      <div class="rowBetween"><h3 id="shoppingSheetTitle" style="margin:0">🛍 新增商品</h3><button class="btnGhost" type="button" onclick="closeShoppingSheet()">關閉</button></div>
-      <div class="formGrid" style="margin-top:14px">
-        <div class="formField full"><label for="shoppingName">商品名稱</label><input class="formControl" id="shoppingName"></div>
-        <div class="formField"><label for="shoppingCategory">分類</label><input class="formControl" id="shoppingCategory" placeholder="藥妝／食品／動漫"></div>
-        <div class="formField"><label for="shoppingRegion">地區</label><input class="formControl" id="shoppingRegion" placeholder="上野／池袋／台場"></div>
-        <div class="formField"><label for="shoppingStore">預計購買店家</label><input class="formControl" id="shoppingStore"></div>
-        <div class="formField"><label for="shoppingPrice">預計單價</label><input class="formControl" id="shoppingPrice" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="shoppingActualPrice">實際單價（可選）</label><input class="formControl" id="shoppingActualPrice" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="shoppingCurrency">幣別</label><select class="formControl" id="shoppingCurrency"><option>JPY</option><option>TWD</option></select></div>
-        <div class="formField"><label for="shoppingQuantity">數量</label><input class="formControl" id="shoppingQuantity" type="number" min="1" step="1" value="1"></div>
-        <div class="formField"><label for="shoppingBuyer">購買者</label><select class="formControl" id="shoppingBuyer"></select></div>
-        <div class="formField"><label for="shoppingProxy">代購委託人</label><input class="formControl" id="shoppingProxy"></div>
-        <div class="formField"><label for="shoppingProxyFee">代購費用</label><input class="formControl" id="shoppingProxyFee" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="shoppingWeight">單件重量（g）</label><input class="formControl" id="shoppingWeight" type="number" min="0" step="1"></div>
-        <div class="formField"><label class="checkRow" style="margin-top:24px"><input id="shoppingPurchased" type="checkbox"><span>已購買</span></label></div>
-        <div class="formField"><label class="checkRow" style="margin-top:24px"><input id="shoppingProxyPaid" type="checkbox"><span>代購費已付款</span></label></div>
-        <div class="formField full"><label for="shoppingImage">商品圖片（本機）</label><input class="formControl" id="shoppingImage" type="file" accept="image/*"><div id="shoppingImageInfo" class="muted" style="margin-top:5px"></div></div>
+      <div class="rowBetween">
+        <h3 id="shoppingSheetTitle" style="margin:0">🛍 新增商品</h3><button class="btnGhost" type="button"
+          onclick="closeShoppingSheet()">關閉</button>
       </div>
-      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeShoppingSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveShoppingSheet()">儲存商品</button></div>
+      <div class="formGrid" style="margin-top:14px">
+        <div class="formField full"><label for="shoppingName">商品名稱</label><input class="formControl" id="shoppingName">
+        </div>
+        <div class="formField"><label for="shoppingCategory">分類</label><input class="formControl" id="shoppingCategory"
+            placeholder="藥妝／食品／動漫"></div>
+        <div class="formField"><label for="shoppingRegion">地區</label><input class="formControl" id="shoppingRegion"
+            placeholder="上野／池袋／台場"></div>
+        <div class="formField"><label for="shoppingStore">預計購買店家</label><input class="formControl" id="shoppingStore">
+        </div>
+        <div class="formField"><label for="shoppingPrice">預計單價</label><input class="formControl" id="shoppingPrice"
+            type="number" min="0" step="1"></div>
+        <div class="formField"><label for="shoppingActualPrice">實際單價（可選）</label><input class="formControl"
+            id="shoppingActualPrice" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="shoppingCurrency">幣別</label><select class="formControl"
+            id="shoppingCurrency">
+            <option>JPY</option>
+            <option>TWD</option>
+          </select></div>
+        <div class="formField"><label for="shoppingQuantity">數量</label><input class="formControl" id="shoppingQuantity"
+            type="number" min="1" step="1" value="1"></div>
+        <div class="formField"><label for="shoppingBuyer">購買者</label><select class="formControl"
+            id="shoppingBuyer"></select></div>
+        <div class="formField"><label for="shoppingProxy">代購委託人</label><input class="formControl" id="shoppingProxy">
+        </div>
+        <div class="formField"><label for="shoppingProxyFee">代購費用</label><input class="formControl"
+            id="shoppingProxyFee" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="shoppingWeight">單件重量（g）</label><input class="formControl" id="shoppingWeight"
+            type="number" min="0" step="1"></div>
+        <div class="formField"><label class="checkRow" style="margin-top:24px"><input id="shoppingPurchased"
+              type="checkbox"><span>已購買</span></label></div>
+        <div class="formField"><label class="checkRow" style="margin-top:24px"><input id="shoppingProxyPaid"
+              type="checkbox"><span>代購費已付款</span></label></div>
+        <div class="formField full"><label for="shoppingImage">商品圖片（本機）</label><input class="formControl"
+            id="shoppingImage" type="file" accept="image/*">
+          <div id="shoppingImageInfo" class="muted" style="margin-top:5px"></div>
+        </div>
+      </div>
+      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeShoppingSheet()">取消</button><button
+          class="btnPill primary" type="button" onclick="saveShoppingSheet()">儲存商品</button></div>
     </div>
   </div>
 
@@ -8029,29 +8679,66 @@ function weatherCodeMain(code) {
     <div class="modalBackdrop" onclick="closeExpenseSheet()"></div>
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="expenseSheetTitle">
 
-      <div class="rowBetween"><h3 id="expenseSheetTitle" style="margin:0">💴 記一筆花費</h3><button class="btnGhost" type="button" onclick="closeExpenseSheet()">關閉</button></div>
-      <div class="expenseSheetIntro"><span class="dashboardKicker">LIVE EXPENSE</span><p>記錄旅途中實際支出，預訂費用請到旅行費用概況管理。</p></div>
+      <div class="rowBetween">
+        <h3 id="expenseSheetTitle" style="margin:0">💴 記一筆花費</h3><button class="btnGhost" type="button"
+          onclick="closeExpenseSheet()">關閉</button>
+      </div>
+      <div class="expenseSheetIntro"><span class="dashboardKicker">LIVE EXPENSE</span>
+        <p>記錄旅途中實際支出，預訂費用請到旅行費用概況管理。</p>
+      </div>
 
       <div class="formGrid expenseFormGrid" style="margin-top:14px">
         <div class="expenseFormSection full"><strong>基本資料</strong><span>金額、日期與付款方式</span></div>
-        <div class="formField expenseAmountField"><label for="exAmount">金額</label><input class="formControl" id="exAmount" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
-        <div class="formField"><label for="exCurrency">幣別</label><select class="formControl" id="exCurrency"><option>JPY</option><option>TWD</option></select></div>
+        <div class="formField expenseAmountField"><label for="exAmount">金額</label><input class="formControl"
+            id="exAmount" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+        <div class="formField"><label for="exCurrency">幣別</label><select class="formControl" id="exCurrency">
+            <option>JPY</option>
+            <option>TWD</option>
+          </select></div>
         <div class="formField"><label for="exDate">日期</label><input class="formControl" id="exDate" type="date"></div>
-        <div class="formField"><label for="exCategory">分類</label><select class="formControl" id="exCategory"><option>🍴 吃</option><option>🚃 交通</option><option>🎁 購物</option><option>🎫 門票</option><option>🏨 住宿</option><option>🛍 購物清單</option><option>旅行已預訂費用</option><option>其他</option></select></div>
-        <div class="formField"><label for="exPaymentMethod">付款方式</label><select class="formControl" id="exPaymentMethod"><option>現金</option><option>信用卡</option><option>電子支付</option><option>Suica／PASMO／ICOCA</option></select></div>
-        <div class="formField"><label for="exPayer">實際付款者</label><select class="formControl" id="exPayer"></select></div>
+        <div class="formField"><label for="exCategory">分類</label><select class="formControl" id="exCategory">
+            <option>🍴 吃</option>
+            <option>🚃 交通</option>
+            <option>🎁 購物</option>
+            <option>🎫 門票</option>
+            <option>🏨 住宿</option>
+            <option>🛍 購物清單</option>
+            <option>旅行已預訂費用</option>
+            <option>其他</option>
+          </select></div>
+        <div class="formField"><label for="exPaymentMethod">付款方式</label><select class="formControl"
+            id="exPaymentMethod">
+            <option>現金</option>
+            <option>信用卡</option>
+            <option>電子支付</option>
+            <option>Suica／PASMO／ICOCA</option>
+          </select></div>
+        <div class="formField"><label for="exPayer">實際付款者</label><select class="formControl" id="exPayer"></select>
+        </div>
 
         <div class="expenseFormSection full"><strong>分攤與關聯</strong><span>設定誰需要分擔這筆支出</span></div>
-        <div class="formField"><label for="exSplitMode">分攤方式</label><select class="formControl" id="exSplitMode"><option value="equal">平均分攤</option><option value="personal">個人支出</option><option value="specified_amount">指定金額</option><option value="specified_ratio">指定比例</option></select></div>
-        <div class="formField"><label for="exSplitDetails">指定內容</label><input class="formControl" id="exSplitDetails" placeholder="例如：我=1000,旅伴 A=500；比例請填 1:2"></div>
-        <div class="formField full"><label for="exTrip">關聯行程（可選）</label><select class="formControl" id="exTrip"></select></div>
-        <div class="formField full"><label for="exSplitMembers">分攤成員</label><div id="exSplitMembers" class="memberList"></div></div>
+        <div class="formField"><label for="exSplitMode">分攤方式</label><select class="formControl" id="exSplitMode">
+            <option value="equal">平均分攤</option>
+            <option value="personal">個人支出</option>
+            <option value="specified_amount">指定金額</option>
+            <option value="specified_ratio">指定比例</option>
+          </select></div>
+        <div class="formField"><label for="exSplitDetails">指定內容</label><input class="formControl" id="exSplitDetails"
+            placeholder="例如：我=1000,旅伴 A=500；比例請填 1:2"></div>
+        <div class="formField full"><label for="exTrip">關聯行程（可選）</label><select class="formControl"
+            id="exTrip"></select></div>
+        <div class="formField full"><label for="exSplitMembers">分攤成員</label>
+          <div id="exSplitMembers" class="memberList"></div>
+        </div>
 
         <div class="expenseFormSection full"><strong>補充資訊</strong><span>備註與匯率設定</span></div>
-        <div class="formField full"><label for="exNote">備註</label><textarea class="formControl" id="exNote" rows="2" placeholder="例如：含飲料、已由我先付款"></textarea></div>
-        <div class="formField full"><label for="manualRate">手動匯率（1 JPY = TWD）</label><input class="formControl" id="manualRate" type="number" min="0" step="0.000001" placeholder="留空使用自動匯率"></div>
+        <div class="formField full"><label for="exNote">備註</label><textarea class="formControl" id="exNote" rows="2"
+            placeholder="例如：含飲料、已由我先付款"></textarea></div>
+        <div class="formField full"><label for="manualRate">手動匯率（1 JPY = TWD）</label><input class="formControl"
+            id="manualRate" type="number" min="0" step="0.000001" placeholder="留空使用自動匯率"></div>
       </div>
-      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeExpenseSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveExpenseSheet()">儲存</button></div>
+      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeExpenseSheet()">取消</button><button
+          class="btnPill primary" type="button" onclick="saveExpenseSheet()">儲存</button></div>
     </div>
   </div>
 
@@ -8059,11 +8746,20 @@ function weatherCodeMain(code) {
   <div id="dayGuideSheet" class="modalSheet" aria-hidden="true">
     <div class="modalBackdrop" onclick="closeDayGuideModal()"></div>
     <div class="modalPanel dayGuidePanel" role="dialog" aria-modal="true" aria-labelledby="dayGuideSheetTitle">
-      <div class="rowBetween"><h3 id="dayGuideSheetTitle" style="margin:0">本日詳細行程</h3><button class="btnGhost" type="button" onclick="closeDayGuideModal()">關閉</button></div>
+      <div class="rowBetween">
+        <h3 id="dayGuideSheetTitle" style="margin:0">本日詳細行程</h3><button class="btnGhost" type="button"
+          onclick="closeDayGuideModal()">關閉</button>
+      </div>
       <p id="dayGuideSummary" class="dayGuideSummary"></p>
-      <div class="dayGuideChecklist"><h4>行前提醒</h4><ul id="dayGuideChecklistList"></ul></div>
+      <div class="dayGuideChecklist">
+        <h4>行前提醒</h4>
+        <ul id="dayGuideChecklistList"></ul>
+      </div>
       <div class="dayGuideItems" id="dayGuideItems"></div>
-      <div class="dayGuideLinks"><h4>快速連結</h4><div id="dayGuideLinkList" class="linkRow"></div></div>
+      <div class="dayGuideLinks">
+        <h4>快速連結</h4>
+        <div id="dayGuideLinkList" class="linkRow"></div>
+      </div>
       <p id="dayGuideSource" class="dayGuideSource"></p>
     </div>
   </div>
@@ -8072,18 +8768,38 @@ function weatherCodeMain(code) {
   <div id="reservedExpenseSheet" class="modalSheet" aria-hidden="true">
     <div class="modalBackdrop" onclick="closeReservedExpenseSheet()"></div>
     <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="reservedExpenseSheetTitle">
-      <div class="rowBetween"><h3 id="reservedExpenseSheetTitle" style="margin:0">新增旅行費用</h3><button class="btnGhost" type="button" onclick="closeReservedExpenseSheet()">關閉</button></div>
+      <div class="rowBetween">
+        <h3 id="reservedExpenseSheetTitle" style="margin:0">新增旅行費用</h3><button class="btnGhost" type="button"
+          onclick="closeReservedExpenseSheet()">關閉</button>
+      </div>
       <p class="muted" style="margin:8px 0 0">預訂費用會獨立顯示，不會自動重複計入一般記帳。</p>
       <div class="formGrid" style="margin-top:14px">
-        <div class="formField full"><label for="reservedLabel">費用名稱</label><input class="formControl" id="reservedLabel" placeholder="例如：東京迪士尼門票"></div>
-        <div class="formField"><label for="reservedAmount">金額</label><input class="formControl" id="reservedAmount" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="reservedCurrency">幣別</label><select class="formControl" id="reservedCurrency"><option>JPY</option><option>TWD</option><option>USD</option></select></div>
-        <div class="formField"><label for="reservedStatus">付款狀態</label><select class="formControl" id="reservedStatus"><option>待確認</option><option>已付款</option><option>部分付款</option><option>未付款</option></select></div>
-        <div class="formField"><label for="reservedParticipants">人數</label><input class="formControl" id="reservedParticipants" type="number" min="0" step="1"></div>
-        <div class="formField"><label for="reservedReferenceTwd">台幣參考（可選）</label><input class="formControl" id="reservedReferenceTwd" type="number" min="0" step="1"></div>
-        <div class="formField full"><label for="reservedNote">備註</label><textarea class="formControl" id="reservedNote" rows="3" placeholder="付款方式、訂單備註或拆分說明"></textarea></div>
+        <div class="formField full"><label for="reservedLabel">費用名稱</label><input class="formControl" id="reservedLabel"
+            placeholder="例如：東京迪士尼門票"></div>
+        <div class="formField"><label for="reservedAmount">金額</label><input class="formControl" id="reservedAmount"
+            type="number" min="0" step="1"></div>
+        <div class="formField"><label for="reservedCurrency">幣別</label><select class="formControl"
+            id="reservedCurrency">
+            <option>JPY</option>
+            <option>TWD</option>
+            <option>USD</option>
+          </select></div>
+        <div class="formField"><label for="reservedStatus">付款狀態</label><select class="formControl" id="reservedStatus">
+            <option>待確認</option>
+            <option>已付款</option>
+            <option>部分付款</option>
+            <option>未付款</option>
+          </select></div>
+        <div class="formField"><label for="reservedParticipants">人數</label><input class="formControl"
+            id="reservedParticipants" type="number" min="0" step="1"></div>
+        <div class="formField"><label for="reservedReferenceTwd">台幣參考（可選）</label><input class="formControl"
+            id="reservedReferenceTwd" type="number" min="0" step="1"></div>
+        <div class="formField full"><label for="reservedNote">備註</label><textarea class="formControl" id="reservedNote"
+            rows="3" placeholder="付款方式、訂單備註或拆分說明"></textarea></div>
       </div>
-      <div class="modalActions"><button class="btnGhost" type="button" onclick="closeReservedExpenseSheet()">取消</button><button class="btnPill primary" type="button" onclick="saveReservedExpenseSheet()">儲存費用</button></div>
+      <div class="modalActions"><button class="btnGhost" type="button"
+          onclick="closeReservedExpenseSheet()">取消</button><button class="btnPill primary" type="button"
+          onclick="saveReservedExpenseSheet()">儲存費用</button></div>
     </div>
   </div>
 
@@ -8114,5 +8830,4 @@ function weatherCodeMain(code) {
 </body>
 
 </html>
-
 
