@@ -1,0 +1,30 @@
+{
+  "name": "Japan Tokyo｜智慧旅遊手冊",
+  "short_name": "Japan Tokyo",
+  "description": "2026 東京九天八夜的行程、地圖、票券、記帳與購物清單。",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait-primary",
+  "background_color": "#d9edf0",
+  "theme_color": "#d9edf0",
+  "categories": ["travel", "lifestyle"],
+  "icons": [
+    {
+      "src": "./assets/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
