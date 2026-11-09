@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Japan Tokyo 旅遊手冊</title>
+  <desc id="desc">藍色富士山、白色雪冠與暖色太陽的旅遊 App 圖示</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4fbff"/>
+      <stop offset="1" stop-color="#b8ddea"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c88b2"/>
+      <stop offset="1" stop-color="#274e78"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#76b9c5"/>
+      <stop offset="1" stop-color="#3f899e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#sky)"/>
+  <circle cx="377" cy="142" r="50" fill="#f3b769"/>
+  <path d="M57 405 220 131c15-25 51-25 66 0l169 274H57Z" fill="url(#mountain)"/>
+  <path d="m220 131-63 105 55-32 32 38 27-39 37 29-47-101c-9-19-32-19-41 0Z" fill="#fff"/>
+  <path d="M51 405h410v46H51z" fill="url(#water)" opacity=".95"/>
+  <path d="M81 427c57-18 102-18 158 0s103 18 160 0 92-17 133 0" fill="none" stroke="#d9f2f3" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+  <path d="M85 459c55-14 103-14 155 0s101 14 153 0 80-13 116 0" fill="none" stroke="#b6e0e4" stroke-width="7" stroke-linecap="round" opacity=".8"/>
+</svg>
+
