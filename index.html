@@ -18,8 +18,6 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Noto+Sans+TC:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-
   <style>
     :root {
       --ink: #233;
@@ -58,10 +56,6 @@
     .bg {
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(1200px 700px at 30% 20%, rgba(255, 255, 255, .75), rgba(255, 255, 255, 0) 60%),
-        radial-gradient(900px 600px at 70% 30%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 55%),
-        linear-gradient(180deg, #cfe9ff 0%, #9fd5ff 45%, #75bfff 100%);
       z-index: -2;
     }
 
@@ -69,14 +63,6 @@
       content: "";
       position: absolute;
       inset: -40px;
-      background:
-        url("https://www.transparenttextures.com/patterns/paper-fibers.png"),
-        url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=60");
-      background-size: 300px 300px, cover;
-      background-position: center;
-      opacity: .18;
-      filter: blur(6px);
-      transform: scale(1.04);
       z-index: -1;
     }
 
@@ -2944,7 +2930,6 @@
 
     .dashboardCardHeading,
     .dashboardPanelHeading,
-    .dashboardLocationRow,
     .dashboardReminderBar,
     .dashboardReminderActions {
       display: flex;
@@ -3046,167 +3031,9 @@
       margin-bottom: 12px;
     }
 
-    .dashboardRouteActions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
     .dashboardPanelHeading h2 {
       font-size: 18px;
     }
-
-    .dashboardTimeline {
-      position: relative;
-      display: grid;
-      gap: 8px;
-      padding-left: 12px;
-    }
-
-    .dashboardTimeline::before {
-      content: "";
-      position: absolute;
-      top: 8px;
-      bottom: 8px;
-      left: 4px;
-      width: 2px;
-      background: linear-gradient(#7ea8c4, rgba(126, 168, 196, .12));
-    }
-
-    .dashboardTimelineItem {
-      position: relative;
-      margin-left: 8px;
-      border: 1px solid rgba(255, 255, 255, .62);
-      border-radius: 15px;
-      background: rgba(255, 253, 248, .43);
-      overflow: hidden;
-    }
-
-    .dashboardTimelineItem::before {
-      content: "";
-      position: absolute;
-      top: 17px;
-      left: -13px;
-      width: 9px;
-      height: 9px;
-      border: 2px solid #f5fbfc;
-      border-radius: 50%;
-      background: #4b8fa2;
-      box-shadow: 0 0 0 3px rgba(75, 143, 162, .16);
-    }
-
-    .dashboardTimelineItem.current {
-      border-color: rgba(210, 106, 86, .44);
-      box-shadow: 0 8px 18px rgba(210, 106, 86, .12);
-    }
-
-    .dashboardTimelineItem.current::before {
-      background: #d26a56;
-      box-shadow: 0 0 0 4px rgba(210, 106, 86, .16);
-    }
-
-    .dashboardTimelineItem.completed {
-      opacity: .67;
-    }
-
-    .dashboardTimelineItem summary {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 12px;
-      color: #24425e;
-      cursor: pointer;
-      list-style: none;
-    }
-
-    .dashboardTimelineItem summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .dashboardTimelineTime {
-      min-width: 82px;
-      color: #55768b;
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .dashboardTimelineTitle {
-      min-width: 0;
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .dashboardTimelineBody {
-      display: grid;
-      gap: 8px;
-      padding: 0 12px 12px 104px;
-      color: #61798a;
-      font-size: 11px;
-    }
-
-    .dashboardTimelineBody .btnGhost,
-    .dashboardTimelineBody .btnPill {
-      justify-self: start;
-      padding: 7px 10px;
-      font-size: 11px;
-    }
-
-    .dashboardRoute {
-      display: grid;
-      gap: 8px;
-    }
-
-    .dashboardRouteItem {
-      display: grid;
-      grid-template-columns: 22px minmax(0, 1fr);
-      gap: 9px;
-      padding: 10px;
-      border-radius: 14px;
-      background: rgba(255, 253, 248, .43);
-      border: 1px solid rgba(255, 255, 255, .6);
-    }
-
-    .dashboardRouteIcon {
-      display: grid;
-      place-items: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 8px;
-      color: #fff;
-      background: #5e8ca4;
-      font-size: 12px;
-    }
-
-    .dashboardRouteItem strong,
-    .dashboardRouteItem small {
-      display: block;
-    }
-
-    .dashboardRouteItem strong {
-      color: #284963;
-      font-size: 12px;
-    }
-
-    .dashboardRouteItem small {
-      margin-top: 3px;
-      color: #6b8291;
-      line-height: 1.45;
-    }
-
-    .dashboardLocationRow {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px dashed rgba(67, 105, 126, .2);
-      color: #678091;
-      font-size: 11px;
-    }
-
     .regionalWeatherList {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3460,10 +3287,6 @@
 
       .dashboardPanelHeading h2 {
         font-size: 16px;
-      }
-
-      .dashboardTimelineBody {
-        padding-left: 12px;
       }
 
       .regionalWeatherList {
@@ -5141,8 +4964,7 @@
         <!-- <div class="dayTabs" id="expenseDayTabs"></div> -->
         <div class="expenseToolbarActions">
           <button class="btnPill primary" onclick="openExpenseSheet()">＋ 記一筆</button>
-          <button class="btnPill" onclick="exportExpenseCSV()">⬇ 匯出</button>
-          <button class="btnPill" onclick="exportExpenseJSON()">JSON</button>
+          <button class="btnPill" onclick="openPageWithoutNav('info')">💾 備份與還原</button>
         </div>
       </div>
 
@@ -5209,7 +5031,6 @@
           <option value="all">全部地區</option>
         </select>
         <button class="btnGhost filterResetBtn" type="button" onclick="resetShoppingFilters()">清除篩選</button>
-        <button class="btnGhost" type="button" onclick="exportShoppingCSV()">⬇ 匯出清單</button>
       </div>
       <div class="moduleSummary shoppingSummary" id="shoppingSummary"></div>
       <div class="shoppingConfirmBar" aria-live="polite">
@@ -6074,17 +5895,6 @@
         </button>`).join("");
     }
 
-    function switchItineraryVersion(version) {
-      if (!data.versions?.[version]) return;
-      syncVersionStores();
-      data.activeVersion = version;
-      data.dayVersions = {};
-      data.days = clone(data.versions[version].days);
-      data.selectedDay = Math.min(data.selectedDay, data.days.length || 1);
-      save();
-      refreshItineraryViews();
-    }
-
     function switchDayItineraryVersion(version) {
       const dayIndex = data.selectedDay - 1;
       const day = data.days[dayIndex];
@@ -6098,16 +5908,6 @@
 
     function statusLabel(status) {
       return ({ not_started: "未開始", in_progress: "進行中", completed: "已完成", cancelled: "已取消" })[status] || "未開始";
-    }
-
-    function setItemStatus(itemId, status) {
-      const item = data.days.flatMap(day => day.items).find(entry => entry.id === itemId);
-      if (!item) return;
-      item.status = status;
-      completedItems[itemId] = status === "completed";
-      saveCompletedItems();
-      save();
-      refreshItineraryViews();
     }
 
     function hasTimeOverlap(items, index) {
@@ -6149,17 +5949,6 @@
       save();
       refreshItineraryViews();
       document.getElementById("page-trip")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function toggleShopping(input) {
-      shoppingState[input.dataset.shopping] = input.checked;
-      localStorage.setItem("tokyoShoppingState", JSON.stringify(shoppingState));
-    }
-
-    function restoreShoppingState() {
-      document.querySelectorAll("[data-shopping]").forEach(input => {
-        input.checked = Boolean(shoppingState[input.dataset.shopping]);
-      });
     }
 
     function openMap(place) {
@@ -6286,7 +6075,7 @@
           <div class="itemTitle">${escapeHtml(it.title)}</div>
           <div class="itemSub">${escapeHtml(it.sub || "")}</div>
           ${detailMarkup}
-          ${safeExternalUrl(it.photo) ? `<img src="${safeExternalUrl(it.photo)}" alt="景點照片" onerror="this.remove()" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:8px">` : ""}
+          ${safeExternalUrl(it.photo) ? `<img src="${safeExternalUrl(it.photo)}" alt="景點照片" loading="lazy" decoding="async" onerror="this.remove()" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:8px">` : ""}
 
           <div class="timelineMeta">
             ${it.startTime && it.endTime ? `<span class="badge">🕒 ${escapeHtml(it.startTime)}–${escapeHtml(it.endTime)}</span>` : `<span class="badge">🕒 時間待補</span>`}
@@ -6385,6 +6174,14 @@
       if (window.L && typeof window.L.map === "function") return Promise.resolve(window.L);
       if (leafletLoaderPromise) return leafletLoaderPromise;
       leafletLoaderPromise = new Promise((resolve, reject) => {
+        if (!document.querySelector("link[data-leaflet-styles]")) {
+          const stylesheet = document.createElement("link");
+          stylesheet.rel = "stylesheet";
+          stylesheet.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+          stylesheet.crossOrigin = "";
+          stylesheet.dataset.leafletStyles = "true";
+          document.head.appendChild(stylesheet);
+        }
         const script = document.createElement("script");
         script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
         script.async = true;
@@ -6597,10 +6394,6 @@
       document.getElementById("page-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function stepMapDay(offset) {
-      selectMapDay(Number(data.selectedDay || 1) + Number(offset || 0));
-    }
-
     // ====== Tickets ======
     let editingTicketIndex = null;
     let pendingTicketAttachment = null;
@@ -6740,7 +6533,7 @@
           <div class="ticketCardMeta"><span class="ticketStatusBadge">${escapeHtml(ticket.status || "待確認")}</span><span class="badge">📅 ${escapeHtml(ticket.date || "日期待補")} ${escapeHtml(ticket.entryTime || "")}</span><span class="badge">💴 ${escapeHtml(ticket.currency || "JPY")} ${Number(ticket.price || 0).toLocaleString()}${ticket.priceType === "per_person" ? "／人" : ""}</span><span class="badge">${escapeHtml(ticket.sourceType || "票券資料")}</span></div>
           <div class="ticketCardDetails"><div><span>購買平台</span><strong>${escapeHtml(ticket.platform || "未填寫")}</strong></div><div><span>訂單編號</span><strong>${escapeHtml(ticket.orderNo || "未填寫")}</strong></div><div><span>關聯行程</span><strong>${escapeHtml(ticketTripName(ticket.tripItemId))}</strong></div>${ticket.pickupDeadline ? `<div><span>取票期限</span><strong>${escapeHtml(ticket.pickupDeadline)}</strong></div>` : ""}</div>
           ${ticket.note ? `<p class="ticketCardNote">${escapeHtml(ticket.note)}</p>` : ""}
-          <div class="ticketCardLinks">${safeExternalUrl(ticket.url) ? `<a class="btnGhost" href="${safeExternalUrl(ticket.url)}" target="_blank" rel="noopener">查看門票／雲端檔案 ↗</a>` : ""}${ticket.attachment?.dataUrl ? (ticket.attachment.type?.startsWith("image/") ? `<img class="ticketQr" src="${escapeHtml(ticket.attachment.dataUrl)}" alt="票券附件">` : `<a class="btnGhost" href="${escapeHtml(ticket.attachment.dataUrl)}" download="${escapeHtml(ticket.attachment.name || "ticket.pdf")}">下載附件</a>`) : ""}</div>`;
+          <div class="ticketCardLinks">${safeExternalUrl(ticket.url) ? `<a class="btnGhost" href="${safeExternalUrl(ticket.url)}" target="_blank" rel="noopener">查看門票／雲端檔案 ↗</a>` : ""}${ticket.attachment?.dataUrl ? (ticket.attachment.type?.startsWith("image/") ? `<img class="ticketQr" src="${escapeHtml(ticket.attachment.dataUrl)}" alt="票券附件" loading="lazy" decoding="async">` : `<a class="btnGhost" href="${escapeHtml(ticket.attachment.dataUrl)}" download="${escapeHtml(ticket.attachment.name || "ticket.pdf")}">下載附件</a>`) : ""}</div>`;
         list.appendChild(card);
       });
     }
@@ -6925,7 +6718,7 @@
         }
         const card = document.createElement("div");
         card.className = `simpleCard shoppingItemCard${item.purchased ? " isPurchased" : ""}`;
-        const image = item.image?.dataUrl ? '<img class="ticketQr" style="width:72px;height:72px;object-fit:cover;float:right;margin-left:10px" src="' + escapeHtml(item.image.dataUrl) + '" alt="商品圖片">' : "";
+        const image = item.image?.dataUrl ? '<img class="ticketQr" loading="lazy" decoding="async" style="width:72px;height:72px;object-fit:cover;float:right;margin-left:10px" src="' + escapeHtml(item.image.dataUrl) + '" alt="商品圖片">' : "";
         const actual = item.actualPrice ? '｜實際 ' + escapeHtml(item.currency) + ' ' + Number(item.actualPrice).toLocaleString() : "";
         const proxy = item.proxy ? '<span class="badge">代購：' + escapeHtml(item.proxy) + (item.proxyFee ? '（費用 ' + Number(item.proxyFee).toLocaleString() + (item.proxyPaid ? '，已付' : '，待付') + '）' : "") + '</span>' : "";
         const statusLabel = item.purchased ? "✓ 已確認買到" : "○ 尚未確認";
@@ -6952,18 +6745,6 @@
       if (category) category.value = "all";
       if (region) region.value = "all";
       renderShopping();
-    }
-
-    function exportShoppingCSV() {
-      const rows = [["商品", "分類", "地區", "店家", "預計單價", "實際單價", "幣別", "數量", "購買者", "代購委託人", "代購費用", "代購費已付款", "重量(g)", "已購買"]];
-      shoppingItems.forEach(item => rows.push([item.name, item.category, item.region, item.store, item.price, item.actualPrice || "", item.currency, item.quantity, item.buyer, item.proxy, item.proxyFee || "", item.proxyPaid ? "是" : "否", item.weight || "", item.purchased ? "是" : "否"]));
-      const csv = "\ufeff" + rows.map(row => row.map(csvEscape).join(",")).join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "tokyo-shopping.csv";
-      link.click();
-      URL.revokeObjectURL(link.href);
     }
 
     // ====== PWA 安裝與離線快取 ======
@@ -7034,10 +6815,7 @@
       if (tab === "tickets") renderTickets();
       if (tab === "flights") renderFlights();
       if (tab === "accommodations") renderAccommodations();
-      if (tab === "weather") {
-        renderRegionalWeather();
-        loadRegionalWeather();
-      }
+      if (tab === "weather") loadRegionalWeather();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -7144,10 +6922,7 @@
       if (tab === "tickets") renderTickets();
       if (tab === "flights") renderFlights();
       if (tab === "accommodations") renderAccommodations();
-      if (tab === "weather") {
-        renderRegionalWeather();
-        loadRegionalWeather();
-      }
+      if (tab === "weather") loadRegionalWeather();
     }
 
     // ====== Add/Edit ======
@@ -7318,17 +7093,6 @@
       openItinerarySheet(itemId);
     }
 
-    function cycleItemStatus(itemId) {
-      const order = ["not_started", "in_progress", "completed", "cancelled"];
-      const item = data.days.flatMap(day => day.items).find(entry => entry.id === itemId);
-      if (!item) return;
-      item.status = order[(order.indexOf(item.status) + 1) % order.length];
-      completedItems[item.id] = item.status === "completed";
-      saveCompletedItems();
-      save();
-      refreshItineraryViews();
-    }
-
     function findItemLocation(itemId) {
       for (let dayIndex = 0; dayIndex < data.days.length; dayIndex += 1) {
         const index = data.days[dayIndex].items.findIndex(item => item.id === itemId);
@@ -7370,34 +7134,6 @@
       saveCompletedItems();
       save();
       refreshItineraryViews();
-    }
-
-    // ====== Routes ======
-    function openDayRoute(dayNo, mode = "transit") {
-      const d = data.days[dayNo - 1];
-      const pts = d.items.map(x => x.place).filter(Boolean);
-      if (pts.length < 2) {
-        alert("此日地點不足（至少需要兩個地點）");
-        return;
-      }
-
-      const origin = pts[0];
-      const destination = pts[pts.length - 1];
-      const waypoints = pts.slice(1, -1).join("|");
-
-      const url =
-        `https://www.google.com/maps/dir/?api=1` +
-        `&origin=${encodeURIComponent(origin)}` +
-        `&destination=${encodeURIComponent(destination)}` +
-        `&waypoints=${encodeURIComponent(waypoints)}` +
-        `&travelmode=${encodeURIComponent(mode === "walking" ? "walking" : "transit")}`;
-
-      location.href = url;
-    }
-
-
-    function openTodayRoute() {
-      openDayRoute(data.selectedDay);
     }
 
     // ====== Helpers ======
@@ -7605,7 +7341,8 @@
       return record;
     }
 
-    let expenses = (Array.isArray(safeParse("tokyoExpenses", [])) ? safeParse("tokyoExpenses", []) : []).map(normalizeExpense);
+    const storedExpenses = safeParse("tokyoExpenses", []);
+    let expenses = (Array.isArray(storedExpenses) ? storedExpenses : []).map(normalizeExpense);
     const savedRate = safeParse("tokyoRate", {});
     let currentRate = Number(savedRate.value) || Number(savedRate.rate) || 0;
     let currentRateUpdatedAt = savedRate.updatedAt || "";
@@ -7958,37 +7695,6 @@
       renderSettlements();
     }
 
-    function csvEscape(value) {
-      const text = String(value ?? "");
-      return /[",\n\r]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
-    }
-
-    function exportExpenseCSV() {
-      const rows = [["日期", "Day", "分類", "金額", "幣別", "台幣換算", "付款者", "付款方式", "分攤", "備註"]];
-      expenses.forEach(expense => rows.push([
-        expense.date, getDayInfo(expense.date).label, expense.category, expense.amount, expense.currency,
-        toTwd(expense.amount, expense.currency), expense.payer, expense.paymentMethod,
-        JSON.stringify(expense.splits || {}), expense.note
-      ]));
-      const csv = "\ufeff" + rows.map(row => row.map(csvEscape).join(",")).join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "tokyo_expense.csv";
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
-    function exportExpenseJSON() {
-      const payload = { format: "japan-tokyo-expenses", exportedAt: new Date().toISOString(), rate: currentRate, rateUpdatedAt: currentRateUpdatedAt, members, expenses };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "tokyo-expenses.json";
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
     function getTripExpenseSum(dayIndex, tripItemId) {
       const item = data.days[dayIndex]?.items.find(entry => entry.id === tripItemId);
       return expenses
@@ -8007,7 +7713,6 @@
       { id: "yamanakako", name: "山中湖", lat: 35.4106, lon: 138.8666 },
       { id: "odaiba", name: "台場", lat: 35.6267, lon: 139.7753 }
     ];
-    let dashboardLocation = null;
     let dashboardWeatherCache = safeParse("tokyoRegionalWeather", {});
     dashboardWeatherCache = dashboardWeatherCache && typeof dashboardWeatherCache === "object" ? dashboardWeatherCache : {};
     let dashboardBudgets = safeParse("tokyoDailyBudgets", {});
@@ -8250,7 +7955,6 @@
         }
       }
 
-      renderDashboardRoute(viewIndex);
       renderDashboardTickets(dayTickets);
       renderDashboardTravelCards();
       renderDashboardReminder();
@@ -8266,57 +7970,6 @@
       if (guideSummary) guideSummary.textContent = guide?.summary || "切換日期查看行程明細。";
       if (guideChecklist) guideChecklist.textContent = guide?.checklist?.length ? `行前提醒 ${guide.checklist.length} 項 · 點擊查看完整內容` : "尚無額外提醒";
       if (guideSource) guideSource.textContent = guide ? "來源：行程明細 TXT（2026/11/08）" : "來源：目前行程資料";
-    }
-
-    function renderDashboardTimeline(dayIndex) {
-      const box = document.getElementById("dashboardTimeline");
-      if (!box) return;
-      const day = data.days[dayIndex];
-      const actualIndex = dashboardActualDayIndex();
-      if (!day || !day.items?.length) {
-        box.innerHTML = '<div class="emptyState">此日尚未建立行程</div>';
-        return;
-      }
-      const now = dashboardTokyoMinutes();
-      box.innerHTML = day.items.map((item, index) => {
-        const completed = dashboardIsClosedItem(item, dayIndex);
-        const current = dayIndex === actualIndex && !completed && dashboardItemMinutes(item) <= now && now <= dashboardItemEndMinutes(item);
-        const timeLabel = item.startTime ? item.startTime + (item.endTime ? "–" + item.endTime : "") : "時間待確認";
-        const detail = [
-          item.place ? "地點：" + escapeHtml(item.place) : "",
-          item.transportMethod ? "交通：" + escapeHtml(item.transportMethod) : "",
-          item.transportDuration ? "預估：" + escapeHtml(item.transportDuration) : "",
-          Number(item.budget) > 0 ? "活動預算：¥" + Number(item.budget).toLocaleString() : "",
-          item.ticketId ? "已關聯票券" : "尚未關聯票券",
-          item.detail ? "行程重點：" + escapeHtml(item.detail) : ""
-        ].filter(Boolean).join(" · ");
-        const openAttr = completed ? "" : " open";
-        const placeArg = escapeHtml(JSON.stringify(String(item.place || "")));
-        const itemIdArg = escapeHtml(JSON.stringify(String(item.id || "")));
-        return '<details class="dashboardTimelineItem ' + (completed ? "completed " : "") + (current ? "current" : "") + '"' + openAttr + '>' +
-          '<summary><span class="dashboardTimelineTime">' + escapeHtml(timeLabel) + '</span><span class="dashboardTimelineTitle">' + escapeHtml(item.title || "未命名行程") + '</span><span class="statusBadge">' + escapeHtml(statusLabel(item.status)) + '</span></summary>' +
-          '<div class="dashboardTimelineBody"><span>' + detail + '</span><div><button class="btnPill primary" type="button" onclick="openMap(' + placeArg + ')">導航</button> <button class="btnGhost" type="button" onclick="toggleCompleted(' + dayIndex + ',' + itemIdArg + ')">' + (completed ? "標記未完成" : "完成行程") + '</button></div></div></details>';
-      }).join("");
-    }
-
-    function renderDashboardRoute(dayIndex) {
-      const box = document.getElementById("dashboardRoute");
-      if (!box) return;
-      const items = (data.days[dayIndex]?.items || []).filter(item => item.place);
-      if (!items.length) {
-        box.innerHTML = '<div class="emptyState">尚未填寫地點，無法建立交通路線</div>';
-        return;
-      }
-      box.innerHTML = items.slice(0, 6).map((item, index) => {
-        const previous = index === 0 ? (dashboardLocation ? "目前位置" : "住宿／上一站") : (items[index - 1].place || "上一站");
-        const method = item.transportMethod || "大眾運輸";
-        const duration = item.transportDuration || "時間待確認";
-        const cost = Number(item.transportCost) > 0 ? " · ¥" + Number(item.transportCost).toLocaleString() : "";
-        const transfer = item.transferCount ? " · 轉乘 " + item.transferCount : "";
-        const walking = item.walkingDistance ? " · 步行 " + item.walkingDistance : "";
-        const exit = item.stationExit ? " · " + item.stationExit : "";
-        return '<div class="dashboardRouteItem"><span class="dashboardRouteIcon">' + (method.includes("步") ? "歩" : "電") + '</span><div><strong>' + escapeHtml(previous) + ' → ' + escapeHtml(item.place) + '</strong><small>' + escapeHtml(method) + " · " + escapeHtml(duration) + cost + transfer + walking + exit + " · 預估資訊" + '</small></div></div>';
-      }).join("");
     }
 
     function renderDashboardTickets(dayTickets) {
@@ -8350,13 +8003,6 @@
       } catch (error) {
         alert("連結無效，請確認網址。");
       }
-    }
-
-    function copyTravelText(value, label = "內容") {
-      if (!value) return;
-      const done = () => alert(label + "已複製");
-      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(value).then(done).catch(() => alert(label + "複製失敗，請手動選取"));
-      else alert(value);
     }
 
     function flightAirportMap(airport) { openMap(airport); }
@@ -8675,11 +8321,6 @@
       renderDashboardTravelCards();
     }
 
-    function openDashboardRoute() {
-      const mode = document.getElementById("dashboardRouteMode")?.value || "transit";
-      openDayRoute(data.selectedDay, mode);
-    }
-
     function renderDashboardRainPlan(dayIndex) {
       const box = document.getElementById("dashboardRainPlan");
       if (!box) return;
@@ -8706,24 +8347,6 @@
       }), 0);
     }
 
-    function toggleDashboardVersion() {
-      const current = getDayVersion(dashboardViewedDayIndex());
-      const next = current === "A" ? "B" : "A";
-      if (!data.versions?.[next]?.days?.length) {
-        alert(next + " 方案尚未建立，請先從行程編輯建立內容。");
-        return;
-      }
-      switchDayItineraryVersion(next);
-      renderDashboard();
-    }
-
-    function openHotelMap() {
-      const day = data.days[dashboardViewedDayIndex()];
-      const hotel = (day?.items || []).find(item => /hotel|inn|飯店|旅館/i.test(String(item.place || "") + " " + String(item.title || ""))) || (day?.items || []).find(item => item.place);
-      if (hotel?.place) openMap(hotel.place);
-      else alert("尚未填寫住宿地點");
-    }
-
     function navigateNextItem() {
       const dayIndex = dashboardViewedDayIndex();
       const next = dashboardNextItem(dayIndex);
@@ -8731,30 +8354,7 @@
         alert("下一個行程尚未填寫地點");
         return;
       }
-      if (dashboardLocation) {
-        const url = "https://www.google.com/maps/dir/?api=1&origin=" +
-          encodeURIComponent(dashboardLocation.lat + "," + dashboardLocation.lon) +
-          "&destination=" + encodeURIComponent(next.item.place) + "&travelmode=transit";
-        location.href = url;
-      } else {
-        openMap(next.item.place);
-      }
-    }
-
-    function requestDashboardLocation() {
-      const status = document.getElementById("dashboardLocationStatus");
-      if (!navigator.geolocation) {
-        if (status) status.textContent = "此瀏覽器不支援定位，請使用手動地點";
-        return;
-      }
-      if (status) status.textContent = "正在取得目前位置…";
-      navigator.geolocation.getCurrentPosition(position => {
-        dashboardLocation = { lat: position.coords.latitude, lon: position.coords.longitude };
-        if (status) status.textContent = "定位已取得（僅本頁暫存）";
-        renderDashboardRoute(dashboardViewedDayIndex());
-      }, error => {
-        if (status) status.textContent = error.code === 1 ? "定位遭拒絕，可繼續手動導航" : "定位失敗，可繼續手動導航";
-      }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 });
+      openMap(next.item.place);
     }
 
     function renderDashboardReminder() {
@@ -8877,8 +8477,6 @@
     renderHeaderDate();
     renderDayTabs();
     renderTrip();
-    renderDashboard();
-    renderRegionalWeather();
     renderCountdown();
     renderExpenses();
     renderMemberManager();
@@ -8894,7 +8492,6 @@
     loadWeather();
     loadRate();
     loadDailyForecast();
-    loadRegionalWeather();
     setInterval(() => {
       renderDashboard();
       renderCountdown();
