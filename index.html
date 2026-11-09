@@ -4122,11 +4122,43 @@
       padding: 18px;
     }
 
+    .expenseOverviewCard {
+      overflow: hidden;
+      padding: 0;
+      background: linear-gradient(145deg, rgba(255, 255, 255, .92), rgba(227, 240, 248, .84));
+    }
+
     .expenseOverviewHead {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
+      padding: 20px 20px 16px;
+    }
+
+    .expenseOverviewIntro {
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .expenseKickerRow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .expenseScopeBadge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 3px 9px;
+      border: 1px solid rgba(71, 142, 154, .16);
+      border-radius: 999px;
+      color: #397080;
+      background: rgba(223, 244, 242, .72);
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .expenseOverviewHead h2,
@@ -4146,19 +4178,137 @@
 
     .expenseTotalHero {
       flex: 0 0 auto;
-      min-width: 145px;
-      padding: 10px 14px;
-      border-radius: 16px;
+      min-width: 190px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, .78);
+      border-radius: 20px;
       color: #294c6a;
-      background: rgba(215, 229, 255, .68);
-      font-size: 14px;
+      background: linear-gradient(145deg, rgba(214, 229, 255, .9), rgba(226, 240, 250, .82));
+      box-shadow: 0 8px 18px rgba(65, 112, 145, .08);
+      text-align: left;
+    }
+
+    .expenseHeroLabel,
+    .expenseStat span,
+    .expenseDetailLabel {
+      display: block;
+      color: #71879a;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .expenseTotalHero strong {
+      display: block;
+      margin-top: 2px;
+      color: #1d4261;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+
+    .expenseHeroSub {
+      display: block;
+      margin-top: 4px;
+      color: #557188;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .expenseHeroSub span {
+      color: #2c526f;
       font-weight: 900;
-      line-height: 1.8;
-      text-align: right;
     }
 
     .expenseStats {
-      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0 20px 16px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .expenseStat {
+      min-width: 0;
+      padding: 12px 13px;
+      border: 1px solid rgba(255, 255, 255, .88);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, .62);
+      box-shadow: 0 5px 13px rgba(52, 93, 119, .05);
+    }
+
+    .expenseStat b {
+      display: block;
+      margin-top: 5px;
+      overflow: hidden;
+      color: #294b68;
+      font-size: 17px;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .expenseStat small {
+      display: block;
+      margin-top: 5px;
+      overflow: hidden;
+      color: #7a8e9f;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .expenseStatsDetails {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      grid-column: 1 / -1;
+      padding-top: 1px;
+    }
+
+    .expenseDetailItem {
+      max-width: 100%;
+      padding: 6px 9px;
+      border-radius: 10px;
+      color: #627d91;
+      background: rgba(255, 255, 255, .48);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .expenseRateStatus {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 42px;
+      padding: 10px 20px 12px;
+      border-top: 1px solid rgba(104, 141, 163, .12);
+      color: #71879a;
+      background: rgba(255, 255, 255, .32);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .expenseRateStatus::before {
+      content: "↔";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
+      border-radius: 50%;
+      color: #3d7180;
+      background: rgba(218, 241, 239, .9);
+      font-size: 12px;
+      font-weight: 900;
     }
 
     .expenseReservedCard .dashboardPanelHeading {
@@ -4221,11 +4371,31 @@
 
       .expenseOverviewHead {
         flex-direction: column;
+        gap: 12px;
+        padding: 17px 16px 14px;
       }
 
       .expenseTotalHero {
         width: 100%;
+        min-width: 0;
         text-align: left;
+      }
+
+      .expenseTotalHero strong {
+        font-size: 23px;
+      }
+
+      .expenseStats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 0 16px 14px;
+      }
+
+      .expenseStat:nth-child(3) {
+        grid-column: 1 / -1;
+      }
+
+      .expenseRateStatus {
+        padding: 10px 16px 12px;
       }
 
       .expenseToolbarActions {
@@ -4978,17 +5148,18 @@
 
       <div class="simpleCard expenseOverviewCard">
         <div class="expenseOverviewHead">
-          <div><span class="dashboardKicker">LIVE EXPENSES</span>
+          <div class="expenseOverviewIntro"><div class="expenseKickerRow"><span class="dashboardKicker">LIVE EXPENSES</span><span class="expenseScopeBadge">一般支出</span></div>
             <h2>旅途支出總計</h2>
             <p>只計入一般旅途記帳，預訂費用會獨立顯示。</p>
           </div>
-          <div class="expenseTotalHero">
-            ¥ <span id="expenseTotalJPY">0</span><br>
-            ≈ NT$ <span id="expenseTotalTWD">0</span>
+          <div class="expenseTotalHero" aria-live="polite">
+            <span class="expenseHeroLabel">目前已記帳</span>
+            <strong>NT$ <span id="expenseTotalTWD">0</span></strong>
+            <span class="expenseHeroSub">約 JPY <span id="expenseTotalJPY">0</span></span>
           </div>
         </div>
         <div id="expenseStats" class="moduleSummary expenseStats"></div>
-        <div id="expenseRateStatus" class="expenseMeta"></div>
+        <div id="expenseRateStatus" class="expenseRateStatus"></div>
       </div>
 
       <div class="simpleCard expenseReservedCard">
@@ -7728,13 +7899,17 @@
       if (rateNode) rateNode.textContent = rateText;
       const dayStats = Object.entries(daySum).sort((a, b) => Number(a[0]) - Number(b[0])).map(entry => "Day " + entry[0] + " NT$ " + Math.round(entry[1]).toLocaleString()).join("｜");
       const memberStats = Object.entries(memberSum).map(entry => entry[0] + " NT$ " + Math.round(entry[1]).toLocaleString()).join("｜");
+      const activeExpenses = expenses.filter(expense => !expense.isReserved);
+      const unsettledCount = activeExpenses.filter(expense => !expense.settled).length;
       const statNode = document.getElementById("expenseStats");
       if (statNode) statNode.innerHTML =
-        '<span class="summaryChip">JPY ' + jpyTotal.toLocaleString() + '</span>' +
-        '<span class="summaryChip">TWD ' + twdTotal.toLocaleString() + '</span>' +
-        '<span class="summaryChip">合計 NT$ ' + totalTwd.toLocaleString() + '</span>' +
-        (dayStats ? '<div style="width:100%;margin-top:7px">每日：' + escapeHtml(dayStats) + "</div>" : "") +
-        (memberStats ? '<div style="width:100%;margin-top:7px">付款者：' + escapeHtml(memberStats) + "</div>" : "");
+        '<div class="expenseStat"><span>日圓原幣</span><b>¥ ' + jpyTotal.toLocaleString() + '</b><small>JPY 記帳</small></div>' +
+        '<div class="expenseStat"><span>台幣原幣</span><b>TWD ' + twdTotal.toLocaleString() + '</b><small>直接以台幣記帳</small></div>' +
+        '<div class="expenseStat"><span>記帳筆數</span><b>' + activeExpenses.length + ' 筆</b><small>' + (unsettledCount ? unsettledCount + ' 筆尚未結清' : '目前皆已結清') + '</small></div>' +
+        ((dayStats || memberStats) ? '<div class="expenseStatsDetails">' +
+          (dayStats ? '<span class="expenseDetailItem"><span class="expenseDetailLabel">每日</span>' + escapeHtml(dayStats) + '</span>' : '') +
+          (memberStats ? '<span class="expenseDetailItem"><span class="expenseDetailLabel">付款者</span>' + escapeHtml(memberStats) + '</span>' : '') +
+          '</div>' : '');
       renderPie(catSum);
       renderSettlements();
     }
