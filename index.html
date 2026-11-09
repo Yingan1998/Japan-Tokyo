@@ -1756,6 +1756,10 @@
         left: 10px;
         width: calc(100% - 20px);
         transform: none;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        justify-content: stretch;
+        overflow: hidden;
       }
 
       .bIcon {
@@ -1768,7 +1772,9 @@
       .bItem {
         gap: 4px;
         font-size: 10px;
-        flex: 0 0 56px;
+        width: 100%;
+        min-width: 0;
+        flex: none;
       }
 
       .dashboardHero {
@@ -2172,18 +2178,22 @@
         right: 10px;
         width: auto;
         transform: none;
-        justify-content: flex-start;
-        overflow-x: auto;
-        scrollbar-width: none;
-      }
-
-      .bottomNav::-webkit-scrollbar {
-        display: none;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        justify-content: stretch;
+        gap: 0;
+        overflow: hidden;
       }
 
       .bIcon {
         width: 42px;
         height: 42px;
+      }
+
+      .bItem {
+        width: 100%;
+        min-width: 0;
+        flex: none;
       }
 
       .itemActions button {
