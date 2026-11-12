@@ -3081,6 +3081,305 @@
       line-height: 1.5;
     }
 
+    /* Lutu-inspired travel helper cards: nearby actions, local safety and
+       lightweight local-only companion notes. Keep the surface compact so
+       today's itinerary remains the primary focus. */
+    .travelHelperCard,
+    .travelSafetyCard,
+    .travelPrepCard,
+    .travelNotesCard {
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 22px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .68), rgba(232, 244, 248, .46));
+      box-shadow: 0 14px 28px rgba(49, 83, 110, .09), inset 0 1px 0 rgba(255, 255, 255, .72);
+      backdrop-filter: blur(14px) saturate(115%);
+      -webkit-backdrop-filter: blur(14px) saturate(115%);
+    }
+
+    .travelHelperHeading,
+    .travelSafetyHeading,
+    .travelPrepHeading,
+    .travelNotesHeading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .travelHelperHeading h2,
+    .travelSafetyHeading h2,
+    .travelPrepHeading h2,
+    .travelNotesHeading h2 {
+      margin: 4px 0 0;
+      color: #19344f;
+      font-size: 18px;
+    }
+
+    .travelHelperHeading p,
+    .travelSafetyHeading p,
+    .travelPrepHeading p,
+    .travelNotesHeading p {
+      margin: 6px 0 0;
+      color: #647c8e;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .travelHelperActions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .travelHelperActions button {
+      display: grid;
+      justify-items: center;
+      gap: 5px;
+      min-height: 70px;
+      padding: 9px 6px;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 16px;
+      color: #36536c;
+      background: rgba(255, 253, 248, .62);
+      box-shadow: 0 8px 16px rgba(49, 83, 110, .07);
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .travelHelperActions button:hover,
+    .travelHelperActions button:focus-visible {
+      border-color: rgba(47, 143, 140, .36);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .travelHelperActions span {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .travelHelperFootnote {
+      margin: 10px 0 0;
+      color: #718696;
+      font-size: 11px;
+    }
+
+    .travelInfoGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .safetyContactGrid,
+    .safetyTipGrid {
+      display: grid;
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .safetyContactGrid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .safetyContact,
+    .safetyTip {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+      padding: 10px 11px;
+      border: 1px solid rgba(117, 157, 178, .16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .58);
+    }
+
+    .safetyContact strong,
+    .safetyTip strong {
+      color: #2b4d67;
+      font-size: 12px;
+    }
+
+    .safetyContact small,
+    .safetyTip small {
+      color: #718696;
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .safetyContact a {
+      color: #2f6f70;
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .safetyNotice {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-radius: 13px;
+      color: #6c5c41;
+      background: rgba(250, 226, 174, .35);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .prepProgress {
+      display: grid;
+      gap: 5px;
+      min-width: 110px;
+      text-align: right;
+      color: #718696;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .prepProgressTrack {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(53, 90, 113, .11);
+    }
+
+    .prepProgressTrack span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #5c91b5, #78b8b0);
+      transition: width .2s ease;
+    }
+
+    .prepList {
+      display: grid;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .prepCheck {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid rgba(117, 157, 178, .16);
+      border-radius: 13px;
+      color: #36536c;
+      background: rgba(255, 255, 255, .58);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .prepCheck input {
+      width: 17px;
+      height: 17px;
+      accent-color: #5c91b5;
+      flex: 0 0 auto;
+    }
+
+    .prepCheck.done {
+      color: #557b69;
+      background: rgba(227, 244, 236, .68);
+      text-decoration: line-through;
+    }
+
+    .companionNoteForm {
+      display: grid;
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .companionNoteForm .formControl {
+      min-height: 42px;
+    }
+
+    .companionNoteForm textarea {
+      min-height: 76px;
+      resize: vertical;
+    }
+
+    .companionNoteActions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .companionNoteList {
+      display: grid;
+      gap: 8px;
+      margin-top: 13px;
+    }
+
+    .companionNote,
+    .companionNoteEmpty {
+      padding: 10px 11px;
+      border: 1px solid rgba(117, 157, 178, .16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .58);
+    }
+
+    .companionNote {
+      display: grid;
+      gap: 5px;
+    }
+
+    .companionNoteHead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #2b4d67;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .companionNoteText {
+      color: #5d7688;
+      font-size: 12px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .companionNoteActions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .companionNoteActions button {
+      border: 0;
+      padding: 4px 7px;
+      border-radius: 9px;
+      color: #55768b;
+      background: rgba(108, 125, 140, .11);
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .offlineStatusBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: #2f6f70;
+      background: rgba(190, 229, 220, .54);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .offlineStatusBadge.offline {
+      color: #8a5a25;
+      background: rgba(250, 226, 174, .55);
+    }
+
     .dashboardTicketList {
       display: grid;
       gap: 8px;
@@ -3291,6 +3590,35 @@
 
       .regionalWeatherList {
         grid-template-columns: 1fr;
+      }
+
+      .travelHelperCard,
+      .travelSafetyCard,
+      .travelPrepCard,
+      .travelNotesCard {
+        padding: 14px 12px;
+      }
+
+      .travelHelperHeading,
+      .travelSafetyHeading,
+      .travelPrepHeading,
+      .travelNotesHeading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .travelHelperActions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .travelInfoGrid,
+      .safetyContactGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .prepProgress {
+        width: 100%;
+        text-align: left;
       }
     }
 
@@ -5112,6 +5440,23 @@
               id="dashboardGuideSource">來源：行程明細 TXT</span></div>
         </div>
 
+        <div class="travelHelperCard" id="dashboardTravelHelperCard">
+          <div class="travelHelperHeading">
+            <div><span class="dashboardKicker">TRAVEL HELPER</span>
+              <h2>今天的小幫手</h2>
+              <p id="dashboardHelperSummary">以目前日期的下一個景點為中心，快速找吃的、逛的與重要提醒。</p>
+            </div>
+            <span class="offlineStatusBadge" id="offlineStatusBadge">● 線上</span>
+          </div>
+          <div class="travelHelperActions" aria-label="今日旅遊小幫手">
+            <button type="button" onclick="openNearbySearch('餐廳')"><span>🍜</span>附近吃</button>
+            <button type="button" onclick="openNearbySearch('購物')"><span>🛍️</span>附近逛</button>
+            <button type="button" onclick="focusTravelSafety()"><span>🆘</span>當地提醒</button>
+            <button type="button" onclick="checkOfflineStatus()"><span>📶</span>離線檢查</button>
+          </div>
+          <p class="travelHelperFootnote">地圖搜尋會開啟 Google Maps；離線時仍可查看已快取的行程、票券與備份資料。</p>
+        </div>
+
       </section>
 
       <div class="sectionTitleRow itineraryTitleRow">
@@ -5371,6 +5716,58 @@
             onclick="openPageWithoutNav('accommodations')"><span>🏨</span>住宿管理<small>飯店、地址與換宿</small></button>
         </div>
       </div>
+
+      <div class="travelSafetyCard" id="travelSafetyCard">
+        <div class="travelSafetyHeading">
+          <div><span class="dashboardKicker">LOCAL GUIDE & SOS</span>
+            <h2>日本當地提醒與 SOS</h2>
+            <p>需要協助時先使用當地緊急電話；駐日代表處資訊以外交部公告為準。</p>
+          </div>
+          <span class="pill">東京適用</span>
+        </div>
+        <div class="safetyContactGrid">
+          <div class="safetyContact"><strong>警察</strong><small>失竊、事故與人身安全</small><a href="tel:110">110</a></div>
+          <div class="safetyContact"><strong>消防／救護</strong><small>火災、急救與送醫</small><a href="tel:119">119</a></div>
+          <div class="safetyContact"><strong>駐日代表處</strong><small>重大急難（日本境內）</small><a href="tel:08010097179">080-1009-7179</a></div>
+        </div>
+        <div class="safetyTipGrid">
+          <div class="safetyTip"><strong>交通</strong><small>日本靠左行駛；搭車前先確認方向、月台與末班車。</small></div>
+          <div class="safetyTip"><strong>防災</strong><small>遇地震先遠離玻璃與招牌，依飯店或車站廣播疏散。</small></div>
+          <div class="safetyTip"><strong>就醫</strong><small>保留護照、保險與藥品資訊；非緊急醫療可先詢問飯店櫃台。</small></div>
+        </div>
+        <div class="safetyNotice">緊急電話不等於一般查詢；若只是行程、票券或交通問題，請優先使用官方網站或服務櫃台。</div>
+      </div>
+
+      <div class="travelInfoGrid">
+        <div class="travelPrepCard" id="travelPrepCard">
+          <div class="travelPrepHeading">
+            <div><span class="dashboardKicker">BEFORE YOU GO</span>
+              <h2>行前清單</h2>
+              <p>勾選狀態只保存在本機，可隨時重設。</p>
+            </div>
+            <div class="prepProgress"><span id="prepProgressLabel">0 / 8</span><div class="prepProgressTrack"><span id="prepProgressBar"></span></div></div>
+          </div>
+          <div id="prepList" class="prepList"></div>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btnGhost" type="button" onclick="resetPrepChecklist()">重設清單</button></div>
+        </div>
+
+        <div class="travelNotesCard" id="travelNotesCard">
+          <div class="travelNotesHeading">
+            <div><span class="dashboardKicker">TRAVEL COMPANIONS</span>
+              <h2>旅伴留言板</h2>
+              <p>先做本機共筆；目前不會自動同步到其他裝置。</p>
+            </div>
+            <span class="pill">LOCAL</span>
+          </div>
+          <div class="companionNoteForm">
+            <input class="formControl" id="companionNoteAuthor" maxlength="24" placeholder="你的暱稱（例如：我）" value="我">
+            <textarea class="formControl" id="companionNoteText" maxlength="240" placeholder="留言給旅伴：集合提醒、想吃的店、臨時變更…"></textarea>
+            <div class="companionNoteActions"><small class="muted">最多 240 字</small><button class="btnPill primary" type="button" onclick="addCompanionNote()">新增留言</button></div>
+          </div>
+          <div id="companionNoteList" class="companionNoteList"></div>
+        </div>
+      </div>
+
       <div class="simpleCard backupCard installCard" id="installCard">
         <div class="backupHeader">
           <div>
@@ -5905,11 +6302,31 @@
     let shoppingState = safeParse("tokyoShoppingState", {});
     let members = safeParse("tokyoMembers", ["我", "旅伴 A", "旅伴 B", "旅伴 C"]);
     let tickets = safeParse("tokyoTickets", []);
+    const TRAVEL_PREP_ITEMS = [
+      { id: "passport", label: "護照、身分證件與重要文件" },
+      { id: "insurance", label: "旅平險／海外醫療保障" },
+      { id: "esim", label: "eSIM／網卡與離線地圖" },
+      { id: "transport", label: "Suica／Pasmo 與交通路線" },
+      { id: "flightCheckin", label: "航班 Check-in 與登機文件" },
+      { id: "tickets", label: "票券、預約與雲端檔案" },
+      { id: "power", label: "行動電源、充電線與轉接頭" },
+      { id: "luggage", label: "行李重量、退稅與回程採買" }
+    ];
+    let prepChecklist = safeParse("tokyoPrepChecklist", {});
+    let companionNotes = safeParse("tokyoCompanionNotes", []);
     let ticketDateMode = "all";
     let shoppingItems = safeParse("tokyoShoppingItems", null);
     completedItems = completedItems && typeof completedItems === "object" ? completedItems : {};
     shoppingState = shoppingState && typeof shoppingState === "object" ? shoppingState : {};
     members = Array.isArray(members) && members.length ? [...new Set(members.map(value => String(value).trim()).filter(Boolean))] : ["我"];
+    prepChecklist = prepChecklist && typeof prepChecklist === "object" ? prepChecklist : {};
+    companionNotes = Array.isArray(companionNotes) ? companionNotes.filter(note => note && typeof note === "object").map(note => ({
+      id: note.id || makeId("note"),
+      author: String(note.author || "我").trim().slice(0, 24) || "我",
+      text: String(note.text || "").trim().slice(0, 240),
+      pinned: Boolean(note.pinned),
+      createdAt: note.createdAt || new Date().toISOString()
+    })).filter(note => note.text) : [];
     tickets = Array.isArray(tickets) ? tickets.map((ticket, index) => ({
       ...ticket,
       id: ticket.id || "ticket-" + (index + 1),
@@ -7075,6 +7492,11 @@
       if (tab === "flights") renderFlights();
       if (tab === "accommodations") renderAccommodations();
       if (tab === "weather") loadRegionalWeather();
+      if (tab === "info") {
+        renderTravelPrep();
+        renderCompanionNotes();
+        updateOfflineStatus();
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -7107,6 +7529,8 @@
         members,
         completedItems,
         shoppingState,
+        prepChecklist,
+        companionNotes,
         settlementsState,
         dailyBudgets: typeof dashboardBudgets !== "undefined" ? dashboardBudgets : {},
         reminderMinutes: typeof dashboardReminderMinutes !== "undefined" ? dashboardReminderMinutes : 10,
@@ -7142,6 +7566,8 @@
           safeSet("tokyoMembers", Array.isArray(payload.members) ? payload.members : members);
           safeSet("tokyoCompletedItems", payload.completedItems || {});
           safeSet("tokyoShoppingState", payload.shoppingState || {});
+          safeSet("tokyoPrepChecklist", payload.prepChecklist && typeof payload.prepChecklist === "object" ? payload.prepChecklist : {});
+          safeSet("tokyoCompanionNotes", Array.isArray(payload.companionNotes) ? payload.companionNotes : []);
           safeSet("tokyoSettlements", payload.settlementsState || {});
           dashboardBudgets = payload.dailyBudgets && typeof payload.dailyBudgets === "object" ? payload.dailyBudgets : {};
           dashboardReminderMinutes = [10, 20, 30].includes(Number(payload.reminderMinutes)) ? Number(payload.reminderMinutes) : 10;
@@ -7182,6 +7608,11 @@
       if (tab === "flights") renderFlights();
       if (tab === "accommodations") renderAccommodations();
       if (tab === "weather") loadRegionalWeather();
+      if (tab === "info") {
+        renderTravelPrep();
+        renderCompanionNotes();
+        updateOfflineStatus();
+      }
     }
 
     // ====== Add/Edit ======
@@ -8144,6 +8575,119 @@
       renderDashboard();
     }
 
+    function helperSearchPlace() {
+      const dayIndex = dashboardViewedDayIndex();
+      const next = dashboardNextItem(dayIndex);
+      const day = data.days[dayIndex];
+      return next?.item?.place || day?.items?.[0]?.place || day?.labelJp || "東京";
+    }
+
+    function openNearbySearch(category) {
+      const place = helperSearchPlace();
+      const query = `${place} ${category} 東京`;
+      openExternal("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query));
+    }
+
+    function focusTravelSafety() {
+      openPageWithoutNav("info");
+      setTimeout(() => document.getElementById("travelSafetyCard")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+    }
+
+    function updateOfflineStatus() {
+      const online = navigator.onLine !== false;
+      document.querySelectorAll("#offlineStatusBadge").forEach(badge => {
+        badge.classList.toggle("offline", !online);
+        badge.textContent = online ? "● 線上" : "○ 離線可用";
+      });
+      const installStatus = document.getElementById("installStatus");
+      if (installStatus && !isStandaloneApp()) {
+        installStatus.dataset.networkState = online ? "online" : "offline";
+      }
+    }
+
+    function checkOfflineStatus() {
+      updateOfflineStatus();
+      showAppToast(navigator.onLine === false ? "目前離線：已快取的行程與備份仍可查看" : "目前已連線：可更新天氣與匯率");
+    }
+
+    function renderTravelPrep() {
+      const list = document.getElementById("prepList");
+      if (!list) return;
+      const done = TRAVEL_PREP_ITEMS.filter(item => prepChecklist[item.id]).length;
+      const total = TRAVEL_PREP_ITEMS.length;
+      const label = document.getElementById("prepProgressLabel");
+      const bar = document.getElementById("prepProgressBar");
+      if (label) label.textContent = `${done} / ${total}`;
+      if (bar) bar.style.width = `${total ? Math.round(done / total * 100) : 0}%`;
+      list.innerHTML = TRAVEL_PREP_ITEMS.map(item => {
+        const checked = Boolean(prepChecklist[item.id]);
+        const id = escapeHtml(item.id);
+        return `<label class="prepCheck${checked ? " done" : ""}"><input type="checkbox" ${checked ? "checked" : ""} onchange="togglePrepItem('${id}', this.checked)"><span>${escapeHtml(item.label)}</span></label>`;
+      }).join("");
+    }
+
+    function togglePrepItem(id, checked) {
+      prepChecklist[id] = Boolean(checked);
+      safeSet("tokyoPrepChecklist", prepChecklist);
+      renderTravelPrep();
+    }
+
+    function resetPrepChecklist() {
+      if (!confirm("確定要重設行前清單嗎？")) return;
+      prepChecklist = {};
+      safeSet("tokyoPrepChecklist", prepChecklist);
+      renderTravelPrep();
+      showAppToast("行前清單已重設");
+    }
+
+    function renderCompanionNotes() {
+      const list = document.getElementById("companionNoteList");
+      if (!list) return;
+      if (!companionNotes.length) {
+        list.innerHTML = '<div class="companionNoteEmpty"><span class="muted">還沒有留言，先留下集合時間或想吃的店吧。</span></div>';
+        return;
+      }
+      const ordered = [...companionNotes].sort((a, b) => Number(b.pinned) - Number(a.pinned) || String(b.createdAt).localeCompare(String(a.createdAt)));
+      list.innerHTML = ordered.map(note => {
+        const id = escapeHtml(note.id);
+        const date = new Date(note.createdAt);
+        const time = Number.isNaN(date.getTime()) ? "剛剛" : date.toLocaleString("zh-TW", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+        return `<article class="companionNote"><div class="companionNoteHead"><span>${note.pinned ? "📌 " : ""}${escapeHtml(note.author)}</span><time>${time}</time></div><div class="companionNoteText">${escapeHtml(note.text)}</div><div class="companionNoteActions"><button type="button" onclick="toggleCompanionNotePin('${id}')">${note.pinned ? "取消置頂" : "置頂"}</button><button type="button" onclick="deleteCompanionNote('${id}')">刪除</button></div></article>`;
+      }).join("");
+    }
+
+    function addCompanionNote() {
+      const authorInput = document.getElementById("companionNoteAuthor");
+      const textInput = document.getElementById("companionNoteText");
+      const author = String(authorInput?.value || "我").trim().slice(0, 24) || "我";
+      const text = String(textInput?.value || "").trim().slice(0, 240);
+      if (!text) {
+        textInput?.focus();
+        return alert("請先輸入留言內容");
+      }
+      companionNotes.unshift({ id: makeId("note"), author, text, pinned: false, createdAt: new Date().toISOString() });
+      safeSet("tokyoCompanionNotes", companionNotes);
+      if (textInput) textInput.value = "";
+      renderCompanionNotes();
+      showAppToast("留言已加入本機留言板");
+    }
+
+    function toggleCompanionNotePin(id) {
+      const note = companionNotes.find(item => item.id === id);
+      if (!note) return;
+      note.pinned = !note.pinned;
+      safeSet("tokyoCompanionNotes", companionNotes);
+      renderCompanionNotes();
+    }
+
+    function deleteCompanionNote(id) {
+      const note = companionNotes.find(item => item.id === id);
+      if (!note || !confirm("確定刪除這則留言嗎？")) return;
+      companionNotes = companionNotes.filter(item => item.id !== id);
+      safeSet("tokyoCompanionNotes", companionNotes);
+      renderCompanionNotes();
+    }
+
     function dashboardTicketIsPending(ticket) {
       const status = String(ticket?.status || "").toLowerCase();
       return !/used|已使用|cancel|取消|失效/.test(status);
@@ -8232,6 +8776,12 @@
       if (guideSummary) guideSummary.textContent = guide?.summary || "切換日期查看行程明細。";
       if (guideChecklist) guideChecklist.textContent = guide?.checklist?.length ? `行前提醒 ${guide.checklist.length} 項 · 點擊查看完整內容` : "尚無額外提醒";
       if (guideSource) guideSource.textContent = guide ? "來源：行程明細 TXT（2026/11/08）" : "來源：目前行程資料";
+      const helperSummary = document.getElementById("dashboardHelperSummary");
+      if (helperSummary) {
+        const helperPlace = next?.item?.place || day.items?.[0]?.place || day.labelJp || "東京市區";
+        helperSummary.textContent = `以「${helperPlace}」為中心，快速找附近吃的、逛的與重要提醒。`;
+      }
+      updateOfflineStatus();
     }
 
     function renderDashboardTickets(dayTickets) {
@@ -8746,8 +9296,14 @@
     renderTickets();
     renderFlights();
     renderAccommodations();
+    renderTravelPrep();
+    renderCompanionNotes();
+    updateOfflineStatus();
     updateInstallPromptUI();
     registerAppServiceWorker();
+
+    window.addEventListener("online", updateOfflineStatus);
+    window.addEventListener("offline", updateOfflineStatus);
 
 
     // API資料
