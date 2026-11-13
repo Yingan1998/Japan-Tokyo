@@ -10,6 +10,10 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/trips/$(tripId)/members/$(request.auth.uid));
     }
 
+    function memberAfter(tripId, uid) {
+      return getAfter(/databases/$(database)/documents/trips/$(tripId)/members/$(uid));
+    }
+
     function activeMember(tripId) {
       return signedIn()
         && memberDoc(tripId).exists()
@@ -19,6 +23,10 @@ service cloud.firestore {
     function canWriteTrip(tripId) {
       return activeMember(tripId)
         && (memberDoc(tripId).data.role == 'admin' || memberDoc(tripId).data.role == 'editor');
+    }
+
+    function isTripAdmin(tripId) {
+      return activeMember(tripId) && memberDoc(tripId).data.role == 'admin';
     }
 
     function allowedDataset(datasetId) {
@@ -32,11 +40,44 @@ service cloud.firestore {
       ];
     }
 
+    match /trips/{tripId} {
+      allow read: if activeMember(tripId);
+      // A new owner creates the trip, their member document and their private
+      // trip index together in one batch. getAfter() prevents an orphaned
+      // member from being used to claim an existing trip.
+      allow create: if signedIn()
+        && request.resource.data.id == tripId
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.destination is string
+        && request.resource.data.startDate is string
+        && request.resource.data.endDate is string;
+      allow update: if isTripAdmin(tripId)
+        && request.resource.data.ownerId == resource.data.ownerId;
+      allow delete: if false;
+    }
+
     match /trips/{tripId}/members/{uid} {
       // Members are provisioned by Firebase Console, Admin SDK, or a trusted backend.
       // A traveller may read only their own membership document.
       allow read: if signedIn() && (uid == request.auth.uid || canWriteTrip(tripId));
-      allow write: if false;
+      allow create: if signedIn()
+        && uid == request.auth.uid
+        && memberAfter(tripId, uid).data.status == 'active'
+        && memberAfter(tripId, uid).data.role == 'admin'
+        && getAfter(/databases/$(database)/documents/trips/$(tripId)).data.ownerId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /users/{uid}/tripRefs/{tripId} {
+      allow read: if signedIn() && uid == request.auth.uid;
+      allow create: if signedIn()
+        && uid == request.auth.uid
+        && request.resource.data.tripId == tripId
+        && memberAfter(tripId, uid).data.status == 'active'
+        && memberAfter(tripId, uid).data.role == 'admin';
+      allow update: if signedIn() && uid == request.auth.uid && activeMember(tripId);
+      allow delete: if signedIn() && uid == request.auth.uid;
     }
 
     match /trips/{tripId}/datasets/{datasetId} {
