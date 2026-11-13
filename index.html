@@ -3464,6 +3464,9 @@
       background: rgba(255, 255, 255, .58);
     }
 
+    .cloudUserIdentity { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .profileInitial { display: grid; flex: 0 0 34px; width: 34px; height: 34px; place-items: center; border-radius: 12px; color: #fff; background: linear-gradient(145deg, #315a76, #5f8fa4); box-shadow: 0 7px 14px rgba(49,90,118,.18); font-size: 15px; font-weight: 900; }
+
     .cloudUserSummary strong,
     .cloudUserSummary small {
       display: block;
@@ -5619,6 +5622,136 @@
       }
     }
   </style>
+  <style>
+    /* Tokyo winter postcard UI refresh */
+    .accountEntry {
+      width: min(100%, 480px);
+      border-color: rgba(255, 255, 255, .9);
+      box-shadow: 0 24px 70px rgba(31, 59, 87, .24);
+    }
+
+    .accountCover {
+      position: relative;
+      isolation: isolate;
+      min-height: 230px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      background-image: linear-gradient(180deg, rgba(224, 239, 245, .22), rgba(28, 57, 81, .62)), url('./assets/fuji-winter-watercolor.jpg');
+      background-size: cover;
+      background-position: center 45%;
+      color: #fff;
+    }
+
+    .accountCover::after {
+      content: "TOKYO · WINTER POSTCARD";
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 6px 9px;
+      border: 1px solid rgba(255, 255, 255, .62);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, .9);
+      background: rgba(29, 59, 84, .24);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .14em;
+    }
+
+    .accountCover > * { position: relative; z-index: 1; }
+    .accountMountain { font-size: 34px; margin-bottom: 8px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.16)); }
+    .accountBrand { color: rgba(255,255,255,.88); font-weight: 800; }
+    .accountCover h1 { text-shadow: 0 3px 16px rgba(15, 35, 54, .32); }
+
+    .accountSosButton {
+      align-self: flex-start;
+      min-height: 44px;
+      margin-top: 16px;
+      padding: 9px 13px;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 14px;
+      color: #fff;
+      background: rgba(169, 55, 42, .78);
+      box-shadow: 0 8px 18px rgba(66, 29, 25, .18);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .accountSosPanel {
+      margin: 0 0 14px;
+      padding: 14px;
+      border: 1px solid rgba(176, 74, 56, .2);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255, 245, 237, .96), rgba(255, 252, 246, .92));
+      color: #4b2e2a;
+    }
+
+    .accountSosHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .accountSosHeader h2 { margin: 3px 0 0; font-size: 18px; }
+    .accountSosPanel p { margin: 9px 0 0; color: #765953; font-size: 12px; line-height: 1.55; }
+    .accountSosGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .accountSosGrid a, .accountSosGrid button {
+      display: grid; min-height: 68px; place-items: center; gap: 3px; padding: 8px 5px;
+      border: 1px solid rgba(176, 74, 56, .18); border-radius: 14px; color: #8e3329;
+      background: rgba(255, 255, 255, .72); font: inherit; text-align: center; text-decoration: none; cursor: pointer;
+    }
+    .accountSosGrid strong { font-size: 19px; }
+    .accountSosGrid span { font-size: 10px; font-weight: 800; }
+    .accountSosPhrase { margin-top: 10px; padding: 10px; border-radius: 12px; background: rgba(255, 226, 210, .72); font-weight: 900; line-height: 1.6; }
+    .accountSosPhrase small { color: #765953; font-weight: 600; }
+
+    .homeShortcutCard {
+      padding: 16px 18px;
+      border: 1px solid rgba(255, 255, 255, .76);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .76), rgba(227, 241, 246, .48));
+      box-shadow: 0 14px 28px rgba(49, 83, 110, .09), inset 0 1px 0 rgba(255,255,255,.72);
+      backdrop-filter: blur(14px) saturate(115%);
+      -webkit-backdrop-filter: blur(14px) saturate(115%);
+    }
+    .homeShortcutHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .homeShortcutHeader h2 { margin: 4px 0 0; color: #19344f; font-size: 18px; }
+    .homeShortcutHeader p { margin: 5px 0 0; color: #647c8e; font-size: 12px; }
+    .postmarkStamp { flex: 0 0 auto; display: grid; place-items: center; width: 56px; height: 56px; border: 1px dashed rgba(210, 91, 67, .65); border-radius: 50%; color: #bd5945; background: rgba(255, 247, 233, .64); font-size: 10px; font-weight: 900; line-height: 1.15; text-align: center; transform: rotate(-8deg); }
+    .homeShortcutGrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 13px; }
+    .homeShortcutGrid button { display: grid; min-height: 76px; place-items: center; gap: 3px; padding: 8px 5px; border: 1px solid rgba(255,255,255,.82); border-radius: 15px; color: #34536d; background: rgba(255,253,248,.64); box-shadow: 0 8px 16px rgba(49,83,110,.07); font: inherit; cursor: pointer; }
+    .homeShortcutGrid button:hover, .homeShortcutGrid button:focus-visible { outline: none; border-color: rgba(47,143,140,.4); transform: translateY(-1px); }
+    .homeShortcutGrid button span { font-size: 20px; line-height: 1; }
+    .homeShortcutGrid button strong { font-size: 11px; }
+    .homeShortcutGrid button small { color: #718696; font-size: 9px; }
+
+    .folioTabs { display: flex; gap: 8px; margin: 0 0 12px; padding: 5px; overflow-x: auto; border: 1px solid rgba(255,255,255,.72); border-radius: 16px; background: rgba(255,255,255,.48); scrollbar-width: none; }
+    .folioTabs::-webkit-scrollbar { display: none; }
+    .folioTab { flex: 1 0 112px; min-height: 44px; border: 0; border-radius: 12px; color: #526d7d; background: transparent; font-weight: 900; cursor: pointer; }
+    .folioTab.active { color: #fff; background: #315a76; box-shadow: 0 8px 16px rgba(49,90,118,.2); }
+
+    .accountSecurityLabel { width: 100%; color: #758b9a; font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .aboutAppCard { display: flex; align-items: center; gap: 13px; }
+    .aboutAppMark img { display: block; width: 54px; height: 54px; border-radius: 16px; box-shadow: 0 8px 18px rgba(49,83,110,.12); }
+    .aboutAppCard h2 { margin: 3px 0 0; color: #19344f; font-size: 17px; }
+    .aboutAppCard p { margin: 5px 0 0; color: #647c8e; font-size: 12px; line-height: 1.5; }
+    .aboutAppCard small { display: block; margin-top: 5px; color: #7d909d; font-size: 10px; }
+
+    @media (max-width: 720px) {
+      .homeShortcutGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .accountGate { padding-inline: 10px; }
+      .accountEntryBody { padding: 18px 16px 8px; }
+      .accountCover { min-height: 220px; padding: 22px 20px 18px; }
+      .accountSosGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .homeShortcutCard { padding: 14px 12px; }
+      .homeShortcutHeader h2 { font-size: 16px; }
+      .homeShortcutGrid { gap: 6px; }
+      .homeShortcutGrid button { min-height: 70px; padding-inline: 3px; }
+      .homeShortcutGrid button strong { font-size: 10px; }
+      .homeShortcutGrid button small { display: none; }
+      .folioTab { flex-basis: 96px; }
+      .aboutAppCard { align-items: flex-start; }
+      .aboutAppMark img { width: 46px; height: 46px; }
+    }
+  </style>
 </head>
 
 <body data-auth-screen="loading">
@@ -5628,6 +5761,7 @@
         <div class="accountMountain" aria-hidden="true">🗻</div>
         <div class="accountBrand">Japan Tokyo · 旅する手帳</div>
         <h1 id="accountGateTitle">東京九天八夜</h1>
+        <button class="accountSosButton" type="button" onclick="togglePublicSos()">🆘 緊急協助 SOS</button>
       </header>
       <div class="accountEntryBody">
         <p id="accountLoading" role="status">正在確認登入狀態…</p>
@@ -5661,6 +5795,16 @@
             <label>設定新密碼<input class="formControl" id="cloudSetupPassword" type="password" autocomplete="new-password" required minlength="10"></label>
             <button class="btnPill primary accountPrimary" type="submit">完成設定並登入</button>
           </form>
+        </section>
+        <section id="accountSosPanel" class="accountSosPanel" hidden aria-labelledby="accountSosTitle">
+          <div class="accountSosHeader"><div><span class="dashboardKicker">TOKYO EMERGENCY</span><h2 id="accountSosTitle">日本緊急協助</h2></div><button class="btnGhost" type="button" onclick="togglePublicSos(false)">關閉</button></div>
+          <p>需要立即協助時，請直接撥打當地緊急電話。以下資訊不需要登入即可使用。</p>
+          <div class="accountSosGrid">
+            <a href="tel:110"><strong>110</strong><span>警察／事故</span></a>
+            <a href="tel:119"><strong>119</strong><span>消防／救護</span></a>
+            <button type="button" onclick="speakEmergencyPhrase()"><strong>日文求助</strong><span>顯示常用句</span></button>
+          </div>
+          <div id="accountSosPhrase" class="accountSosPhrase" hidden>助けてください。日本語が話せません。<br><small>請幫幫我，我不會說日文。</small></div>
         </section>
         <p id="accountEntryStatus" class="accountStatus" role="status"></p>
       </div>
@@ -5727,6 +5871,18 @@
           <button class="btnGhost dashboardReviewBtn" id="dashboardReviewBtn" type="button"
             onclick="openPageWithoutNav('info')" hidden>查看回顧</button>
         </div>
+
+        <section class="homeShortcutCard" aria-labelledby="homeShortcutTitle">
+          <div class="homeShortcutHeader"><div><span class="dashboardKicker">TRAVEL SHORTCUTS</span><h2 id="homeShortcutTitle">旅行捷徑</h2><p>把今天最常用的功能放在手邊。</p></div><span class="postmarkStamp" aria-hidden="true">東京<br>2026</span></div>
+          <div class="homeShortcutGrid">
+            <button type="button" onclick="goHome()"><span>📅</span><strong>今日行程</strong><small>時間軸與導航</small></button>
+            <button type="button" onclick="openPageWithoutNav('tickets')"><span>🎫</span><strong>票券</strong><small>票券與預約</small></button>
+            <button type="button" onclick="openPageWithoutNav('accommodations')"><span>🏨</span><strong>住宿</strong><small>入住資訊</small></button>
+            <button type="button" onclick="openExpenseFromDashboard()"><span>💴</span><strong>快速記帳</strong><small>記一筆支出</small></button>
+            <button type="button" onclick="openPageWithoutNav('shopping')"><span>🛍️</span><strong>購物清單</strong><small>採購進度</small></button>
+            <button type="button" onclick="focusTravelSafety()"><span>🆘</span><strong>SOS</strong><small>緊急協助</small></button>
+          </div>
+        </section>
 
         <div class="dashboardStats" aria-label="今日旅行摘要">
           <article class="dashboardStat dashboardBudgetStat">
@@ -5984,6 +6140,11 @@
         <div class="sectionTitle">票券 <span class="muted">Tickets</span></div>
         <button class="btnPill primary" type="button" onclick="openTicketSheet()">＋ 新增票券</button>
       </div>
+      <nav class="folioTabs" aria-label="票夾分類">
+        <button class="folioTab active" type="button" data-folio-tab="tickets" onclick="openFolioTab('tickets')">🎫 票券</button>
+        <button class="folioTab" type="button" data-folio-tab="flights" onclick="openFolioTab('flights')">✈️ 航班</button>
+        <button class="folioTab" type="button" data-folio-tab="accommodations" onclick="openFolioTab('accommodations')">🏨 住宿</button>
+      </nav>
       <div class="ticketScopeBar">
         <div><span class="dashboardKicker">VIEWING</span><strong id="ticketScopeLabel">全部票券</strong><small
             id="ticketScopeDescription">可用日期、狀態與關鍵字快速篩選</small></div>
@@ -6014,6 +6175,11 @@
             onclick="openTravelRecordEditor('flight')">＋ 新增航班</button><button class="btnPill primary" type="button"
             onclick="openPrivateTravelSheet('flight')">🔒 私密訂位資料</button></div>
       </div>
+      <nav class="folioTabs" aria-label="票夾分類">
+        <button class="folioTab" type="button" data-folio-tab="tickets" onclick="openFolioTab('tickets')">🎫 票券</button>
+        <button class="folioTab active" type="button" data-folio-tab="flights" onclick="openFolioTab('flights')">✈️ 航班</button>
+        <button class="folioTab" type="button" data-folio-tab="accommodations" onclick="openFolioTab('accommodations')">🏨 住宿</button>
+      </nav>
       <div id="flightList"></div>
       <div class="simpleCard travelPrivacyNote"><b>私密資料保護</b>
         <p>訂位代號與電子機票號碼不寫入公開程式碼或一般備份；目前只在此頁記憶體暫存，重新整理或登出後會清除。雲端帳號啟用後，登入資料仍不會寫入 Google 試算表。</p><button class="btnGhost" type="button"
@@ -6028,6 +6194,11 @@
             onclick="openTravelRecordEditor('accommodation')">＋ 新增住宿</button><button class="btnPill primary"
             type="button" onclick="openPrivateTravelSheet('accommodation')">🔒 私密訂單資料</button></div>
       </div>
+      <nav class="folioTabs" aria-label="票夾分類">
+        <button class="folioTab" type="button" data-folio-tab="tickets" onclick="openFolioTab('tickets')">🎫 票券</button>
+        <button class="folioTab" type="button" data-folio-tab="flights" onclick="openFolioTab('flights')">✈️ 航班</button>
+        <button class="folioTab active" type="button" data-folio-tab="accommodations" onclick="openFolioTab('accommodations')">🏨 住宿</button>
+      </nav>
       <div id="accommodationList"></div>
       <div class="simpleCard travelPrivacyNote"><b>入住與費用提醒</b>
         <p>住宿金額保留原幣，台幣僅作參考，不會重複計入實際記帳。付款狀態未提供的項目維持「待確認」。</p>
@@ -6055,6 +6226,7 @@
             <input id="cloudImportFile" type="file" accept="application/json,.json" hidden onchange="previewCloudImport(event)">
           </div>
           <div id="accountSecurity" class="cloudAuthActions" hidden>
+            <span class="accountSecurityLabel">帳號安全</span>
             <button class="btnGhost" type="button" onclick="openChangePasswordPrompt()">修改密碼</button>
             <button class="btnGhost accountDanger" id="accountLogout" type="button" onclick="logoutCloudAccount()">登出</button>
           </div>
@@ -6084,7 +6256,13 @@
               Check-in</small></button>
           <button type="button"
             onclick="openPageWithoutNav('accommodations')"><span>🏨</span>住宿管理<small>飯店、地址與換宿</small></button>
+          <button type="button" onclick="openPageWithoutNav('shopping')"><span>🛍️</span>購物清單<small>採購與確認進度</small></button>
         </div>
+      </div>
+
+      <div class="simpleCard aboutAppCard">
+        <div class="aboutAppMark"><img src="./assets/app-icon-192.png" alt="Japan Tokyo App icon"></div>
+        <div><span class="dashboardKicker">ABOUT THIS APP</span><h2>Japan Tokyo｜旅する手帳</h2><p>東京九天八夜的行程、票夾、旅費與旅伴同步都集中在這裡。</p><small>Firebase 雲端同步 · 可安裝 PWA · 2026 冬季旅程</small></div>
       </div>
 
       <div class="travelSafetyCard" id="travelSafetyCard">
@@ -6180,28 +6358,24 @@
   </div>
 
   <!-- Bottom Nav -->
-  <div class="bottomNav" inert>
-    <div class="bItem active" onclick="switchPage('trip', this)">
+  <div class="bottomNav" inert aria-label="主要導覽">
+    <div class="bItem active" data-tab="trip" onclick="switchPage('trip', this)">
       <div class="bIcon">📅</div>
       行程
     </div>
-    <div class="bItem" onclick="switchPage('map', this)">
+    <div class="bItem" data-tab="map" onclick="switchPage('map', this)">
       <div class="bIcon">🗺️</div>
       地圖
     </div>
-    <div class="bItem" onclick="switchPage('expense', this)">
+    <div class="bItem" data-tab="expense" onclick="switchPage('expense', this)">
       <div class="bIcon">💴</div>
-      記帳
+      旅費
     </div>
-    <div class="bItem" onclick="switchPage('tickets', this)">
+    <div class="bItem" data-tab="tickets" onclick="switchPage('tickets', this)">
       <div class="bIcon">🎫</div>
-      票券
+      票夾
     </div>
-    <div class="bItem" onclick="switchPage('shopping', this)">
-      <div class="bIcon">🛍️</div>
-      購物
-    </div>
-    <div class="bItem" onclick="switchPage('info', this)">
+    <div class="bItem" data-tab="info" onclick="switchPage('info', this)">
       <div class="bIcon">☰</div>
       我的
     </div>
@@ -6616,6 +6790,19 @@
       button.textContent = field.type === "password" ? "顯示密碼" : "隱藏密碼";
     }
 
+    function togglePublicSos(force) {
+      const panel = document.getElementById("accountSosPanel");
+      if (!panel) return;
+      const next = typeof force === "boolean" ? force : panel.hidden;
+      panel.hidden = !next;
+      if (next) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function speakEmergencyPhrase() {
+      const phrase = document.getElementById("accountSosPhrase");
+      if (phrase) phrase.hidden = !phrase.hidden;
+    }
+
     function accountError(error) {
       const messages = {
         "auth/invalid-credential": "Email 或密碼不正確，請確認後再試一次。",
@@ -6873,6 +7060,10 @@
     function clearCloudSession() {
       cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {}, provider: "" };
       cloudSessionWrite();
+      ["cloudLoginPassword", "cloudSetupPassword", "accountCurrentPassword", "accountNewPassword", "accountConfirmPassword"].forEach(id => {
+        const field = document.getElementById(id);
+        if (field) field.value = "";
+      });
       if (typeof privateTravelDrafts !== "undefined") {
         privateTravelDrafts.flight = {};
         privateTravelDrafts.accommodation = {};
@@ -6904,7 +7095,9 @@
       actions.hidden = !loggedIn;
       summary.hidden = !loggedIn;
       if (loggedIn) {
-        summary.innerHTML = `<div><strong>${escapeHtml(cloudAuthState.user.name)} · ${escapeHtml(cloudAuthState.user.email)}</strong><small>角色：${escapeHtml(cloudAuthState.user.role)} · 狀態：${escapeHtml(cloudAuthState.user.status)}</small></div><span class="adminUserBadge">已登入</span>`;
+        const displayName = String(cloudAuthState.user.name || cloudAuthState.user.email || "旅伴").trim();
+        const initial = escapeHtml(displayName.slice(0, 1).toUpperCase());
+        summary.innerHTML = `<div class="cloudUserIdentity"><span class="profileInitial" aria-hidden="true">${initial}</span><div><strong>${escapeHtml(displayName)} · ${escapeHtml(cloudAuthState.user.email)}</strong><small>角色：${escapeHtml(cloudAuthState.user.role)} · 狀態：${escapeHtml(cloudAuthState.user.status)}</small></div></div><span class="adminUserBadge">已登入</span>`;
       }
       if (adminPanel) adminPanel.hidden = firebaseConfigured() || !loggedIn || cloudAuthState.user.role !== "admin";
       if (!configured) setCloudAuthStatus("尚未設定 Firebase Web App config，App 目前仍使用本機 localStorage；請填入 firebase-config.js 後重新整理。\n若使用舊版 API，請改填 api-config.js。");
@@ -8476,9 +8669,36 @@
     });
 
     // ====== Backup / page navigation ======
+    function navTabForPage(tab) {
+      return ({
+        trip: "trip",
+        map: "map",
+        expense: "expense",
+        tickets: "tickets",
+        flights: "tickets",
+        accommodations: "tickets",
+        shopping: "info",
+        info: "info",
+        weather: "trip"
+      })[tab] || "trip";
+    }
+
+    function setActiveBottomNav(tab) {
+      const activeTab = navTabForPage(tab);
+      document.querySelectorAll(".bItem[data-tab]").forEach(item => item.classList.toggle("active", item.dataset.tab === activeTab));
+    }
+
+    function openFolioTab(tab) {
+      if (!["tickets", "flights", "accommodations"].includes(tab)) tab = "tickets";
+      document.querySelectorAll(".folioTab[data-folio-tab]").forEach(button => button.classList.toggle("active", button.dataset.folioTab === tab));
+      openPageWithoutNav(tab);
+    }
+
     function openPageWithoutNav(tab) {
       document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
       document.getElementById(`page-${tab}`)?.classList.add("active");
+      setActiveBottomNav(tab);
+      document.querySelectorAll(".folioTab[data-folio-tab]").forEach(button => button.classList.toggle("active", button.dataset.folioTab === tab));
       if (tab === "shopping") renderShopping();
       if (tab === "tickets") renderTickets();
       if (tab === "flights") renderFlights();
@@ -8593,6 +8813,8 @@
       document.querySelectorAll(".bItem").forEach(b => b.classList.remove("active"));
       document.getElementById(`page-${tab}`).classList.add("active");
       if (el) el.classList.add("active");
+      else setActiveBottomNav(tab);
+      document.querySelectorAll(".folioTab[data-folio-tab]").forEach(button => button.classList.toggle("active", button.dataset.folioTab === tab));
 
       if (tab === "map") renderMapList();
       if (tab === "shopping") renderShopping();
