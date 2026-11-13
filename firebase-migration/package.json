@@ -1,0 +1,13 @@
+{
+  "name": "japan-tokyo-firestore-migration",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview": "node migrate.mjs",
+    "apply": "node migrate.mjs --apply"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.2"
+  }
+}
+
