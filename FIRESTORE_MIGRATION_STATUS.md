@@ -6,6 +6,7 @@
 
 - 已保留 `index(20261113-004507).html`：這是本工作區在加入 Firestore 前的原版快照；使用者指定的同名原始附件未出現在目前可讀取的工作區，因此未假稱已取得外部版本。
 - 新版 `index.html` 已加入 Firebase Web App 設定入口與 Firestore adapter。
+- 已填入 `japan-tokyo-38679` 的 Firebase Web App 公開設定（不含私鑰）。
 - 新版仍保留原有 UI、A／B 行程、地圖、票券、住宿、記帳、分帳與本機備份。
 - Firestore adapter 預設使用六個資料集：
   - `itinerary`
@@ -37,7 +38,7 @@
 ## 需要手動完成
 
 1. 在 Firebase Console 的 `japan-tokyo-38679` 專案啟用 Authentication > Email/Password。
-2. 在 Project settings > Your apps 取得 Web App config，填入 `firebase-config.js`；不要填服務帳號私鑰。
+2. Web App 公開設定已填入 `firebase-config.js`；若日後更換 Web App，才需要更新此檔，不要填服務帳號私鑰。
 3. 建立首位管理員 Firebase Auth 帳號，並由可信任的 Console／Admin SDK 建立：
    `trips/japan-tokyo-2026/members/{uid}`，欄位至少包含 `name`、`email`、`role: "admin"`、`status: "active"`。
 4. 安裝 Node.js 20+，在 `firebase-migration` 執行 `npm install`。
@@ -67,7 +68,7 @@
 | 項目 | 結果 |
 | --- | --- |
 | 已保留原版 App | 已完成 |
-| 新版 Firebase／Firestore 接線 | 已完成，待填 Web App config |
+| 新版 Firebase／Firestore 接線 | 已完成，已填 Web App config；待啟用登入與建立管理員 |
 | 移轉工具預覽 | 已完成程式，尚缺備份檔與 Node 執行環境 |
 | 實際寫入 Firestore | 尚未執行，缺少備份檔與 Google Cloud 授權 |
 | 真實 Firebase 登入 | 尚未執行，缺少 Web App config 與首位管理員 |
