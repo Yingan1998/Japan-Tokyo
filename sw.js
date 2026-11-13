@@ -1,10 +1,10 @@
-const CACHE_NAME = "japan-tokyo-pwa-v4";
+const CACHE_NAME = "japan-tokyo-pwa-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./firebase-config.js",
-  "./firebase-adapter.js",
+  "./firebase-config.js?v=2",
+  "./firebase-adapter.js?v=2",
   "./api-config.js",
   "./assets/app-icon.svg",
   "./assets/app-icon-192.png",
