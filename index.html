@@ -7166,11 +7166,13 @@
             activeTripMeta = { ...activeTripMeta, ...updated };
             const nextDates = tripDateKeys(payload.startDate, payload.endDate);
             const byDate = new Map(data.days.map(day => [day.date, day]));
+            const byDateB = new Map((data.versions?.B?.days || []).map(day => [day.date, day]));
             const makeDay = date => ({ labelZh: `DAY${nextDates.indexOf(date) + 1}`, labelJp: activeTripMeta.destination, date, items: [] });
             const nextDays = nextDates.map(date => byDate.get(date) || makeDay(date));
+            const nextDaysB = nextDates.map(date => byDateB.get(date) || clone(makeDay(date)));
             data.days = nextDays;
             data.versions.A.days = nextDays;
-            data.versions.B.days = clone(nextDays);
+            data.versions.B.days = nextDaysB;
             data = migrateData(data);
             safeSet("emenuTokyo", data);
             renderHeaderDate();
