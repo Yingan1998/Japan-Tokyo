@@ -5733,8 +5733,53 @@
     .aboutAppCard p { margin: 5px 0 0; color: #647c8e; font-size: 12px; line-height: 1.5; }
     .aboutAppCard small { display: block; margin-top: 5px; color: #7d909d; font-size: 10px; }
 
+    /* Multi-trip workspace */
+    .travel-list-mode .app > .topbar,
+    .travel-list-mode .app > .infoCard,
+    .travel-list-mode .bottomNav { display: none !important; }
+    .travel-list-mode .app { padding-top: 22px; }
+    .travelListPage { max-width: 760px; margin: 0 auto; }
+    .travelListHero { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 22px; border: 1px solid rgba(255,255,255,.86); border-radius: 26px; background: linear-gradient(145deg, rgba(255,255,255,.84), rgba(221,238,245,.72)); box-shadow: 0 18px 40px rgba(37,64,87,.14); }
+    .travelListHero h1 { margin: 4px 0 0; color: #19344f; font-size: clamp(26px, 7vw, 38px); }
+    .travelListHero p { margin: 7px 0 0; color: #688095; font-size: 13px; line-height: 1.55; }
+    .travelListHeroActions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .travelListToolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0; padding: 12px 14px; border: 1px solid rgba(255,255,255,.7); border-radius: 18px; background: rgba(255,255,255,.62); }
+    .travelListStatus { min-height: 20px; margin: 8px 4px; color: #658094; font-size: 12px; }
+    .travelListGroups { display: grid; gap: 16px; }
+    .travelGroup { padding: 14px; border: 1px solid rgba(255,255,255,.82); border-radius: 22px; background: rgba(255,255,255,.68); box-shadow: 0 12px 24px rgba(37,64,87,.08); }
+    .travelGroup h2 { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 10px; color: #294861; font-size: 15px; }
+    .travelGroup h2 small { color: #7890a0; font-size: 11px; font-weight: 700; }
+    .travelCards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .travelCard { display: flex; flex-direction: column; min-width: 0; min-height: 154px; padding: 15px; border: 1px solid rgba(255,255,255,.9); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(232,243,247,.74)); box-shadow: 0 8px 18px rgba(37,64,87,.08); text-align: left; }
+    .travelCard.is-active { border-color: rgba(47,143,140,.5); box-shadow: 0 0 0 3px rgba(47,143,140,.1), 0 12px 24px rgba(37,64,87,.1); }
+    .travelCardTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .travelCardStatus { padding: 5px 8px; border-radius: 999px; color: #2d7655; background: rgba(111,207,151,.18); font-size: 10px; font-weight: 900; white-space: nowrap; }
+    .travelCardStatus.ended { color: #72808b; background: rgba(105,126,141,.12); }
+    .travelCard h3 { margin: 10px 0 3px; color: #19344f; font-size: 17px; line-height: 1.35; overflow-wrap: anywhere; }
+    .travelCard p { margin: 0; color: #688095; font-size: 12px; line-height: 1.5; }
+    .travelCardMeta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; color: #547084; font-size: 11px; }
+    .travelCardMeta span { padding: 5px 7px; border-radius: 9px; background: rgba(244,250,251,.82); }
+    .travelCardActions { display: flex; justify-content: flex-end; gap: 7px; margin-top: auto; padding-top: 12px; }
+    .travelCardActions .btnPill, .travelCardActions .btnGhost { min-height: 38px; padding: 7px 10px; font-size: 12px; }
+    .travelListEmpty { padding: 34px 20px; border: 1px dashed rgba(74,112,137,.28); border-radius: 22px; background: rgba(255,255,255,.54); text-align: center; }
+    .travelListEmptyIcon { font-size: 34px; }
+    .travelListEmpty h2 { margin: 8px 0 4px; color: #294861; font-size: 20px; }
+    .travelListEmpty p { margin: 0 auto 15px; max-width: 360px; color: #718696; font-size: 13px; line-height: 1.6; }
+    .tripCreatePanel { max-width: 620px; }
+    .tripCreateHint { margin: 8px 0 0; line-height: 1.55; }
+    .tripCreateForm { margin-top: 14px; }
+    .requiredMark { color: #c9684e; font-size: 10px; font-weight: 800; }
+    .tripCreateStatus { min-height: 18px; color: #718696; font-size: 12px; line-height: 1.5; }
+    .tripSettingsCard { border: 1px dashed rgba(74,112,137,.22); }
+    .tripSettingsCard .tripSettingsGrid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-top: 10px; }
+    .tripSettingsCard .tripSettingValue { padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.62); }
+    .tripSettingValue small { display: block; color: #7890a0; font-size: 10px; }
+    .tripSettingValue strong { display: block; margin-top: 2px; color: #294861; font-size: 13px; overflow-wrap: anywhere; }
+    .tripListBack { margin-bottom: 8px; }
+
     @media (max-width: 720px) {
       .homeShortcutGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .travelCards { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
       .accountGate { width: 100%; max-width: 100%; overflow-x: hidden; padding-inline: 10px; }
@@ -5761,6 +5806,15 @@
       .folioTab { flex-basis: 96px; }
       .aboutAppCard { align-items: flex-start; }
       .aboutAppMark img { width: 46px; height: 46px; }
+      .travelListPage { padding-inline: 0; }
+      .travelListHero { flex-direction: column; padding: 17px; }
+      .travelListHeroActions { width: 100%; justify-content: stretch; }
+      .travelListHeroActions > * { flex: 1 1 0; }
+      .travelListToolbar { position: sticky; top: 8px; z-index: 3; }
+      .travelListToolbar > * { flex: 1 1 0; justify-content: center; }
+      .travelCard { min-height: 142px; }
+      .tripCreatePanel { max-height: calc(100dvh - 26px); overflow-y: auto; }
+      .tripSettingsCard .tripSettingsGrid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -5846,7 +5900,7 @@
           </div>
         </button>
 
-        <div class="locChip">📍 東京｜Tokyo</div>
+        <div class="locChip" id="tripLocationChip">📍 東京｜Tokyo</div>
         <div class="dateChip" id="dateRange"></div>
         <div class="dateChip" id="countdownBox">計算中…</div>
 
@@ -5867,11 +5921,37 @@
     </div>
 
     <!-- Pages -->
+    <section class="page travelListPage" id="page-travel-list" aria-labelledby="travelListTitle">
+      <div class="travelListHero">
+        <div>
+          <span class="dashboardKicker">MY TRIPS</span>
+          <h1 id="travelListTitle">我的旅行</h1>
+          <p id="travelListWelcome">登入後，你的每趟旅程都會分開保存。</p>
+        </div>
+        <div class="travelListHeroActions">
+          <button class="btnGhost" type="button" onclick="openAccountFromTravelList()">我的帳號</button>
+          <button class="btnGhost accountDanger" type="button" onclick="logoutCloudAccount()">登出</button>
+        </div>
+      </div>
+      <div class="travelListToolbar">
+        <button class="btnPill primary" type="button" onclick="openTripCreateSheet()">＋ 新增旅行</button>
+        <button class="btnGhost" id="continueTripBtn" type="button" onclick="continueLastTrip()" hidden>繼續上次旅行</button>
+      </div>
+      <div id="travelListStatus" class="travelListStatus" role="status" aria-live="polite"></div>
+      <div id="travelListGroups" class="travelListGroups"></div>
+      <div id="travelListEmpty" class="travelListEmpty" hidden>
+        <div class="travelListEmptyIcon">🗺️</div>
+        <h2>還沒有旅行</h2>
+        <p>建立第一趟旅行後，就能擁有獨立的日期、行程、票券與旅費。</p>
+        <button class="btnPill primary" type="button" onclick="openTripCreateSheet()">建立第一趟旅行</button>
+      </div>
+    </section>
+
     <section class="page active" id="page-trip">
       <section class="dashboardShell" id="dashboardShell" aria-labelledby="dashboardTitle">
         <div class="dashboardHero">
           <div>
-            <div class="dashboardKicker">TODAY IN TOKYO</div>
+            <div class="dashboardKicker" id="dashboardKickerLabel">TODAY IN TOKYO</div>
             <h1 id="dashboardTitle">今日行程</h1>
             <p id="dashboardDateLabel" class="dashboardDate">查看中的日期</p>
           </div>
@@ -5884,7 +5964,7 @@
         </div>
 
         <section class="homeShortcutCard" aria-labelledby="homeShortcutTitle">
-          <div class="homeShortcutHeader"><div><span class="dashboardKicker">TRAVEL SHORTCUTS</span><h2 id="homeShortcutTitle">旅行捷徑</h2><p>把今天最常用的功能放在手邊。</p></div><span class="postmarkStamp" aria-hidden="true">東京<br>2026</span></div>
+          <div class="homeShortcutHeader"><div><span class="dashboardKicker">TRAVEL SHORTCUTS</span><h2 id="homeShortcutTitle">旅行捷徑</h2><p>把今天最常用的功能放在手邊。</p></div><span class="postmarkStamp" id="tripPostmark" aria-hidden="true">東京<br>2026</span></div>
           <div class="homeShortcutGrid">
             <button type="button" onclick="goHome()"><span>📅</span><strong>今日行程</strong><small>時間軸與導航</small></button>
             <button type="button" onclick="openPageWithoutNav('tickets')"><span>🎫</span><strong>票券</strong><small>票券與預約</small></button>
@@ -6219,6 +6299,7 @@
     <section class="page" id="page-info">
       <div class="sectionTitleRow">
         <div class="sectionTitle">資訊 <span class="muted">Info</span></div>
+        <button class="btnGhost tripListBack" type="button" onclick="loadTravelList()">← 我的旅行</button>
       </div>
       <div class="cloudAuthCard" id="cloudAuthCard">
         <div class="cloudAuthHeader">
@@ -6393,7 +6474,7 @@
   </div>
 
   <script src="./firebase-config.js?v=2"></script>
-  <script src="./firebase-adapter.js?v=3"></script>
+  <script src="./firebase-adapter.js?v=4"></script>
   <script src="./api-config.js"></script>
   <script>
 
@@ -6441,8 +6522,8 @@
     let dailyWeather = {};
 
     // ====== 日期（你給的）======
-    const START_DATE = "2026-11-28";
-    const END_DATE = "2026-12-06";
+    let START_DATE = "2026-11-28";
+    let END_DATE = "2026-12-06";
 
     // 行程資料已由下方 Notion 匯出版本統一管理。
     // ====== Notion 匯出的正式 9 天行程 ======
@@ -6710,6 +6791,12 @@
     // Firestore stores the six shared trip datasets; credentials never enter localStorage.
     const CLOUD_API_BASE_URL = String(window.__TRAVEL_API_BASE_URL__ || "").replace(/\/$/, "");
     const CLOUD_TRIP_ID = "japan-tokyo-2026";
+    let activeTripId = String(window.__ACTIVE_TRIP_ID__ || CLOUD_TRIP_ID);
+    let activeTripMeta = null;
+    let availableTrips = [];
+    let tripLoadSequence = 0;
+    let tripListBusy = false;
+    let editingTripId = "";
     const CLOUD_SYNC_KEYS = {
       emenuTokyo: "itinerary",
       tokyoFlights: "flights",
@@ -6765,7 +6852,12 @@
     const pendingAccountWrites = new Map();
 
     function accountStorageKey(key) {
-      return accountScope ? `tokyo-account:${accountScope}:${key}` : key;
+      const tripSuffix = activeTripId && activeTripId !== CLOUD_TRIP_ID ? `:trip:${activeTripId}` : "";
+      return accountScope ? `tokyo-account:${accountScope}${tripSuffix}:${key}` : (tripSuffix ? `tokyo-trip:${activeTripId}:${key}` : key);
+    }
+
+    function profileStorageKey(key) {
+      return accountScope ? `tokyo-account:${accountScope}:profile:${key}` : `tokyo-profile:${key}`;
     }
 
     function changeAccountScope(uid) {
@@ -6825,6 +6917,332 @@
         "permission-denied": "旅程存取遭拒，請管理員核對成員資格與 Firestore 規則。"
       };
       return messages[error?.code] || error?.message || "操作失敗，請稍後重試。";
+    }
+
+    function tripDateKeys(startDate, endDate) {
+      const start = new Date(String(startDate) + "T00:00:00Z");
+      const end = new Date(String(endDate) + "T00:00:00Z");
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return [];
+      const days = [];
+      for (let cursor = new Date(start), count = 0; cursor <= end && count < 366; cursor.setUTCDate(cursor.getUTCDate() + 1), count += 1) days.push(cursor.toISOString().slice(0, 10));
+      return days;
+    }
+
+    function blankTripData(meta) {
+      const destination = String(meta?.destination || "新旅行").trim();
+      const days = tripDateKeys(meta?.startDate, meta?.endDate).map((date, index) => ({
+        labelZh: `DAY${index + 1}`,
+        labelJp: destination,
+        date,
+        items: []
+      }));
+      return migrateData({ version: "multi-trip-v1", schemaVersion: 3, selectedDay: 1, activeVersion: "A", dayVersions: {}, versions: { A: { days }, B: { days: clone(days) } }, days });
+    }
+
+    function tripTodayKey(timeZone) {
+      try {
+        const parts = new Intl.DateTimeFormat("en-CA", { timeZone: timeZone || "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+        const values = Object.fromEntries(parts.filter(part => part.type !== "literal").map(part => [part.type, part.value]));
+        return `${values.year}-${values.month}-${values.day}`;
+      } catch { return new Date().toISOString().slice(0, 10); }
+    }
+
+    function tripStatus(meta) {
+      if (meta?.status === "archived") return { key: "archived", label: "已封存" };
+      const today = tripTodayKey(meta?.timezone);
+      if (today < String(meta?.startDate || "")) return { key: "upcoming", label: "即將出發" };
+      if (today > String(meta?.endDate || "")) return { key: "ended", label: "已結束" };
+      return { key: "active", label: "旅行中" };
+    }
+
+    function setTravelListMode(enabled) {
+      document.body.classList.toggle("travel-list-mode", Boolean(enabled));
+      document.body.dataset.tripScreen = enabled ? "list" : "trip";
+      document.querySelector(".bottomNav")?.classList.toggle("is-hidden", Boolean(enabled));
+    }
+
+    function resetTripState(meta) {
+      const selectedMeta = meta || { id: CLOUD_TRIP_ID, name: "Japan Tokyo", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard" };
+      activeTripId = String(selectedMeta.id || CLOUD_TRIP_ID);
+      activeTripMeta = { ...selectedMeta, id: activeTripId };
+      window.__ACTIVE_TRIP_ID__ = activeTripId;
+      if (window.travelFirebase?.setTrip) window.travelFirebase.setTrip(activeTripId);
+      START_DATE = activeTripMeta.startDate || "2026-11-28";
+      END_DATE = activeTripMeta.endDate || "2026-12-06";
+      DASHBOARD_TIMEZONE = activeTripMeta.timezone || "Asia/Tokyo";
+      document.body.dataset.tripTheme = activeTripMeta.theme || "postcard";
+      const locationChip = document.getElementById("tripLocationChip");
+      if (locationChip) locationChip.textContent = `📍 ${activeTripMeta.destination || "旅行目的地"}`;
+      const kicker = document.getElementById("dashboardKickerLabel");
+      if (kicker) kicker.textContent = `TODAY IN ${(activeTripMeta.destination || "TRIP").toLocaleUpperCase()}`;
+      const postmark = document.getElementById("tripPostmark");
+      if (postmark) postmark.innerHTML = `${escapeHtml(activeTripMeta.destination || "旅行")}<br>${escapeHtml(String(START_DATE).slice(0, 4))}`;
+      const title = document.getElementById("homeShortcutTitle");
+      if (title) title.textContent = `${activeTripMeta.name || "旅行"} 捷徑`;
+      const stored = safeParse("emenuTokyo", null);
+      const raw = activeTripId === CLOUD_TRIP_ID && stored ? stored : blankTripData(activeTripMeta);
+      data = migrateData(raw);
+      flights = normalizeTravelRecords(safeParse(FLIGHTS_KEY, []), activeTripId === CLOUD_TRIP_ID ? defaultFlights : []);
+      accommodations = normalizeTravelRecords(safeParse(ACCOMMODATIONS_KEY, []), activeTripId === CLOUD_TRIP_ID ? defaultAccommodations : []);
+      reservedExpenses = normalizeTravelRecords(safeParse(RESERVED_EXPENSES_KEY, []), activeTripId === CLOUD_TRIP_ID ? defaultReservedExpenses : []);
+      completedItems = safeParse("tokyoCompletedItems", {});
+      shoppingState = safeParse("tokyoShoppingState", {});
+      members = safeParse("tokyoMembers", activeTripId === CLOUD_TRIP_ID ? ["我", "旅伴 A", "旅伴 B", "旅伴 C"] : ["我"]);
+      tickets = safeParse("tokyoTickets", activeTripId === CLOUD_TRIP_ID ? [] : []);
+      shoppingItems = safeParse("tokyoShoppingItems", activeTripId === CLOUD_TRIP_ID ? [] : []);
+      prepChecklist = safeParse("tokyoPrepChecklist", {});
+      companionNotes = safeParse("tokyoCompanionNotes", []);
+      if (typeof expenses !== "undefined") expenses = (Array.isArray(safeParse("tokyoExpenses", [])) ? safeParse("tokyoExpenses", []) : []).map(normalizeExpense);
+      if (typeof settlementsState !== "undefined") settlementsState = safeParse("tokyoSettlements", {});
+      if (typeof dashboardBudgets !== "undefined") dashboardBudgets = safeParse("tokyoDailyBudgets", {});
+      if (typeof dashboardWeatherCache !== "undefined") dashboardWeatherCache = safeParse("tokyoRegionalWeather", {});
+      if (typeof currentRate !== "undefined") {
+        const savedRate = safeParse("tokyoRate", {});
+        currentRate = Number(savedRate.value || savedRate.rate || 0);
+        currentRateUpdatedAt = savedRate.updatedAt || "";
+      }
+      ticketDateMode = "all";
+      accountSyncReady = false;
+      renderHeaderDate();
+      renderDayTabs();
+      renderTrip();
+      renderExpenses();
+      renderTickets();
+      renderFlights();
+      renderAccommodations();
+      renderShopping();
+      renderTravelPrep();
+      renderCompanionNotes();
+      renderCountdown();
+      loadWeather();
+      loadRate();
+      loadDailyForecast();
+    }
+
+    function applyTripSnapshot(snapshot) {
+      const datasets = snapshot?.datasets || {};
+      const itinerary = localValueForCloudDataset("emenuTokyo", datasets.itinerary || []);
+      data = migrateData(itinerary && Array.isArray(itinerary.days) ? itinerary : blankTripData(activeTripMeta));
+      flights = normalizeTravelRecords(localValueForCloudDataset("tokyoFlights", datasets.flights || []), activeTripId === CLOUD_TRIP_ID ? defaultFlights : []);
+      accommodations = normalizeTravelRecords(localValueForCloudDataset("tokyoAccommodations", datasets.accommodations || []), activeTripId === CLOUD_TRIP_ID ? defaultAccommodations : []);
+      reservedExpenses = normalizeTravelRecords(localValueForCloudDataset("tokyoReservedExpenses", datasets.reservedExpenses || []), activeTripId === CLOUD_TRIP_ID ? defaultReservedExpenses : []);
+      tickets = Array.isArray(localValueForCloudDataset("tokyoTickets", datasets.tickets || [])) ? localValueForCloudDataset("tokyoTickets", datasets.tickets || []) : [];
+      expenses = (Array.isArray(localValueForCloudDataset("tokyoExpenses", datasets.expenses || [])) ? localValueForCloudDataset("tokyoExpenses", datasets.expenses || []) : []).map(normalizeExpense);
+      const cacheKeys = { emenuTokyo: data, tokyoFlights: flights, tokyoAccommodations: accommodations, tokyoReservedExpenses: reservedExpenses, tokyoTickets: tickets, tokyoExpenses: expenses };
+      Object.entries(cacheKeys).forEach(([key, value]) => safeSet(key, value));
+      renderHeaderDate();
+      refreshItineraryViews();
+      renderFlights();
+      renderAccommodations();
+      renderTickets();
+      renderExpenses();
+    }
+
+    function formatTripRange(meta) {
+      return `${fmtYmd(meta.startDate)} – ${fmtYmd(meta.endDate)}`;
+    }
+
+    function renderTravelList() {
+      const groups = document.getElementById("travelListGroups");
+      const empty = document.getElementById("travelListEmpty");
+      const status = document.getElementById("travelListStatus");
+      const continueButton = document.getElementById("continueTripBtn");
+      const welcome = document.getElementById("travelListWelcome");
+      if (!groups || !empty) return;
+      const displayName = cloudAuthState.user?.name || cloudAuthState.user?.email || "旅伴";
+      if (welcome) welcome.textContent = `${displayName}，每趟旅程都會分開保存。`;
+      const storedLast = localStorage.getItem(profileStorageKey("lastTripId")) || "";
+      const lastTrip = availableTrips.find(trip => trip.id === storedLast);
+      if (continueButton) { continueButton.hidden = !lastTrip; continueButton.textContent = lastTrip ? `繼續「${lastTrip.name}」` : "繼續上次旅行"; }
+      const groupsConfig = [
+        ["upcoming", "即將出發", "先準備好行程與票券"],
+        ["active", "旅行中", "今天的路線與提醒"],
+        ["ended", "已結束", "查看旅程紀錄"],
+        ["archived", "已封存", "不在主要列表顯示"]
+      ];
+      groups.innerHTML = groupsConfig.map(([key, label, hint]) => {
+        const list = availableTrips.filter(trip => tripStatus(trip).key === key);
+        if (!list.length) return "";
+        return `<section class="travelGroup" data-status-group="${key}"><h2><span>${label}</span><small>${hint} · ${list.length} 趟</small></h2><div class="travelCards">${list.map(renderTravelCard).join("")}</div></section>`;
+      }).join("");
+      empty.hidden = availableTrips.length > 0;
+      if (status && availableTrips.length) status.textContent = `共 ${availableTrips.length} 趟旅行；切換旅行時，行程與本機快取會一起隔離。`;
+      if (status && !availableTrips.length) status.textContent = "尚未找到可開啟的旅行。";
+    }
+
+    function renderTravelCard(trip) {
+      const state = tripStatus(trip);
+      const isActive = activeTripId === trip.id && activeTripMeta;
+      const role = trip.member?.role === "admin" ? "擁有者" : trip.member?.role === "editor" ? "編輯者" : "檢視者";
+      return `<article class="travelCard${isActive ? " is-active" : ""}"><div class="travelCardTop"><span class="pill">${escapeHtml(trip.destination || "未設定目的地")}</span><span class="travelCardStatus${state.key === "ended" || state.key === "archived" ? " ended" : ""}">${state.label}</span></div><h3>${escapeHtml(trip.name || "未命名旅行")}</h3><p>${escapeHtml(formatTripRange(trip))}</p><div class="travelCardMeta"><span>${escapeHtml(trip.timezone || "時區待設定")}</span><span>${escapeHtml(trip.currency || "JPY")} → ${escapeHtml(trip.settlementCurrency || "TWD")}</span><span>${role}</span></div><div class="travelCardActions"><button class="btnPill primary" type="button" onclick="openTripById('${encodeURIComponent(trip.id)}')">開啟旅行</button>${trip.member?.role === "admin" ? `<button class="btnGhost" type="button" onclick="openTripSettings('${encodeURIComponent(trip.id)}')">設定</button>` : ""}</div></article>`;
+    }
+
+    async function loadTravelList({ quiet = false } = {}) {
+      if (tripListBusy) return;
+      tripListBusy = true;
+      setTravelListMode(true);
+      setAccountScreen("app");
+      switchPage("travel-list");
+      const status = document.getElementById("travelListStatus");
+      if (status && !quiet) status.textContent = "正在整理可開啟的旅行…";
+      try {
+        availableTrips = firebaseConfigured()
+          ? await window.travelFirebase.listTrips()
+          : JSON.parse(localStorage.getItem(profileStorageKey("travelRefs")) || "[]");
+        if (!availableTrips.length && !firebaseConfigured()) {
+          availableTrips = [{ id: CLOUD_TRIP_ID, name: "Japan Tokyo｜旅する手帳", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard", status: "active", member: cloudAuthState.user }];
+        }
+        renderTravelList();
+      } catch (error) {
+        availableTrips = [];
+        renderTravelList();
+        if (status) status.textContent = `旅行列表載入失敗：${accountError(error)}；請重新載入。`;
+      } finally { tripListBusy = false; }
+    }
+
+    function continueLastTrip() {
+      const lastId = localStorage.getItem(accountStorageKey("lastTripId"));
+      const trip = availableTrips.find(item => item.id === lastId) || availableTrips.find(item => tripStatus(item).key === "active") || availableTrips[0];
+      if (trip) openTripById(encodeURIComponent(trip.id));
+    }
+
+    function openAccountFromTravelList() {
+      switchPage("info");
+      document.getElementById("cloudAuthTitle")?.focus();
+    }
+
+    function openTripCreateSheet() {
+      const sheet = document.getElementById("tripCreateSheet");
+      if (!sheet) return;
+      editingTripId = "";
+      document.getElementById("tripCreateForm")?.reset();
+      document.getElementById("tripCreateTitle").textContent = "建立旅行";
+      document.getElementById("tripCreateStatus").textContent = "";
+      const start = document.getElementById("newTripStartDate");
+      const end = document.getElementById("newTripEndDate");
+      const today = new Date();
+      const date = today.toISOString().slice(0, 10);
+      if (start) start.value = date;
+      if (end) end.value = date;
+      sheet.classList.add("open");
+      sheet.setAttribute("aria-hidden", "false");
+      document.getElementById("newTripName")?.focus();
+    }
+
+    function closeTripCreateSheet() {
+      const sheet = document.getElementById("tripCreateSheet");
+      if (!sheet) return;
+      sheet.classList.remove("open");
+      sheet.setAttribute("aria-hidden", "true");
+    }
+
+    async function submitTripCreate(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const submit = form.querySelector('[type="submit"]');
+      const status = document.getElementById("tripCreateStatus");
+      const payload = { name: document.getElementById("newTripName").value.trim(), destination: document.getElementById("newTripDestination").value.trim(), startDate: document.getElementById("newTripStartDate").value, endDate: document.getElementById("newTripEndDate").value, timezone: document.getElementById("newTripTimezone").value, currency: document.getElementById("newTripCurrency").value, settlementCurrency: document.getElementById("newTripSettlementCurrency").value, theme: document.getElementById("newTripTheme").value };
+      if (!payload.name || !payload.destination || payload.endDate < payload.startDate) { if (status) status.textContent = "請確認必填欄位與日期範圍。"; return; }
+      submit.disabled = true;
+      if (status) status.textContent = editingTripId ? "正在更新旅行設定…" : "正在建立旅行與權限…";
+      try {
+        if (editingTripId) {
+          const current = availableTrips.find(item => item.id === editingTripId);
+          const removedDates = tripDateKeys(current?.startDate, current?.endDate).filter(date => !tripDateKeys(payload.startDate, payload.endDate).includes(date));
+          if (removedDates.length && activeTripId === editingTripId) {
+            const affected = data.days.filter(day => removedDates.includes(day.date) && day.items.length).flatMap(day => day.items.map(item => item.title));
+            const ticketAffected = tickets.filter(ticket => removedDates.includes(ticket.date)).map(ticket => ticket.name);
+            const lodgingAffected = accommodations.filter(item => removedDates.some(date => date >= item.checkInDate && date <= item.checkOutDate)).map(item => item.name || item.nameZh);
+            const names = [...affected, ...ticketAffected, ...lodgingAffected].filter(Boolean);
+            if (names.length) {
+              if (status) status.textContent = `縮短日期會影響 ${names.length} 筆資料：${names.slice(0, 5).join("、")}${names.length > 5 ? "…" : ""}。請先移動或刪除後再儲存。`;
+              return;
+            }
+          }
+          const updated = firebaseConfigured() ? await window.travelFirebase.updateTrip(editingTripId, payload) : { ...current, ...payload, id: editingTripId };
+          availableTrips = availableTrips.map(item => item.id === editingTripId ? { ...item, ...updated } : item);
+          if (!firebaseConfigured()) localStorage.setItem(profileStorageKey("travelRefs"), JSON.stringify(availableTrips));
+          if (activeTripId === editingTripId) {
+            activeTripMeta = { ...activeTripMeta, ...updated };
+            const nextDates = tripDateKeys(payload.startDate, payload.endDate);
+            const byDate = new Map(data.days.map(day => [day.date, day]));
+            const makeDay = date => ({ labelZh: `DAY${nextDates.indexOf(date) + 1}`, labelJp: activeTripMeta.destination, date, items: [] });
+            const nextDays = nextDates.map(date => byDate.get(date) || makeDay(date));
+            data.days = nextDays;
+            data.versions.A.days = nextDays;
+            data.versions.B.days = clone(nextDays);
+            data = migrateData(data);
+            safeSet("emenuTokyo", data);
+            renderHeaderDate();
+            refreshItineraryViews();
+          }
+          closeTripCreateSheet();
+          renderTravelList();
+          return;
+        }
+        const created = firebaseConfigured() ? await window.travelFirebase.createTrip(payload) : { id: "local-" + Date.now().toString(36), ...payload, status: "active", member: cloudAuthState.user };
+        if (!firebaseConfigured()) {
+          const refs = JSON.parse(localStorage.getItem(profileStorageKey("travelRefs")) || "[]");
+          refs.push(created);
+          localStorage.setItem(profileStorageKey("travelRefs"), JSON.stringify(refs));
+        }
+        closeTripCreateSheet();
+        await loadTravelList();
+        await openTripById(encodeURIComponent(created.id));
+      } catch (error) { if (status) status.textContent = `建立失敗：${accountError(error)}`; }
+      finally { submit.disabled = false; }
+    }
+
+    async function openTripById(encodedId) {
+      const tripId = decodeURIComponent(String(encodedId || ""));
+      const listed = availableTrips.find(trip => trip.id === tripId);
+      if (!listed) return;
+      const sequence = ++tripLoadSequence;
+      tripListBusy = true;
+      const status = document.getElementById("travelListStatus");
+      if (status) status.textContent = `正在開啟「${listed.name}」…`;
+      try {
+        const selected = firebaseConfigured() ? await window.travelFirebase.tripFor(tripId) : listed;
+        if (sequence !== tripLoadSequence) return;
+        activeTripMeta = selected;
+        resetTripState(selected);
+        if (firebaseConfigured()) {
+          cloudAuthState.user = { ...cloudAuthState.user, role: selected.member?.role || "viewer", status: selected.member?.status || "active", name: selected.member?.name || cloudAuthState.user.name };
+          cloudSessionWrite();
+          await pullCloudTripData({ quiet: true });
+        }
+        if (sequence !== tripLoadSequence) return;
+        localStorage.setItem(profileStorageKey("lastTripId"), tripId);
+        setTravelListMode(false);
+        goHome();
+        renderCloudAuthPanel();
+      } catch (error) {
+        if (status) status.textContent = `開啟旅行失敗：${accountError(error)}`;
+      } finally { tripListBusy = false; }
+    }
+
+    function openTripSettings(encodedId) {
+      const tripId = decodeURIComponent(String(encodedId || ""));
+      const trip = availableTrips.find(item => item.id === tripId);
+      if (!trip) return;
+      editingTripId = tripId;
+      const sheet = document.getElementById("tripCreateSheet");
+      document.getElementById("tripCreateTitle").textContent = "編輯旅行設定";
+      const values = { newTripName: trip.name || "", newTripDestination: trip.destination || "", newTripStartDate: trip.startDate || "", newTripEndDate: trip.endDate || "", newTripTimezone: trip.timezone || "Asia/Tokyo", newTripCurrency: trip.currency || "JPY", newTripSettlementCurrency: trip.settlementCurrency || "TWD", newTripTheme: trip.theme || "postcard" };
+      Object.entries(values).forEach(([id, value]) => { const field = document.getElementById(id); if (field) field.value = value; });
+      document.getElementById("tripCreateStatus").textContent = "延長日期會新增空白日；縮短日期前會先檢查受影響資料。";
+      sheet.classList.add("open");
+      sheet.setAttribute("aria-hidden", "false");
+      document.getElementById("newTripName")?.focus();
+    }
+
+    async function updateTripSettings(tripId, patch) {
+      try {
+        const updated = firebaseConfigured() ? await window.travelFirebase.updateTrip(tripId, patch) : { ...availableTrips.find(item => item.id === tripId), ...patch };
+        availableTrips = availableTrips.map(item => item.id === tripId ? { ...item, ...updated } : item);
+        renderTravelList();
+        if (activeTripId === tripId) { activeTripMeta = updated; resetTripState(updated); }
+      } catch (error) { setCloudAuthStatus(`旅行設定更新失敗：${accountError(error)}`, true); }
     }
 
     async function runAccountForm(form, action) {
@@ -6913,14 +7331,14 @@
       if (firebaseConfigured()) {
         const firebaseDataset = FIREBASE_SYNC_KEYS[key];
         if (!firebaseDataset) return;
-        const result = await window.travelFirebase.writeDataset(firebaseDataset, cloudRecordsForKey(key, value), cloudAuthState.revisions?.[firebaseDataset]?.revision ?? 0);
+        const result = await window.travelFirebase.writeDataset(firebaseDataset, cloudRecordsForKey(key, value), cloudAuthState.revisions?.[firebaseDataset]?.revision ?? 0, activeTripId);
         cloudAuthState.revisions[firebaseDataset] = { revision: result.revision };
         cloudAuthState.recordVersions[firebaseDataset] = Object.fromEntries((result.records || []).map(item => [String(item.id), Number(item._cloudVersion || 0)]));
         cloudAuthState.provider = "firebase";
         cloudSessionWrite();
         return;
       }
-      const result = await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/datasets/${encodeURIComponent(dataset)}`, {
+      const result = await cloudRequest(`/api/trips/${encodeURIComponent(activeTripId)}/datasets/${encodeURIComponent(dataset)}`, {
         method: "PUT",
         body: JSON.stringify({ records: cloudRecordsForKey(key, value), expectedRevision: cloudAuthState.revisions?.[dataset]?.revision ?? 0 })
       });
@@ -6933,10 +7351,11 @@
       if (!CLOUD_SYNC_KEYS[key] || !cloudHasSession() || !accountSyncReady || accountLeaving || cloudHydrating) return;
       if (firebaseConfigured() && (!FIREBASE_SYNC_KEYS[key] || !["admin", "editor"].includes(cloudAuthState.user.role))) return;
       const owner = cloudAuthState.user.id;
+      const tripAtQueue = activeTripId;
       clearTimeout(cloudSyncTimers[key]);
       cloudSyncTimers[key] = setTimeout(() => {
         delete cloudSyncTimers[key];
-        if (cloudAuthState.user?.id !== owner) return;
+        if (cloudAuthState.user?.id !== owner || activeTripId !== tripAtQueue) return;
         const previous = pendingAccountWrites.get(key) || Promise.resolve();
         const task = previous.then(() => syncCloudDataset(key, value)).catch(error => {
           setCloudAuthStatus(accountError(error), true);
@@ -6948,14 +7367,16 @@
 
     async function pullCloudTripData({ quiet = false } = {}) {
       if (!cloudHasSession()) return setCloudAuthStatus("請先登入再載入雲端資料。", true);
+      const sequence = tripLoadSequence;
       if (Object.keys(cloudSyncTimers).length || pendingAccountWrites.size) {
         return setCloudAuthStatus("仍在同步變更，請稍後再重新載入。", true);
       }
       try {
         setCloudAuthStatus(firebaseConfigured() ? "正在載入 Firestore 旅程資料…" : "正在載入雲端旅程資料…");
         const snapshot = firebaseConfigured()
-          ? await window.travelFirebase.readSnapshot()
-          : await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/snapshot`);
+          ? await window.travelFirebase.readSnapshot(activeTripId)
+          : await cloudRequest(`/api/trips/${encodeURIComponent(activeTripId)}/snapshot`);
+        if (sequence !== tripLoadSequence) return;
         const datasets = snapshot.datasets || {};
         const total = Object.values(datasets).reduce((sum, list) => sum + (Array.isArray(list) ? list.length : 0), 0);
         if (!total && !Object.values(snapshot.revisions || {}).some(entry => entry.revision > 0)) {
@@ -7056,12 +7477,12 @@
         if (payload.format !== "japan-tokyo-travel-backup" || !payload.data) throw new Error("不是有效的旅行備份檔");
         const datasets = cloudDatasetsFromBackup(payload);
         const previewResult = firebaseConfigured()
-          ? await window.travelFirebase.previewImport(datasets)
-          : await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import/preview`, { method: "POST", body: JSON.stringify({ datasets }) });
+          ? await window.travelFirebase.previewImport(datasets, activeTripId)
+          : await cloudRequest(`/api/trips/${encodeURIComponent(activeTripId)}/import/preview`, { method: "POST", body: JSON.stringify({ datasets }) });
         const lines = Object.entries(previewResult.preview || {}).map(([dataset, item]) => `${dataset}: 新增 ${item.added}、更新 ${item.updated}、移除 ${item.removed}`).join("\n");
         if (!confirm(`雲端匯入預覽（尚未寫入）：\n\n${lines}\n\n確定要以此備份更新私人試算表嗎？`)) return;
-        if (firebaseConfigured()) await window.travelFirebase.importDatasets(datasets, cloudAuthState.revisions);
-        else await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import`, { method: "POST", body: JSON.stringify({ datasets, revisions: cloudAuthState.revisions, confirmed: true }) });
+        if (firebaseConfigured()) await window.travelFirebase.importDatasets(datasets, cloudAuthState.revisions, activeTripId);
+        else await cloudRequest(`/api/trips/${encodeURIComponent(activeTripId)}/import`, { method: "POST", body: JSON.stringify({ datasets, revisions: cloudAuthState.revisions, confirmed: true }) });
         await pullCloudTripData();
         setCloudAuthStatus("備份已匯入雲端；畫面即將重新整理。", false);
         setTimeout(() => location.reload(), 500);
@@ -7179,13 +7600,10 @@
         setAccountScreen("loading");
         return;
       }
-      goHome();
       renderCloudAuthPanel();
-      setCloudAuthStatus("正在載入旅程…");
-      await pullCloudTripData({ quiet: true });
-      if (!cloudHasSession()) return;
       setAccountScreen("app");
       if (!firebaseConfigured() && result.user.role === "admin") await loadAdminUsers();
+      await loadTravelList();
     }
 
     async function logoutCloudAccount() {
@@ -7226,6 +7644,7 @@
             return;
           }
           setAccountScreen("app");
+          await loadTravelList({ quiet: true });
           return;
         }
         if (showCloudSetupForm()) return;
@@ -8691,6 +9110,7 @@
         shopping: "info",
         info: "info",
         weather: "trip"
+        ,"travel-list": "info"
       })[tab] || "trip";
     }
 
@@ -8708,6 +9128,7 @@
     function openPageWithoutNav(tab) {
       document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
       document.getElementById(`page-${tab}`)?.classList.add("active");
+      if (tab === "travel-list") setTravelListMode(true);
       setActiveBottomNav(tab);
       document.querySelectorAll(".folioTab[data-folio-tab]").forEach(button => button.classList.toggle("active", button.dataset.folioTab === tab));
       if (tab === "shopping") renderShopping();
@@ -8812,6 +9233,8 @@
 
     // ====== Pages ======
     function goHome() {
+      if (!activeTripMeta) return loadTravelList({ quiet: true });
+      setTravelListMode(false);
       const tripNav = document.querySelectorAll(".bItem")[0];
       switchPage("trip", tripNav);
       renderDayTabs();
@@ -8822,7 +9245,10 @@
     function switchPage(tab, el) {
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       document.querySelectorAll(".bItem").forEach(b => b.classList.remove("active"));
-      document.getElementById(`page-${tab}`).classList.add("active");
+      const target = document.getElementById(`page-${tab}`);
+      if (!target) return;
+      target.classList.add("active");
+      if (tab === "travel-list") setTravelListMode(true);
       if (el) el.classList.add("active");
       else setActiveBottomNav(tab);
       document.querySelectorAll(".folioTab[data-folio-tab]").forEach(button => button.classList.toggle("active", button.dataset.folioTab === tab));
@@ -9119,11 +9545,19 @@
     }
 
     async function loadDailyForecast() {
+      if (activeTripId !== CLOUD_TRIP_ID && !activeTripMeta?.latitude) {
+        dailyWeather = {};
+        renderDayTabs();
+        return;
+      }
       try {
+        const latitude = Number(activeTripMeta?.latitude || TOKYO_LAT);
+        const longitude = Number(activeTripMeta?.longitude || TOKYO_LON);
+        const timezone = encodeURIComponent(activeTripMeta?.timezone || "Asia/Tokyo");
         const url = "https://api.open-meteo.com/v1/forecast" +
-          "?latitude=" + TOKYO_LAT + "&longitude=" + TOKYO_LON +
+          "?latitude=" + latitude + "&longitude=" + longitude +
           "&daily=weather_code,temperature_2m_max,precipitation_probability_max" +
-          "&forecast_days=16&timezone=Asia%2FTokyo";
+          "&forecast_days=16&timezone=" + timezone;
         const json = await fetchJsonWithTimeout(url);
         dailyWeather = {};
         (json.daily?.time || []).forEach((date, index) => {
@@ -9142,11 +9576,20 @@
       const descBox = document.getElementById("wxDesc");
       const tempBox = document.getElementById("tempBox");
       const iconBox = document.querySelector(".wxIcon");
+      if (activeTripId !== CLOUD_TRIP_ID && !activeTripMeta?.latitude) {
+        tempBox.textContent = "--°C";
+        descBox.textContent = "請在旅行設定補充目的地座標";
+        iconBox.textContent = "🗺️";
+        return;
+      }
       try {
+        const latitude = Number(activeTripMeta?.latitude || TOKYO_LAT);
+        const longitude = Number(activeTripMeta?.longitude || TOKYO_LON);
+        const timezone = encodeURIComponent(activeTripMeta?.timezone || "Asia/Tokyo");
         const url = "https://api.open-meteo.com/v1/forecast" +
-          "?latitude=" + TOKYO_LAT + "&longitude=" + TOKYO_LON +
+          "?latitude=" + latitude + "&longitude=" + longitude +
           "&current=temperature_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code" +
-          "&timezone=Asia%2FTokyo";
+          "&timezone=" + timezone;
         const json = await fetchJsonWithTimeout(url);
         const current = json.current || {};
         const code = current.weather_code;
@@ -9171,6 +9614,12 @@
 
     async function loadRate() {
       const rateBox = document.getElementById("rateBox");
+      const baseCurrency = String(activeTripMeta?.currency || "JPY").toUpperCase();
+      const settlementCurrency = String(activeTripMeta?.settlementCurrency || "TWD").toUpperCase();
+      if (activeTripId !== CLOUD_TRIP_ID || baseCurrency !== "JPY" || settlementCurrency !== "TWD") {
+        rateBox.innerHTML = `匯率｜<b>${escapeHtml(baseCurrency)} → ${escapeHtml(settlementCurrency)}</b><small class="rateHint">可在旅行設定更新</small>`;
+        return;
+      }
       try {
         const json = await fetchJsonWithTimeout("https://open.er-api.com/v6/latest/JPY");
         const jpyToTwd = Number(json?.rates?.TWD);
@@ -9194,22 +9643,14 @@
 
 
     function renderCountdown() {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const start = new Date(START_DATE + "T00:00:00");
-      const diffMs = start - today;
-      const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
       const box = document.getElementById("countdownBox");
-
-      if (diffDays > 0) {
-        box.innerHTML = `✈️ 距離出發還有 <b>${diffDays}</b> 天`;
-      } else if (diffDays === 0) {
-        box.innerHTML = `🎉 今天出發！祝旅途平安`;
-      } else {
-        box.innerHTML = `🧳 旅程進行中 / 已出發`;
-      }
+      if (!box) return;
+      const today = tripTodayKey(DASHBOARD_TIMEZONE);
+      const diffDays = dashboardDayDifference(today, START_DATE);
+      if (today < START_DATE) box.innerHTML = `✈️ 距離出發還有 <b>${diffDays}</b> 天`;
+      else if (today === START_DATE) box.innerHTML = `🎉 今天出發！祝旅途平安`;
+      else if (today <= END_DATE) box.innerHTML = `🧳 旅行期間 · Day <b>${Math.max(1, dashboardDayDifference(START_DATE, today) + 1)}</b>`;
+      else box.innerHTML = `📮 旅程已結束 · 可查看回顧`;
     }
 
 
@@ -9622,7 +10063,7 @@
 
 
     // ====== Phase 2 Dashboard ======
-    const DASHBOARD_TIMEZONE = "Asia/Tokyo";
+    let DASHBOARD_TIMEZONE = "Asia/Tokyo";
     const DASHBOARD_REGIONS = [
       { id: "tokyo", name: "東京市區", lat: 35.681236, lon: 139.767125 },
       { id: "disney", name: "東京迪士尼", lat: 35.632896, lon: 139.880394 },
@@ -10552,6 +10993,30 @@
 
 
   </script>
+
+  <!-- Trip creation sheet -->
+  <div id="tripCreateSheet" class="modalSheet" aria-hidden="true">
+    <div class="modalBackdrop" onclick="closeTripCreateSheet()"></div>
+    <div class="modalPanel tripCreatePanel" role="dialog" aria-modal="true" aria-labelledby="tripCreateTitle">
+      <div class="rowBetween">
+        <div><span class="dashboardKicker">NEW TRIP</span><h3 id="tripCreateTitle" style="margin:2px 0 0">建立旅行</h3></div>
+        <button class="btnGhost" type="button" onclick="closeTripCreateSheet()">關閉</button>
+      </div>
+      <p class="muted tripCreateHint">新旅行會建立獨立的日期時間軸與資料空間，不會帶入東京行程。</p>
+      <form id="tripCreateForm" class="formGrid tripCreateForm" onsubmit="submitTripCreate(event)">
+        <div class="formField full"><label for="newTripName">旅行名稱 <span class="requiredMark">必填</span></label><input class="formControl" id="newTripName" required maxlength="80" placeholder="例如：2027 京都春日旅行"></div>
+        <div class="formField full"><label for="newTripDestination">主要目的地 <span class="requiredMark">必填</span></label><input class="formControl" id="newTripDestination" required maxlength="80" placeholder="例如：日本京都"></div>
+        <div class="formField"><label for="newTripStartDate">出發日 <span class="requiredMark">必填</span></label><input class="formControl" id="newTripStartDate" type="date" required></div>
+        <div class="formField"><label for="newTripEndDate">回程日 <span class="requiredMark">必填</span></label><input class="formControl" id="newTripEndDate" type="date" required></div>
+        <div class="formField"><label for="newTripTimezone">旅行時區</label><select class="formControl" id="newTripTimezone"><option value="Asia/Tokyo">日本時間 Asia/Tokyo</option><option value="Asia/Taipei">台北時間 Asia/Taipei</option><option value="Asia/Seoul">韓國時間 Asia/Seoul</option><option value="Europe/London">英國時間 Europe/London</option><option value="America/Los_Angeles">美西時間 America/Los_Angeles</option></select></div>
+        <div class="formField"><label for="newTripCurrency">旅行幣別</label><select class="formControl" id="newTripCurrency"><option value="JPY">JPY 日圓</option><option value="TWD">TWD 新台幣</option><option value="KRW">KRW 韓元</option><option value="USD">USD 美元</option><option value="EUR">EUR 歐元</option></select></div>
+        <div class="formField"><label for="newTripSettlementCurrency">換算幣別</label><select class="formControl" id="newTripSettlementCurrency"><option value="TWD">TWD 新台幣</option><option value="JPY">JPY 日圓</option><option value="USD">USD 美元</option><option value="EUR">EUR 歐元</option></select></div>
+        <div class="formField"><label for="newTripTheme">封面風格</label><select class="formControl" id="newTripTheme"><option value="postcard">冬日明信片</option><option value="minimal">簡約旅誌</option><option value="sunset">暖色夕陽</option></select></div>
+        <div id="tripCreateStatus" class="tripCreateStatus full" role="status" aria-live="polite"></div>
+        <div class="modalActions full"><button class="btnGhost" type="button" onclick="closeTripCreateSheet()">取消</button><button class="btnPill primary" type="submit">建立旅行</button></div>
+      </form>
+    </div>
+  </div>
 
   <!-- Itinerary Sheet -->
   <div id="itinerarySheet" class="modalSheet" aria-hidden="true">
