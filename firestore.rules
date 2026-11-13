@@ -41,10 +41,21 @@ service cloud.firestore {
 
     match /trips/{tripId}/datasets/{datasetId} {
       allow read: if allowedDataset(datasetId) && activeMember(tripId);
-      allow create, update: if allowedDataset(datasetId)
+      allow create: if allowedDataset(datasetId)
         && canWriteTrip(tripId)
         && request.resource.data.tripId == tripId
         && request.resource.data.dataset == datasetId
+        && request.resource.data.revision == 1
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'tripId', 'dataset', 'revision', 'updatedAt', 'updatedBy', 'records'
+        ]);
+      allow update: if allowedDataset(datasetId)
+        && canWriteTrip(tripId)
+        && request.resource.data.tripId == tripId
+        && request.resource.data.dataset == datasetId
+        && request.resource.data.revision == resource.data.revision + 1
+        && request.resource.data.updatedBy == request.auth.uid
         && request.resource.data.keys().hasOnly([
           'tripId', 'dataset', 'revision', 'updatedAt', 'updatedBy', 'records'
         ]);
