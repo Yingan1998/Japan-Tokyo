@@ -259,25 +259,25 @@
 
 主要 `localStorage` 資料鍵：
 
-| Key | 內容 |
-| --- | --- |
-| `emenuTokyo` | 行程、九天資料與 A／B 版本 |
-| `tokyoExpenses` | 實際支出 |
-| `tokyoTickets` | 票券與預約 |
-| `tokyoShoppingItems` | 購物清單 |
-| `tokyoShoppingState` | 購物清單 UI 狀態 |
-| `tokyoFlights` | 航班 |
-| `tokyoAccommodations` | 住宿 |
-| `tokyoReservedExpenses` | 預訂費用 |
-| `tokyoMembers` | 旅伴／分帳成員 |
-| `tokyoSettlements` | 分帳結算狀態 |
-| `tokyoCompletedItems` | 行程完成狀態 |
-| `tokyoPrepChecklist` | 行前清單勾選狀態 |
-| `tokyoCompanionNotes` | 旅伴留言 |
-| `tokyoDailyBudgets` | 每日預算 |
-| `tokyoReminderMinutes` | 提醒提前分鐘數 |
-| `tokyoRate` | 匯率與更新時間 |
-| `tokyoRegionalWeather` | 分區天氣快取 |
+| Key                     | 內容                       |
+| ----------------------- | -------------------------- |
+| `emenuTokyo`            | 行程、九天資料與 A／B 版本 |
+| `tokyoExpenses`         | 實際支出                   |
+| `tokyoTickets`          | 票券與預約                 |
+| `tokyoShoppingItems`    | 購物清單                   |
+| `tokyoShoppingState`    | 購物清單 UI 狀態           |
+| `tokyoFlights`          | 航班                       |
+| `tokyoAccommodations`   | 住宿                       |
+| `tokyoReservedExpenses` | 預訂費用                   |
+| `tokyoMembers`          | 旅伴／分帳成員             |
+| `tokyoSettlements`      | 分帳結算狀態               |
+| `tokyoCompletedItems`   | 行程完成狀態               |
+| `tokyoPrepChecklist`    | 行前清單勾選狀態           |
+| `tokyoCompanionNotes`   | 旅伴留言                   |
+| `tokyoDailyBudgets`     | 每日預算                   |
+| `tokyoReminderMinutes`  | 提醒提前分鐘數             |
+| `tokyoRate`             | 匯率與更新時間             |
+| `tokyoRegionalWeather`  | 分區天氣快取               |
 
 訂位代號、PIN 與電子機票號碼使用頁面記憶體暫存，不寫入上述本機資料鍵與 JSON 備份。
 
@@ -316,7 +316,6 @@
 
 ### 需要正式設定後才能使用
 
-- `firebase-config.js` 的 `apiKey`、`messagingSenderId` 與 `appId`。
 - Firebase Authentication 的 Email／密碼登入啟用。
 - 第一位管理員 Auth 帳號與 `members/{uid}` 文件。
 - `firestore.rules` 部署至目標專案。
