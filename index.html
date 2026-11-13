@@ -5923,6 +5923,8 @@
           <div class="cloudAuthActions">
             <button class="btnGhost" type="button" onclick="syncLocalDataToCloud()">上傳目前本機資料</button>
             <button class="btnGhost" type="button" onclick="pullCloudTripData()">重新載入雲端資料</button>
+            <label class="btnGhost" for="cloudImportFile">預覽匯入備份</label>
+            <input id="cloudImportFile" type="file" accept="application/json,.json" hidden onchange="previewCloudImport(event)">
             <button class="btnGhost" type="button" onclick="openChangePasswordPrompt()">修改密碼</button>
             <button class="btnGhost" type="button" onclick="logoutCloudAccount()">登出</button>
           </div>
@@ -6532,6 +6534,43 @@
       } catch (error) {
         setCloudAuthStatus(error.message, true);
       }
+    }
+
+    function cloudDatasetsFromBackup(payload) {
+      const source = payload || {};
+      return {
+        itinerary: cloudRecordsForKey("emenuTokyo", source.data || {}),
+        flights: cloudRecordsForKey("tokyoFlights", source.flights || []),
+        accommodations: cloudRecordsForKey("tokyoAccommodations", source.accommodations || []),
+        tickets: cloudRecordsForKey("tokyoTickets", source.tickets || []),
+        shopping: cloudRecordsForKey("tokyoShoppingItems", source.shoppingItems || []),
+        expenses: cloudRecordsForKey("tokyoExpenses", source.expenses || []),
+        reserved_expenses: cloudRecordsForKey("tokyoReservedExpenses", source.reservedExpenses || []),
+        members: cloudRecordsForKey("tokyoMembers", source.members || []),
+        completed_items: cloudRecordsForKey("tokyoCompletedItems", source.completedItems || {}),
+        prep_checklist: cloudRecordsForKey("tokyoPrepChecklist", source.prepChecklist || {}),
+        companion_notes: cloudRecordsForKey("tokyoCompanionNotes", source.companionNotes || []),
+        settlements: cloudRecordsForKey("tokyoSettlements", source.settlementsState || {}),
+        daily_budgets: cloudRecordsForKey("tokyoDailyBudgets", source.dailyBudgets || {})
+      };
+    }
+
+    async function previewCloudImport(event) {
+      const file = event.target.files[0];
+      event.target.value = "";
+      if (!file || !cloudAuthState.token) return setCloudAuthStatus("請先登入，再選擇 JSON 備份。", true);
+      try {
+        const payload = JSON.parse(await file.text());
+        if (payload.format !== "japan-tokyo-travel-backup" || !payload.data) throw new Error("不是有效的旅行備份檔");
+        const datasets = cloudDatasetsFromBackup(payload);
+        const previewResult = await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import/preview`, { method: "POST", body: JSON.stringify({ datasets }) });
+        const lines = Object.entries(previewResult.preview || {}).map(([dataset, item]) => `${dataset}: 新增 ${item.added}、更新 ${item.updated}、移除 ${item.removed}`).join("\n");
+        if (!confirm(`雲端匯入預覽（尚未寫入）：\n\n${lines}\n\n確定要以此備份更新私人試算表嗎？`)) return;
+        await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import`, { method: "POST", body: JSON.stringify({ datasets, revisions: cloudAuthState.revisions, confirmed: true }) });
+        await pullCloudTripData();
+        setCloudAuthStatus("備份已匯入雲端；畫面即將重新整理。", false);
+        setTimeout(() => location.reload(), 500);
+      } catch (error) { setCloudAuthStatus(`雲端匯入失敗：${error.message}`, true); }
     }
 
     function clearCloudSession() {
