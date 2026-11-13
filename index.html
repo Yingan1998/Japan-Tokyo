@@ -3382,6 +3382,203 @@
       background: rgba(250, 226, 174, .55);
     }
 
+    .cloudAuthCard {
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 22px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .74), rgba(228, 244, 248, .52));
+      box-shadow: 0 14px 28px rgba(49, 83, 110, .09), inset 0 1px 0 rgba(255, 255, 255, .74);
+      backdrop-filter: blur(14px) saturate(115%);
+      -webkit-backdrop-filter: blur(14px) saturate(115%);
+    }
+
+    .cloudAuthHeader {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cloudAuthHeader h2 {
+      margin: 4px 0 0;
+      color: #19344f;
+      font-size: 18px;
+    }
+
+    .cloudAuthHeader p {
+      margin: 6px 0 0;
+      color: #647c8e;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .cloudAuthBody {
+      display: grid;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .cloudAuthForm {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .cloudAuthForm label {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+      color: #668092;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .cloudAuthForm label span {
+      padding-left: 2px;
+    }
+
+    .cloudAuthActions,
+    .adminUserActions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .cloudAuthStatus {
+      min-height: 20px;
+      color: #55768b;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .cloudUserSummary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 11px;
+      border: 1px solid rgba(117, 157, 178, .18);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .58);
+    }
+
+    .cloudUserSummary strong,
+    .cloudUserSummary small {
+      display: block;
+    }
+
+    .cloudUserSummary strong {
+      color: #2b4d67;
+      font-size: 13px;
+    }
+
+    .cloudUserSummary small {
+      margin-top: 2px;
+      color: #718696;
+      font-size: 10px;
+    }
+
+    .adminUserPanel {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(117, 157, 178, .16);
+    }
+
+    .adminUserPanel h3 {
+      margin: 0;
+      color: #2b4d67;
+      font-size: 13px;
+    }
+
+    .adminUserList {
+      display: grid;
+      gap: 7px;
+    }
+
+    .adminUserRow {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid rgba(117, 157, 178, .15);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .54);
+    }
+
+    .adminUserRow strong,
+    .adminUserRow small {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .adminUserRow strong {
+      color: #2b4d67;
+      font-size: 12px;
+    }
+
+    .adminUserRow small {
+      margin-top: 2px;
+      color: #718696;
+      font-size: 10px;
+    }
+
+    .adminUserBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+      padding: 3px 7px;
+      border-radius: 8px;
+      color: #2f6f70;
+      background: rgba(190, 229, 220, .54);
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .adminUserBadge.disabled {
+      color: #8a5a25;
+      background: rgba(250, 226, 174, .55);
+    }
+
+    .adminUserActions .btnGhost {
+      padding: 7px 9px;
+      font-size: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .cloudAuthCard {
+        padding: 14px 12px;
+      }
+
+      .cloudAuthHeader {
+        flex-direction: column;
+      }
+
+      .cloudAuthForm {
+        grid-template-columns: 1fr;
+      }
+
+      .cloudAuthForm button {
+        width: 100%;
+      }
+
+      .cloudUserSummary,
+      .adminUserRow {
+        align-items: flex-start;
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+
+      .adminUserActions {
+        width: 100%;
+      }
+    }
+
     .dashboardTicketList {
       display: grid;
       gap: 8px;
@@ -5705,6 +5902,38 @@
       <div class="sectionTitleRow">
         <div class="sectionTitle">資訊 <span class="muted">Info</span></div>
       </div>
+      <div class="cloudAuthCard" id="cloudAuthCard">
+        <div class="cloudAuthHeader">
+          <div><span class="dashboardKicker">CLOUD TRIP ACCOUNT</span>
+            <h2 id="cloudAuthTitle">旅伴登入與雲端同步</h2>
+            <p id="cloudAuthDescription">登入後可將行程、票券、航班住宿、清單與費用同步到私人 Google 試算表。</p>
+          </div>
+          <span class="offlineStatusBadge" id="cloudAuthModeBadge">本機模式</span>
+        </div>
+        <div id="cloudAuthBody" class="cloudAuthBody">
+          <form id="cloudLoginForm" class="cloudAuthForm" onsubmit="loginCloudAccount(event)">
+            <label><span>Email</span><input class="formControl" id="cloudLoginEmail" type="email" autocomplete="username" required placeholder="旅伴 Email"></label>
+            <label><span>密碼</span><input class="formControl" id="cloudLoginPassword" type="password" autocomplete="current-password" required placeholder="至少 10 碼"></label>
+            <button class="btnPill primary" type="submit">登入</button>
+          </form>
+          <form id="cloudSetupForm" class="cloudAuthForm" hidden onsubmit="setupCloudPassword(event)">
+            <label><span>設定新密碼</span><input class="formControl" id="cloudSetupPassword" type="password" autocomplete="new-password" required minlength="10" placeholder="至少 10 碼"></label>
+            <button class="btnPill primary" type="submit">完成設定並登入</button>
+          </form>
+          <div class="cloudAuthActions">
+            <button class="btnGhost" type="button" onclick="syncLocalDataToCloud()">上傳目前本機資料</button>
+            <button class="btnGhost" type="button" onclick="pullCloudTripData()">重新載入雲端資料</button>
+            <button class="btnGhost" type="button" onclick="openChangePasswordPrompt()">修改密碼</button>
+            <button class="btnGhost" type="button" onclick="logoutCloudAccount()">登出</button>
+          </div>
+          <div id="cloudAuthUserSummary" class="cloudUserSummary" hidden></div>
+          <div id="cloudAuthStatus" class="cloudAuthStatus" aria-live="polite">未設定 API 時，App 仍可使用本機模式。</div>
+          <div id="adminUserPanel" class="adminUserPanel" hidden>
+            <div class="rowBetween"><h3>旅伴帳號管理</h3><button class="btnGhost" type="button" onclick="createCompanionAccount()">＋ 新增旅伴</button></div>
+            <div id="adminUserList" class="adminUserList"></div>
+          </div>
+        </div>
+      </div>
       <div class="simpleCard">
         <div class="rowBetween">
           <div><b>更多功能</b>
@@ -5839,6 +6068,7 @@
     </div>
   </div>
 
+  <script src="./api-config.js"></script>
   <script>
 
     // ====== API 設定 ======
@@ -6149,9 +6379,346 @@
       }
     }
 
+    // ====== Optional cloud account / Google Sheets sync ======
+    // GitHub Pages remains usable in local-only mode when this URL is empty.
+    // The API stores credentials in PostgreSQL and trip data in private Sheets;
+    // this browser only keeps a short-lived bearer token in sessionStorage.
+    const CLOUD_API_BASE_URL = String(window.__TRAVEL_API_BASE_URL__ || "").replace(/\/$/, "");
+    const CLOUD_TRIP_ID = "japan-tokyo-2026";
+    const CLOUD_SYNC_KEYS = {
+      emenuTokyo: "itinerary",
+      tokyoFlights: "flights",
+      tokyoAccommodations: "accommodations",
+      tokyoTickets: "tickets",
+      tokyoShoppingItems: "shopping",
+      tokyoExpenses: "expenses",
+      tokyoReservedExpenses: "reserved_expenses",
+      tokyoMembers: "members",
+      tokyoCompletedItems: "completed_items",
+      tokyoPrepChecklist: "prep_checklist",
+      tokyoCompanionNotes: "companion_notes",
+      tokyoSettlements: "settlements",
+      tokyoDailyBudgets: "daily_budgets"
+    };
+    const cloudSyncTimers = {};
+    let cloudHydrating = false;
+    let cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {} };
+
+    function cloudSessionRead() {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem("japanTokyoCloudSession") || "null") || {};
+        return { token: saved.token || "", user: saved.user || null, revisions: saved.revisions || {}, recordVersions: saved.recordVersions || {} };
+      } catch { return { token: "", user: null, revisions: {}, recordVersions: {} }; }
+    }
+
+    function cloudSessionWrite() {
+      try {
+        if (cloudAuthState.token) sessionStorage.setItem("japanTokyoCloudSession", JSON.stringify(cloudAuthState));
+        else sessionStorage.removeItem("japanTokyoCloudSession");
+      } catch (error) { console.warn("雲端登入狀態無法儲存", error); }
+    }
+
+    cloudAuthState = cloudSessionRead();
+
+    function cloudConfigured() { return Boolean(CLOUD_API_BASE_URL); }
+
+    async function cloudRequest(path, options = {}) {
+      if (!cloudConfigured()) throw new Error("尚未設定 API 網址，現在仍是本機模式。");
+      const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+      if (cloudAuthState.token) headers.Authorization = `Bearer ${cloudAuthState.token}`;
+      const response = await fetch(`${CLOUD_API_BASE_URL}${path}`, { ...options, headers });
+      let body = null;
+      try { body = await response.json(); } catch { body = {}; }
+      if (!response.ok) {
+        const error = new Error(body.message || `API 請求失敗（${response.status}）`);
+        error.status = response.status;
+        error.code = body.error;
+        error.details = body.details;
+        throw error;
+      }
+      return body;
+    }
+
+    function setCloudAuthStatus(message, isError = false) {
+      const status = document.getElementById("cloudAuthStatus");
+      if (!status) return;
+      status.textContent = message;
+      status.style.color = isError ? "#9e3434" : "";
+    }
+
+    function cloudRecordsForKey(key, value) {
+      const dataset = CLOUD_SYNC_KEYS[key];
+      const decorate = (item, fallbackId) => {
+        const id = String(item?.id || fallbackId);
+        const version = item?._cloudVersion || cloudAuthState.recordVersions?.[dataset]?.[id];
+        return version ? { ...item, id, _cloudVersion: version } : { ...item, id };
+      };
+      if (key === "emenuTokyo") return [decorate({ id: "trip-state", data: value }, "trip-state")];
+      if (Array.isArray(value)) return value.map((item, index) => {
+        if (item && typeof item === "object") return decorate(item, `${dataset}-${index + 1}`);
+        return decorate({ value: item }, `${dataset}-${index + 1}`);
+      });
+      if (value && typeof value === "object") return Object.entries(value).map(([entryKey, entryValue]) => decorate({ key: entryKey, value: entryValue }, `kv-${entryKey}`));
+      return [{ id: "value", value }];
+    }
+
+    function localValueForCloudDataset(key, records) {
+      if (key === "emenuTokyo") return records.find(item => item.id === "trip-state")?.data || null;
+      if (["tokyoMembers"].includes(key)) return records.map(item => item.value ?? item.name ?? item.id.replace(`${CLOUD_SYNC_KEYS[key]}-`, ""));
+      if (Array.isArray(safeParse(key, null))) return records;
+      return Object.fromEntries(records.map(item => [item.key || String(item.id).replace("kv-", ""), item.value]));
+    }
+
+    async function syncCloudDataset(key, value) {
+      const dataset = CLOUD_SYNC_KEYS[key];
+      if (!dataset || !cloudAuthState.token || cloudHydrating) return;
+      const result = await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/datasets/${encodeURIComponent(dataset)}`, {
+        method: "PUT",
+        body: JSON.stringify({ records: cloudRecordsForKey(key, value), expectedRevision: cloudAuthState.revisions?.[dataset]?.revision ?? 0 })
+      });
+      cloudAuthState.revisions[dataset] = { revision: result.revision };
+      cloudAuthState.recordVersions[dataset] = Object.fromEntries((result.records || []).map(item => [String(item.id), Number(item._cloudVersion || 0)]));
+      cloudSessionWrite();
+    }
+
+    function queueCloudSync(key, value) {
+      if (!CLOUD_SYNC_KEYS[key] || !cloudAuthState.token || cloudHydrating) return;
+      clearTimeout(cloudSyncTimers[key]);
+      cloudSyncTimers[key] = setTimeout(() => syncCloudDataset(key, value).catch(error => {
+        if (error.code === "REVISION_CONFLICT" || error.code === "RECORD_CONFLICT") setCloudAuthStatus("雲端版本衝突：請先重新載入，再合併後儲存。", true);
+        else setCloudAuthStatus(error.message, true);
+      }), 650);
+    }
+
+    async function pullCloudTripData() {
+      if (!cloudAuthState.token) return setCloudAuthStatus("請先登入再載入雲端資料。", true);
+      try {
+        setCloudAuthStatus("正在載入私人試算表資料…");
+        const snapshot = await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/snapshot`);
+        const datasets = snapshot.datasets || {};
+        const total = Object.values(datasets).reduce((sum, list) => sum + (Array.isArray(list) ? list.length : 0), 0);
+        if (!total) return setCloudAuthStatus("雲端試算表目前沒有資料；確認後可上傳本機資料。", false);
+        cloudHydrating = true;
+        Object.entries(CLOUD_SYNC_KEYS).forEach(([key]) => {
+          if (!Array.isArray(datasets[key])) return;
+          const value = localValueForCloudDataset(key, datasets[key]);
+          if (value !== null && value !== undefined) safeSet(key, value);
+        });
+        cloudAuthState.revisions = snapshot.revisions || {};
+        cloudAuthState.recordVersions = Object.fromEntries(Object.entries(datasets).map(([dataset, records]) => [dataset, Object.fromEntries((records || []).map(item => [String(item.id), Number(item._cloudVersion || 0)]))]));
+        cloudSessionWrite();
+        cloudHydrating = false;
+        setCloudAuthStatus("雲端資料已載入；請重新整理畫面以套用完整行程。", false);
+        showAppToast("雲端資料已載入");
+      } catch (error) {
+        cloudHydrating = false;
+        if (error.status === 401) clearCloudSession();
+        setCloudAuthStatus(error.message, true);
+      }
+    }
+
+    async function syncLocalDataToCloud() {
+      if (!cloudAuthState.token) return setCloudAuthStatus("請先登入再上傳本機資料。", true);
+      if (!confirm("上傳會以目前本機資料更新雲端；若雲端已有其他旅伴修改，系統會停止並提示衝突。確定繼續嗎？")) return;
+      try {
+        setCloudAuthStatus("正在上傳本機資料…");
+        for (const [key, dataset] of Object.entries(CLOUD_SYNC_KEYS)) {
+          const value = key === "emenuTokyo" ? data : safeParse(key, null);
+          if (value === null || value === undefined) continue;
+          await syncCloudDataset(key, value);
+        }
+        setCloudAuthStatus("本機資料已同步到私人 Google 試算表。", false);
+        showAppToast("雲端同步完成");
+      } catch (error) {
+        setCloudAuthStatus(error.message, true);
+      }
+    }
+
+    function clearCloudSession() {
+      cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {} };
+      cloudSessionWrite();
+      if (typeof privateTravelDrafts !== "undefined") {
+        privateTravelDrafts.flight = {};
+        privateTravelDrafts.accommodation = {};
+      }
+      renderCloudAuthPanel();
+    }
+
+    function renderCloudAuthPanel() {
+      const form = document.getElementById("cloudLoginForm");
+      const setupForm = document.getElementById("cloudSetupForm");
+      const actions = document.querySelector("#cloudAuthBody .cloudAuthActions");
+      const summary = document.getElementById("cloudAuthUserSummary");
+      const badge = document.getElementById("cloudAuthModeBadge");
+      const adminPanel = document.getElementById("adminUserPanel");
+      if (!form || !actions || !summary || !badge) return;
+      const configured = cloudConfigured();
+      const loggedIn = Boolean(cloudAuthState.token && cloudAuthState.user);
+      badge.textContent = !configured ? "本機模式" : loggedIn ? "已登入" : "API 已連線";
+      badge.classList.toggle("offline", !configured);
+      form.hidden = !configured || loggedIn;
+      if (setupForm && !window.__cloudSetupToken) setupForm.hidden = true;
+      actions.hidden = !loggedIn;
+      summary.hidden = !loggedIn;
+      if (loggedIn) {
+        summary.innerHTML = `<div><strong>${escapeHtml(cloudAuthState.user.name)} · ${escapeHtml(cloudAuthState.user.email)}</strong><small>角色：${escapeHtml(cloudAuthState.user.role)} · 狀態：${escapeHtml(cloudAuthState.user.status)}</small></div><span class="adminUserBadge">✓ session</span>`;
+      }
+      if (adminPanel) adminPanel.hidden = !loggedIn || cloudAuthState.user.role !== "admin";
+      if (!configured) setCloudAuthStatus("尚未設定 API 網址，App 目前仍使用本機 localStorage；請先部署 server 並填入 api-config.js。");
+    }
+
+    function cloudSetupContext() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("setup_token")) return { token: params.get("setup_token"), purpose: "first_setup" };
+      if (params.get("reset_token")) return { token: params.get("reset_token"), purpose: "password_reset" };
+      return null;
+    }
+
+    function showCloudSetupForm() {
+      const setup = cloudSetupContext();
+      const setupForm = document.getElementById("cloudSetupForm");
+      const loginForm = document.getElementById("cloudLoginForm");
+      if (!setupForm || !setup) return false;
+      window.__cloudSetupToken = setup;
+      setupForm.hidden = false;
+      if (loginForm) loginForm.hidden = true;
+      setCloudAuthStatus(setup.purpose === "password_reset" ? "請設定新的旅伴密碼。此連結只能使用一次。" : "首次設定旅伴密碼。此連結只能使用一次。", false);
+      return true;
+    }
+
+    async function setupCloudPassword(event) {
+      event?.preventDefault();
+      const setup = window.__cloudSetupToken || cloudSetupContext();
+      const password = document.getElementById("cloudSetupPassword")?.value || "";
+      if (!setup?.token) return setCloudAuthStatus("設定連結無效或已過期。", true);
+      try {
+        setCloudAuthStatus("正在設定密碼…");
+        const result = await cloudRequest("/api/auth/setup-password", { method: "POST", body: JSON.stringify({ token: setup.token, purpose: setup.purpose, password }) });
+        cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {} };
+        cloudSessionWrite();
+        window.__cloudSetupToken = null;
+        window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+        renderCloudAuthPanel();
+        setCloudAuthStatus("密碼設定完成，已自動登入。", false);
+        await pullCloudTripData();
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
+    async function loginCloudAccount(event) {
+      event?.preventDefault();
+      try {
+        const email = document.getElementById("cloudLoginEmail")?.value.trim();
+        const password = document.getElementById("cloudLoginPassword")?.value;
+        setCloudAuthStatus("正在登入…");
+        const result = await cloudRequest("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+        cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {} };
+        cloudSessionWrite();
+        renderCloudAuthPanel();
+        setCloudAuthStatus(`已登入 ${result.user.name}；正在檢查雲端資料…`);
+        await pullCloudTripData();
+        if (cloudAuthState.user.role === "admin") await loadAdminUsers();
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
+    async function logoutCloudAccount() {
+      try { if (cloudAuthState.token) await cloudRequest("/api/auth/logout", { method: "POST" }); } catch {}
+      clearCloudSession();
+      setCloudAuthStatus("已登出；本機資料仍保留在此裝置。", false);
+    }
+
+    async function restoreCloudSession() {
+      if (!cloudConfigured()) return renderCloudAuthPanel();
+      if (showCloudSetupForm()) return renderCloudAuthPanel();
+      if (!cloudAuthState.token) return renderCloudAuthPanel();
+      try {
+        const result = await cloudRequest("/api/auth/me");
+        cloudAuthState.user = result.user;
+        cloudSessionWrite();
+        renderCloudAuthPanel();
+        await pullCloudTripData();
+        if (cloudAuthState.user.role === "admin") await loadAdminUsers();
+      } catch { clearCloudSession(); }
+    }
+
+    async function openChangePasswordPrompt() {
+      if (!cloudAuthState.token) return setCloudAuthStatus("請先登入。", true);
+      const currentPassword = prompt("請輸入目前密碼");
+      if (currentPassword === null) return;
+      const newPassword = prompt("請輸入新密碼（至少 10 碼）");
+      if (newPassword === null) return;
+      try {
+        const result = await cloudRequest("/api/auth/change-password", { method: "POST", body: JSON.stringify({ currentPassword, newPassword }) });
+        cloudAuthState.token = result.token;
+        cloudAuthState.user = result.user;
+        cloudSessionWrite();
+        renderCloudAuthPanel();
+        setCloudAuthStatus("密碼已修改，舊的登入狀態已撤銷。", false);
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
+    async function loadAdminUsers() {
+      if (cloudAuthState.user?.role !== "admin") return;
+      try {
+        const result = await cloudRequest("/api/admin/users");
+        renderAdminUsers(result.users || []);
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
+    function renderAdminUsers(users) {
+      const list = document.getElementById("adminUserList");
+      if (!list) return;
+      if (!users.length) return list.innerHTML = '<div class="companionNoteEmpty"><span class="muted">尚無旅伴帳號。</span></div>';
+      list.innerHTML = users.map(user => `<article class="adminUserRow"><div><strong>${escapeHtml(user.name)} · ${escapeHtml(user.email)}</strong><small>${escapeHtml(user.id)}</small><span class="adminUserBadge${user.status === "disabled" ? " disabled" : ""}">${escapeHtml(user.role)} · ${escapeHtml(user.status)}</span></div><div class="adminUserActions"><button class="btnGhost" type="button" onclick="editCompanionAccount('${escapeHtml(user.id)}','${escapeHtml(user.name)}','${escapeHtml(user.email)}','${escapeHtml(user.role)}','${escapeHtml(user.status)}')">編輯</button><button class="btnGhost" type="button" onclick="resetCompanionPassword('${escapeHtml(user.id)}')">重設密碼</button><button class="btnGhost" type="button" onclick="deleteCompanionAccount('${escapeHtml(user.id)}')">永久刪除</button></div></article>`).join("");
+    }
+
+    async function createCompanionAccount() {
+      const name = prompt("旅伴姓名");
+      if (name === null) return;
+      const email = prompt("旅伴 Email");
+      if (email === null) return;
+      const role = prompt("角色：viewer（檢視者）／editor（編輯者）", "viewer");
+      try {
+        const result = await cloudRequest("/api/admin/users", { method: "POST", body: JSON.stringify({ name, email, role: role === "editor" ? "editor" : "viewer" }) });
+        alert(`帳號已建立。請私下交付一次性設定連結（24 小時有效）：\n\n${result.setupUrl}`);
+        await loadAdminUsers();
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
+    async function editCompanionAccount(id, currentName, currentEmail, currentRole, currentStatus) {
+      const name = prompt("姓名", currentName);
+      if (name === null) return;
+      const email = prompt("Email", currentEmail);
+      if (email === null) return;
+      const role = prompt("角色：admin／editor／viewer", currentRole);
+      if (role === null) return;
+      const status = prompt("狀態：active／disabled", currentStatus);
+      if (status === null) return;
+      try {
+        await cloudRequest(`/api/admin/users/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify({ name, email, role, status }) });
+        await loadAdminUsers();
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
+    async function resetCompanionPassword(id) {
+      if (!confirm("產生新的一次性密碼設定連結，並撤銷此帳號既有登入狀態？")) return;
+      try {
+        const result = await cloudRequest(`/api/admin/users/${encodeURIComponent(id)}/reset-password`, { method: "POST" });
+        alert(`請私下交付一次性重設連結（24 小時有效）：\n\n${result.resetUrl}`);
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
+    async function deleteCompanionAccount(id) {
+      if (!confirm("永久刪除帳號？歷史行程與分帳資料會保留，但帳號本身無法復原。")) return;
+      try {
+        await cloudRequest(`/api/admin/users/${encodeURIComponent(id)}`, { method: "DELETE" });
+        await loadAdminUsers();
+      } catch (error) { setCloudAuthStatus(error.message, true); }
+    }
+
     function safeSet(key, value) {
       try {
         localStorage.setItem(key, JSON.stringify(value));
+        queueCloudSync(key, value);
         return true;
       } catch (error) {
         console.error(`資料儲存失敗：${key}`, error);
@@ -9301,6 +9868,8 @@
     renderAccommodations();
     renderTravelPrep();
     renderCompanionNotes();
+    renderCloudAuthPanel();
+    restoreCloudSession();
     updateOfflineStatus();
     updateInstallPromptUI();
     registerAppServiceWorker();
@@ -9393,7 +9962,7 @@
         <h3 id="privateTravelSheetTitle" style="margin:0">🔒 私密訂位資料</h3><button class="btnGhost" type="button"
           onclick="closePrivateTravelSheet()">關閉</button>
       </div>
-      <p class="muted" style="line-height:1.55">此專案目前沒有帳號認證。資料只保留在本次頁面工作階段的記憶體，重新整理會清除，也不會寫入一般 localStorage 或 JSON 備份。
+      <p class="muted" style="line-height:1.55">訂位代號、PIN 與機票號碼只保留在本次頁面工作階段的記憶體，重新整理或登出會清除，不會寫入 Google 試算表、一般 localStorage 或 JSON 備份。
       </p>
       <div class="formGrid" style="margin-top:14px">
         <div class="formField full"><label for="privateTravelBooking">訂位代號／訂單確認碼</label><input class="formControl"
