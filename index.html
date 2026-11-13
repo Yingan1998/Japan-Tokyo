@@ -6434,7 +6434,10 @@
     function firebaseConfigured() { return Boolean(window.travelFirebase?.configured?.()); }
     function cloudProvider() { return firebaseConfigured() ? "firebase" : (CLOUD_API_BASE_URL ? "api" : ""); }
     function cloudConfigured() { return Boolean(cloudProvider()); }
-    function cloudHasSession() { return Boolean(cloudAuthState.user && (cloudAuthState.token || cloudAuthState.provider === "firebase")); }
+    function cloudHasSession() {
+      if (firebaseConfigured()) return Boolean(cloudAuthState.user && cloudAuthState.provider === "firebase");
+      return Boolean(cloudAuthState.user && cloudAuthState.token && cloudAuthState.provider === "api");
+    }
 
     async function cloudRequest(path, options = {}) {
       if (!cloudConfigured()) throw new Error("尚未設定 API 網址，現在仍是本機模式。");
@@ -6715,7 +6718,10 @@
       if (firebaseConfigured()) {
         try {
           const result = await window.travelFirebase.currentSession();
-          if (!result) return renderCloudAuthPanel();
+          if (!result) {
+            clearCloudSession();
+            return;
+          }
           cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {}, provider: "firebase" };
           cloudSessionWrite();
           renderCloudAuthPanel();
