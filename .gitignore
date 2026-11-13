@@ -1,0 +1,8 @@
+server/.env
+server/node_modules/
+server/.npm/
+*.log
+.edge-*
+edge-*.html
+edge-*.txt
+
