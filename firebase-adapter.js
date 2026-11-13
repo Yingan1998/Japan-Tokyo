@@ -33,7 +33,7 @@
       script.async = true;
       script.dataset.firebaseSrc = src;
       script.onload = resolve;
-      script.onerror = function () { reject(new Error("Firebase SDK 載入失敗：" + src)); };
+      script.onerror = function () { reject(new Error("Firebase SDK 頛憭望?嚗? + src)); };
       document.head.appendChild(script);
     });
   }
@@ -51,7 +51,7 @@
 
   function normalizeTripId(value) {
     const tripId = String(value || "").trim();
-    if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{2,96}$/.test(tripId)) throw new Error("旅行 ID 格式不正確。");
+    if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{2,96}$/.test(tripId)) throw new Error("?? ID ?澆?銝迤蝣箝?);
     return tripId;
   }
 
@@ -64,16 +64,16 @@
   }
 
   async function memberFor(user, tripId = activeTripId) {
-    if (!user) throw new Error("請先登入。");
+    if (!user) throw new Error("隢??餃??);
     const snapshot = await memberRef(tripId, user.uid).get({ source: "server" });
     if (!snapshot.exists) {
-      const error = new Error("此帳號尚未加入這趟旅行。");
+      const error = new Error("甇文董???芸??仿?????);
       error.code = "TRIP_MEMBER_REQUIRED";
       throw error;
     }
     const member = snapshot.data() || {};
     if (member.status !== "active") {
-      const error = new Error("此旅伴帳號已停用。");
+      const error = new Error("甇斗?隡游董?歇???);
       error.code = "ACCOUNT_DISABLED";
       throw error;
     }
@@ -82,7 +82,7 @@
 
   async function ensureInitialized() {
     if (!configured()) {
-      const error = new Error("尚未填入 Firebase Web App config。");
+      const error = new Error("撠憛怠 Firebase Web App config??);
       error.code = "FIREBASE_CONFIG_MISSING";
       throw error;
     }
@@ -91,7 +91,7 @@
         await loadScript(CDN_BASE + "firebase-app-compat.js");
         await loadScript(CDN_BASE + "firebase-auth-compat.js");
         await loadScript(CDN_BASE + "firebase-firestore-compat.js");
-        if (!window.firebase) throw new Error("Firebase SDK 尚未可用。");
+        if (!window.firebase) throw new Error("Firebase SDK 撠?舐??);
         if (!window.firebase.apps.length) window.firebase.initializeApp(config);
         return { app: window.firebase.app(), auth: window.firebase.auth(), db: window.firebase.firestore() };
       }());
@@ -100,7 +100,7 @@
   }
 
   function firestore() {
-    if (!window.firebase || !window.firebase.firestore) throw new Error("Firestore 尚未初始化。");
+    if (!window.firebase || !window.firebase.firestore) throw new Error("Firestore 撠????);
     return window.firebase.firestore();
   }
 
@@ -146,7 +146,7 @@
   async function changePassword(currentPassword, newPassword) {
     const sdk = await ensureInitialized();
     const user = sdk.auth.currentUser;
-    if (!user || !user.email) throw new Error("請先登入。");
+    if (!user || !user.email) throw new Error("隢??餃??);
     const credential = window.firebase.auth.EmailAuthProvider.credential(user.email, String(currentPassword || ""));
     await user.reauthenticateWithCredential(credential);
     await user.updatePassword(String(newPassword || ""));
@@ -154,7 +154,7 @@
   }
 
   function datasetRef(dataset, tripId = activeTripId) {
-    if (!DATASETS.includes(dataset)) throw new Error("不支援的 Firestore 資料集：" + dataset);
+    if (!DATASETS.includes(dataset)) throw new Error("銝?渡? Firestore 鞈???" + dataset);
     return firestore().doc(tripPath(tripId) + "/datasets/" + dataset);
   }
 
@@ -184,7 +184,7 @@
       const data = snapshot.exists ? snapshot.data() || {} : {};
       const records = Array.isArray(data.records) ? data.records.filter(item => !item._deleted) : [];
       if (snapshot.exists && !Array.isArray(data.records)) {
-        throw new Error("雲端資料格式與 App 不相容：" + dataset);
+        throw new Error("?脩垢鞈??澆???App 銝摰對?" + dataset);
       }
       revisions[dataset] = { revision: Number(data.revision || 0), updatedAt: data.updatedAt || null };
       return [dataset, records.map(item => ({ ...item, _cloudVersion: Number(item._cloudVersion || 1), _cloudUpdatedAt: data.updatedAt || "", _cloudUpdatedBy: data.updatedBy || "" }))];
@@ -198,7 +198,7 @@
     const selectedTripId = normalizeTripId(tripId);
     const member = await memberFor(user, selectedTripId);
     if (!["admin", "editor"].includes(member.role)) {
-      const error = new Error("檢視者不能修改旅程資料。");
+      const error = new Error("瑼Ｚ????賭耨?寞?蝔???);
       error.code = "FORBIDDEN";
       throw error;
     }
@@ -209,7 +209,7 @@
       const currentData = snapshot.exists ? snapshot.data() || {} : {};
       const revision = Number(currentData.revision || 0);
       if (expectedRevision !== undefined && expectedRevision !== null && Number(expectedRevision) !== revision) {
-        const error = new Error("Firestore 資料集版本衝突，請先重新載入。");
+        const error = new Error("Firestore 鞈????祈?蝒?隢??頛??);
         error.code = "REVISION_CONFLICT";
         error.details = { dataset, expectedRevision: Number(expectedRevision), currentRevision: revision };
         throw error;
@@ -220,7 +220,7 @@
         const old = currentById.get(item.id);
         const expectedVersion = Number(item._cloudVersion || 0);
         if (old && expectedVersion !== Number(old._cloudVersion || 0)) {
-          const error = new Error("Firestore 單筆資料版本衝突，請先重新載入。");
+          const error = new Error("Firestore ?桃?鞈??銵?嚗????啗??乓?);
           error.code = "RECORD_CONFLICT";
           error.details = { dataset, id: item.id, expectedVersion, currentVersion: Number(old._cloudVersion || 0) };
           throw error;
@@ -278,8 +278,8 @@
     const user = window.firebase.auth().currentUser;
     const member = await memberFor(user, selectedTripId);
     const fallback = selectedTripId === DEFAULT_TRIP_ID ? {
-      name: "Japan Tokyo｜旅する手帳",
-      destination: "東京",
+      name: "Japan Tokyo嚚????董",
+      destination: "?曹漪",
       startDate: "2026-11-28",
       endDate: "2026-12-06",
       timezone: "Asia/Tokyo",
@@ -294,9 +294,9 @@
       snapshot = await firestore().doc(tripPath(selectedTripId)).get({ source: "server" });
     } catch (error) {
       if (selectedTripId !== DEFAULT_TRIP_ID) throw error;
-      console.warn("舊 Firestore 規則尚未開放旅行設定讀取，使用東京相容設定：", error);
+      console.warn("??Firestore 閬?撠???閮剖?霈??雿輻?曹漪?詨捆閮剖?嚗?, error);
     }
-    if (snapshot && !snapshot.exists && selectedTripId !== DEFAULT_TRIP_ID) throw new Error("找不到這趟旅行設定。");
+    if (snapshot && !snapshot.exists && selectedTripId !== DEFAULT_TRIP_ID) throw new Error("?曆??圈???閮剖???);
     const stored = snapshot?.data() || {};
     const hasTripSettings = Boolean(stored.startDate && stored.endDate && stored.destination);
     return { id: selectedTripId, ...fallback, ...(selectedTripId === DEFAULT_TRIP_ID && !hasTripSettings ? {} : stored), member };
@@ -310,17 +310,15 @@
     try {
       refsSnapshot = await firestore().collection("users").doc(user.uid).collection("tripRefs").get({ source: "server" });
     } catch (error) {
-      // 舊規則尚未部署時，先走既有東京 members 文件相容路徑。
-      console.warn("旅行索引尚未可讀，改用既有成員文件：", error);
+      // ?????芷蝵脫?嚗?韏唳?鈭?members ?辣?詨捆頝臬???      console.warn("??蝝Ｗ?撠?航?嚗?冽???⊥?隞塚?", error);
     }
     const ids = new Set((refsSnapshot?.docs || []).map(doc => doc.id));
-    // 舊東京旅程沒有索引時，仍透過既有 members 文件相容讀取。
-    if (!ids.has(DEFAULT_TRIP_ID)) {
+    // ?鈭祆?蝔??揣撘?嚗????Ｘ? members ?辣?詨捆霈??    if (!ids.has(DEFAULT_TRIP_ID)) {
       try { await memberFor(user, DEFAULT_TRIP_ID); ids.add(DEFAULT_TRIP_ID); } catch (error) { if (!['TRIP_MEMBER_REQUIRED', 'ACCOUNT_DISABLED'].includes(error.code)) throw error; }
     }
     const trips = [];
     for (const tripId of ids) {
-      try { trips.push(await tripFor(tripId)); } catch (error) { console.warn("旅行列表略過無法讀取的旅行：" + tripId, error); }
+      try { trips.push(await tripFor(tripId)); } catch (error) { console.warn("???”?仿??⊥?霈????嚗? + tripId, error); }
     }
     return trips;
   }
@@ -328,12 +326,12 @@
   async function createTrip(settings) {
     await ensureInitialized();
     const user = window.firebase.auth().currentUser;
-    if (!user) throw new Error("請先登入。");
+    if (!user) throw new Error("隢??餃??);
     const payload = settings || {};
     const tripId = normalizeTripId(payload.id || ("trip-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8)));
     const trip = {
       id: tripId,
-      name: String(payload.name || "未命名旅行").trim(),
+      name: String(payload.name || "?芸??銵?).trim(),
       destination: String(payload.destination || "").trim(),
       startDate: String(payload.startDate || ""),
       endDate: String(payload.endDate || ""),
@@ -341,14 +339,14 @@
       currency: String(payload.currency || "JPY").toUpperCase(),
       settlementCurrency: String(payload.settlementCurrency || "TWD").toUpperCase(),
       cover: String(payload.cover || ""),
-      theme: String(payload.theme || "postcard"),
+      theme: String(payload.theme || "journal"),
       status: "active",
       ownerId: user.uid,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
     if (!trip.name || !trip.destination || !/^\d{4}-\d{2}-\d{2}$/.test(trip.startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(trip.endDate) || trip.endDate < trip.startDate) {
-      throw new Error("請填寫正確的旅行名稱、目的地與日期。");
+      throw new Error("隢‵撖急迤蝣箇????迂?????);
     }
     const batch = firestore().batch();
     batch.set(firestore().doc(tripPath(tripId)), trip);
@@ -363,7 +361,7 @@
     const selectedTripId = normalizeTripId(tripId);
     const user = window.firebase.auth().currentUser;
     const member = await memberFor(user, selectedTripId);
-    if (member.role !== "admin") { const error = new Error("只有旅行擁有者／管理員可以修改旅行設定。"); error.code = "FORBIDDEN"; throw error; }
+    if (member.role !== "admin") { const error = new Error("?芣???????蝞∠??∪隞乩耨?寞?銵身摰?); error.code = "FORBIDDEN"; throw error; }
     const current = await tripFor(selectedTripId);
     const next = { ...current, ...patch, id: selectedTripId, ownerId: current.ownerId || user.uid, updatedAt: new Date().toISOString() };
     delete next.member;
