@@ -1,0 +1,5 @@
+node_modules/
+/tokyo_trip_html_backup.json
+/*.backup.json
+.env
+
