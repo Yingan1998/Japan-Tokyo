@@ -14,13 +14,13 @@
 - Service Worker 會快取主要畫面、圖示、背景與已載入資源；離線時仍可查看已快取的行程資料。
 - 未設定後端 API 時，App 仍可用本機模式，資料儲存在瀏覽器 `localStorage`。
 
-### 1.2 可選的雲端模式
+### 1.2 雲端模式（Firebase 優先）
 
-- `server/` 提供 Node.js 20 + Express API。
-- PostgreSQL 儲存登入帳號、密碼雜湊、Session、一次性設定 Token、權限與稽核紀錄。
-- Google Sheets 儲存私人旅程資料；Service Account 只由後端存取，瀏覽器不會接觸試算表憑證。
-- 不使用 Firebase。
-- 前端透過 `api-config.js` 的 `window.__TRAVEL_API_BASE_URL__` 連接後端。
+- `firebase-config.js` + `firebase-adapter.js` 提供 Firebase Authentication（Email／密碼）與 Cloud Firestore 連線。
+- Firestore 以 `trips/japan-tokyo-2026/datasets/{dataset}` 儲存六個核心資料集；瀏覽器不接觸服務帳號私鑰。
+- `firestore.rules` 限制未登入、非旅程成員與檢視者的寫入；成員角色只能由管理端建立或調整。
+- `server/` 保留為舊版 Node.js／PostgreSQL／Google Sheets 回退方案，方便逐步移轉與回滾；Firebase 模式不會把六個核心資料集寫回 Google Sheets。
+- 尚未填入 Firebase Web App 公開設定時，App 仍可使用本機 `localStorage`；若設定 `api-config.js` 且未啟用 Firebase，才使用舊版 API。
 
 ## 2. 主要導覽
 
@@ -163,7 +163,7 @@
 - 顯示採購進度、預算、實際金額與估算重量。
 - 商品有價格時，可直接建立一筆記帳資料。
 - 提供「只看尚未確認」快速操作。
-- 採購資料會納入 JSON 備份，也可同步至 Google Sheets。
+- 採購資料會納入 JSON 備份；Firebase 核心同步範圍不包含購物清單，仍可使用本機備份或舊版 API。
 
 ## 8. 票券（Tickets）
 
@@ -201,21 +201,21 @@
 
 ### 10.1 雲端帳號與同步
 
-前端已提供下列操作；需先部署後端並設定 API 網址：
+前端已提供下列操作；需先填入 Firebase Web App 設定並建立旅程成員文件：
 
 - Email／密碼登入。
 - 登出。
 - 首次設定密碼。
 - 修改密碼。
 - 一次性密碼設定與重設連結。
-- 上傳目前本機資料到私人 Google Sheets。
+- 上傳目前本機資料到私人 Cloud Firestore。
 - 從雲端重新載入旅程資料。
 - 匯入 JSON 備份前先顯示新增／更新／移除預覽。
 - 匯入確認後才寫入雲端。
-- 管理員建立、查詢、更新、停用、恢復與永久刪除旅伴帳號。
-- 管理員調整姓名、Email、角色與啟用狀態。
-- 管理員產生一次性設定／重設連結。
-- 最後一位啟用管理員不可停用、刪除或降級。
+- 管理員帳號及旅伴邀請需由 Firebase Console 或尚未部署的 Admin SDK／後端管理；前端不自行修改成員角色。
+- Firebase Web App 目前提供登入、登出、改密碼、讀寫六個資料集與權限錯誤提示。
+- 初始管理員需先在 Firebase Authentication 建立帳號，再建立對應 `members/{uid}` 文件。
+- 一次性設定／重設連結需要郵件服務或 Admin SDK；目前可由管理員私下產生與交付。
 
 角色權限：
 
@@ -281,29 +281,28 @@
 
 訂位代號、PIN 與電子機票號碼使用頁面記憶體暫存，不寫入上述本機資料鍵與 JSON 備份。
 
-## 12. Google Sheets 雲端資料集
+## 12. Firestore 雲端資料集
 
-後端會建立或沿用以下工作表：
+核心資料集固定放在以下文件：
 
-- `itineraries`
-- `flights`
-- `accommodations`
-- `tickets`
-- `shopping`
-- `expenses`
-- `reserved_expenses`
-- `members`
-- `completed_items`
-- `prep_checklist`
-- `companion_notes`
-- `settlements`
-- `daily_budgets`
+- `trips/japan-tokyo-2026/datasets/itinerary`
+- `trips/japan-tokyo-2026/datasets/tickets`
+- `trips/japan-tokyo-2026/datasets/flights`
+- `trips/japan-tokyo-2026/datasets/accommodations`
+- `trips/japan-tokyo-2026/datasets/expenses`
+- `trips/japan-tokyo-2026/datasets/reservedExpenses`
 
-每筆資料使用：`id`、`version`、`updated_at`、`updated_by`、`deleted_at`、`payload_json`。
+每個文件包含 `tripId`、`dataset`、`revision`、`updatedAt`、`updatedBy` 與 `records`；每筆記錄保留穩定 `id`、`_cloudVersion`，寫入時以 Firestore transaction 偵測版本衝突。
 
-帳號、密碼雜湊、Session、設定／重設 Token 與稽核資料只放 PostgreSQL，不放 Google Sheets。
+成員文件位於 `trips/japan-tokyo-2026/members/{uid}`，欄位包含 `name`、`email`、`role`（`admin`／`editor`／`viewer`）與 `status`（`active`／`disabled`）。密碼、Token 與私鑰絕不寫入 Firestore 或前端。
 
-## 13. 目前狀態與限制
+移轉工具位於 `firebase-migration/`，可先預覽舊 JSON，再用 `--apply` 寫入；發現雲端既有不同版本時保留雲端資料並列出衝突。
+
+## 13. 舊版 Google Sheets 雲端資料集（回退方案）
+
+`server/` 仍保留原本的 Google Sheets／PostgreSQL schema，供既有部署回滾使用。Firebase 模式啟用後，六個核心資料集不再同步寫入試算表；購物、行前清單與留言等非核心資料仍可留在本機或沿用舊版 API。
+
+## 14. 目前狀態與限制
 
 ### 已完成並可使用
 
@@ -311,21 +310,23 @@
 - 本機行程、地圖、天氣、記帳、購物、票券、航班、住宿、行前、SOS、留言與 JSON 備份。
 - Leaflet／OpenStreetMap 互動地圖與座標 marker。
 - Notion 景點重點連結。
-- 前端雲端登入、同步、匯入預覽與管理員操作介面。
+- Firebase 前端 adapter、Firestore rules、六資料集同步、匯入預覽與版本衝突處理。
+- 舊版 Node.js API、PostgreSQL schema、Google Sheets schema 與版本衝突邏輯仍保留。
 - Node.js API、PostgreSQL schema、Google Sheets schema 與版本衝突邏輯。
 
 ### 需要正式設定後才能使用
 
-- PostgreSQL 連線。
-- Google Spreadsheet ID。
-- Google Service Account JSON。
-- 正式 Node.js API 主機與 HTTPS 網址。
-- `api-config.js` 的 API URL。
-- 初始管理員帳號與密碼。
+- `firebase-config.js` 的 `apiKey`、`messagingSenderId` 與 `appId`。
+- Firebase Authentication 的 Email／密碼登入啟用。
+- 第一位管理員 Auth 帳號與 `members/{uid}` 文件。
+- `firestore.rules` 部署至目標專案。
+- `firebase-migration/` 的 Node.js 依賴與 Google Application Default Credentials。
+- 舊版回退模式才需要 PostgreSQL、Google Spreadsheet ID、Service Account、API URL。
 
 ### 尚未完成實際整合驗證
 
-- 尚未使用正式 Google Sheet 實際寫入資料。
-- 尚未在正式 PostgreSQL 主機驗證登入、角色限制、停用 Session 失效與衝突流程。
+- 目前環境找不到使用者指定的 `tokyo_firestore_migration.zip`、旅行備份 JSON、Node.js／npm 與 Google ADC，因此尚未聲稱已實際寫入 Firestore。
+- 已完成可執行的 Firebase adapter、rules 與移轉工具；填入設定並完成授權後即可執行預覽／寫入。
+- 尚未在正式專案完成真實登入、讀取與受權限控制寫入驗收。
 - 尚未啟用郵件寄送服務；目前重設／首次設定連結由管理員產生後私下交付。
 
