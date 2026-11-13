@@ -1,0 +1,59 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function memberDoc(tripId) {
+      return get(/databases/$(database)/documents/trips/$(tripId)/members/$(request.auth.uid));
+    }
+
+    function activeMember(tripId) {
+      return signedIn()
+        && memberDoc(tripId).exists()
+        && memberDoc(tripId).data.status == 'active';
+    }
+
+    function canWriteTrip(tripId) {
+      return activeMember(tripId)
+        && (memberDoc(tripId).data.role == 'admin' || memberDoc(tripId).data.role == 'editor');
+    }
+
+    function allowedDataset(datasetId) {
+      return datasetId in [
+        'itinerary',
+        'tickets',
+        'flights',
+        'accommodations',
+        'expenses',
+        'reservedExpenses'
+      ];
+    }
+
+    match /trips/{tripId}/members/{uid} {
+      // Members are provisioned by Firebase Console, Admin SDK, or a trusted backend.
+      // A traveller may read only their own membership document.
+      allow read: if signedIn() && (uid == request.auth.uid || canWriteTrip(tripId));
+      allow write: if false;
+    }
+
+    match /trips/{tripId}/datasets/{datasetId} {
+      allow read: if allowedDataset(datasetId) && activeMember(tripId);
+      allow create, update: if allowedDataset(datasetId)
+        && canWriteTrip(tripId)
+        && request.resource.data.tripId == tripId
+        && request.resource.data.dataset == datasetId
+        && request.resource.data.keys().hasOnly([
+          'tripId', 'dataset', 'revision', 'updatedAt', 'updatedBy', 'records'
+        ]);
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
