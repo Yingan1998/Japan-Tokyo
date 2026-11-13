@@ -35,18 +35,31 @@
   function loadScript(src) {
     return new Promise(function (resolve, reject) {
       const existing = document.querySelector('script[data-firebase-src="' + src + '"]');
+      let settled = false;
+      let timer = null;
+      const finish = function (error) {
+        if (settled) return;
+        settled = true;
+        if (timer) clearTimeout(timer);
+        if (error) reject(error); else resolve();
+      };
+      timer = setTimeout(function () {
+        const error = new Error("Firebase SDK 頛?暹?嚗?蝣箄???蝬脰楝???摰寥?敺?閰艾?);
+        error.code = "auth/network-request-failed";
+        finish(error);
+      }, 12000);
       if (existing) {
-        existing.addEventListener("load", resolve, { once: true });
-        existing.addEventListener("error", reject, { once: true });
-        if (window.firebase) resolve();
+        if (window.firebase) return finish();
+        existing.addEventListener("load", function () { finish(); }, { once: true });
+        existing.addEventListener("error", function () { finish(new Error("Firebase SDK 頛憭望?嚗???渡????)); }, { once: true });
         return;
       }
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
       script.dataset.firebaseSrc = src;
-      script.onload = resolve;
-      script.onerror = function () { reject(new Error("Firebase SDK 頛憭望?嚗? + src)); };
+      script.onload = function () { finish(); };
+      script.onerror = function () { finish(new Error("Firebase SDK 頛憭望?嚗? + src)); };
       document.head.appendChild(script);
     });
   }
@@ -145,11 +158,26 @@
   }
 
   async function currentSession() {
-    const sdk = await ensureInitialized();
+    const sdk = await withTimeout(ensureInitialized(), 15000, "auth/network-request-failed", "Firebase SDK 頛?暹?嚗?蝣箄???蝬脰楝敺?閰艾?);
     const user = await new Promise((resolve, reject) => {
-      const unsubscribe = sdk.auth.onAuthStateChanged(
-        current => { unsubscribe(); resolve(current); },
-        error => { unsubscribe(); reject(error); }
+      let settled = false;
+      let unsubscribe = () => {};
+      let timer = null;
+      const finish = function (error, current) {
+        if (settled) return;
+        settled = true;
+        if (timer) clearTimeout(timer);
+        unsubscribe();
+        if (error) reject(error); else resolve(current);
+      };
+      timer = setTimeout(function () {
+        const error = new Error("Firebase ?餃??敺拚暹?嚗???渡?敺?閰艾?);
+        error.code = "auth/network-request-failed";
+        finish(error);
+      }, 12000);
+      unsubscribe = sdk.auth.onAuthStateChanged(
+        current => finish(null, current),
+        error => finish(error)
       );
     });
     if (!user) return null;
