@@ -6936,7 +6936,7 @@
         date,
         items: []
       }));
-      return migrateData({ version: "multi-trip-v1", schemaVersion: 3, selectedDay: 1, activeVersion: "A", dayVersions: {}, versions: { A: { days }, B: { days: clone(days) } }, days });
+      return migrateData({ version: "multi-trip-v1", schemaVersion: 3, selectedDay: 1, activeVersion: "A", singlePlan: true, dayVersions: {}, versions: { A: { days }, B: { days: [] } }, days });
     }
 
     function tripTodayKey(timeZone) {
@@ -7172,7 +7172,7 @@
             const nextDaysB = nextDates.map(date => byDateB.get(date) || clone(makeDay(date)));
             data.days = nextDays;
             data.versions.A.days = nextDays;
-            data.versions.B.days = nextDaysB;
+            data.versions.B.days = data.singlePlan ? [] : nextDaysB;
             data = migrateData(data);
             safeSet("emenuTokyo", data);
             renderHeaderDate();
@@ -7826,7 +7826,8 @@
       const source = raw && Array.isArray(raw.days) && raw.days.length ? raw : defaultData;
       const active = source.activeVersion === "B" ? "B" : "A";
       const versionA = decorateItineraryGuides(source.versions?.A?.days?.length ? normalizeDays(source.versions.A.days) : normalizeDays(source.days));
-      const versionB = decorateItineraryGuides(source.versions?.B?.days?.length ? normalizeDays(source.versions.B.days) : buildRelaxedDays(versionA));
+      const singlePlan = source.singlePlan === true && !source.versions?.B?.days?.length;
+      const versionB = singlePlan ? [] : decorateItineraryGuides(source.versions?.B?.days?.length ? normalizeDays(source.versions.B.days) : buildRelaxedDays(versionA));
       const activeDays = active === "B" ? versionB : versionA;
       const dayVersions = source.dayVersions && typeof source.dayVersions === "object" ? { ...source.dayVersions } : {};
       const mixedDays = decorateItineraryGuides(activeDays.map((day, index) => {
@@ -7839,6 +7840,7 @@
         version: DATA_VERSION,
         schemaVersion: 3,
         activeVersion: active,
+        singlePlan,
         versions: { A: { days: versionA }, B: { days: versionB } },
         dayVersions,
         days: mixedDays,
@@ -8182,7 +8184,8 @@
       const box = document.getElementById("versionSwitch");
       if (!box) return;
       const selectedVersion = getDayVersion(data.selectedDay - 1);
-      box.innerHTML = ["A", "B"].map(version => `
+      const versions = data.singlePlan ? ["A"] : ["A", "B"];
+      box.innerHTML = versions.map(version => `
         <button type="button" class="${selectedVersion === version ? "active" : ""}" onclick="switchDayItineraryVersion('${version}')">
           ${version}｜${version === "A" ? "充實版" : "輕鬆版"}
         </button>`).join("");
@@ -8191,6 +8194,7 @@
     function switchDayItineraryVersion(version) {
       const dayIndex = data.selectedDay - 1;
       const day = data.days[dayIndex];
+      if (data.singlePlan && version === "B") return;
       if (!day || !data.versions?.[version]?.days?.[dayIndex]) return;
       data.dayVersions = data.dayVersions && typeof data.dayVersions === "object" ? data.dayVersions : {};
       data.dayVersions[day.date] = version;
@@ -9287,6 +9291,8 @@
         daySelect.value = String(Number.isInteger(selectedDay) ? selectedDay : data.selectedDay - 1);
       }
       if (versionSelect) {
+        const bOption = versionSelect.querySelector('option[value="B"]');
+        if (bOption) bOption.hidden = Boolean(data.singlePlan);
         versionSelect.value = selectedVersion || data.activeVersion;
       }
       updateItineraryDatePreview();
@@ -9357,7 +9363,7 @@
     function saveItinerarySheet() {
       const title = document.getElementById("itineraryName").value.trim();
       if (!title) return alert("請填寫行程名稱。");
-      const targetVersion = document.getElementById("itineraryVersion").value === "B" ? "B" : "A";
+      const targetVersion = !data.singlePlan && document.getElementById("itineraryVersion").value === "B" ? "B" : "A";
       const targetDayIndex = Number(document.getElementById("itineraryDay").value);
       if (!Number.isInteger(targetDayIndex) || !getVersionDays(targetVersion)[targetDayIndex]) return alert("請選擇有效的日期。");
       syncVersionStores();
