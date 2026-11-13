@@ -7728,8 +7728,12 @@
       }
       renderCloudAuthPanel();
       setAccountScreen("app");
-      if (!firebaseConfigured() && result.user.role === "admin") await loadAdminUsers();
-      await loadTravelList();
+      // 登入成功後先進入「我的旅行」，不要等待 Firestore 旅程列表查詢，
+      // 避免手機弱網時登入按鈕長時間維持 disabled。
+      setTravelListMode(true);
+      switchPage("travel-list");
+      if (!firebaseConfigured() && result.user.role === "admin") void loadAdminUsers();
+      void loadTravelList({ quiet: true });
     }
 
     async function logoutCloudAccount() {
