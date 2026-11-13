@@ -5737,7 +5737,18 @@
       .homeShortcutGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (max-width: 600px) {
-      .accountGate { padding-inline: 10px; }
+      .accountGate { width: 100%; max-width: 100%; overflow-x: hidden; padding-inline: 10px; }
+      .accountEntry { width: 100%; max-width: 360px; min-width: 0; }
+      .accountEntryBody,
+      .accountCover,
+      .accountEntry form,
+      .accountPasswordRow { width: 100%; min-width: 0; max-width: 100%; }
+      .accountEntry form label,
+      .accountPasswordRow > * { width: 100%; min-width: 0; max-width: 100%; }
+      .accountPasswordRow .btnGhost { width: auto; }
+      .accountEntryBody { overflow: hidden; }
+      .accountEntry .formControl { min-width: 0; max-width: 100%; }
+      .accountPasswordRow .btnGhost { min-width: 0; padding-inline: 8px; font-size: 12px; }
       .accountEntryBody { padding: 18px 16px 8px; }
       .accountCover { min-height: 220px; padding: 22px 20px 18px; }
       .accountSosGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
