@@ -5906,7 +5906,7 @@
         <div class="cloudAuthHeader">
           <div><span class="dashboardKicker">CLOUD TRIP ACCOUNT</span>
             <h2 id="cloudAuthTitle">旅伴登入與雲端同步</h2>
-            <p id="cloudAuthDescription">登入後可將行程、票券、航班住宿、清單與費用同步到私人 Google 試算表。</p>
+            <p id="cloudAuthDescription">登入後可將六個核心資料集同步到私人 Firestore；尚未填入 Firebase 設定時仍可使用本機模式。</p>
           </div>
           <span class="offlineStatusBadge" id="cloudAuthModeBadge">本機模式</span>
         </div>
@@ -6070,6 +6070,8 @@
     </div>
   </div>
 
+  <script src="./firebase-config.js"></script>
+  <script src="./firebase-adapter.js"></script>
   <script src="./api-config.js"></script>
   <script>
 
@@ -6381,10 +6383,9 @@
       }
     }
 
-    // ====== Optional cloud account / Google Sheets sync ======
-    // GitHub Pages remains usable in local-only mode when this URL is empty.
-    // The API stores credentials in PostgreSQL and trip data in private Sheets;
-    // this browser only keeps a short-lived bearer token in sessionStorage.
+    // ====== Optional cloud account / Firestore sync ======
+    // GitHub Pages remains usable in local-only mode when Firebase config is empty.
+    // Firestore stores the six shared trip datasets; credentials never enter localStorage.
     const CLOUD_API_BASE_URL = String(window.__TRAVEL_API_BASE_URL__ || "").replace(/\/$/, "");
     const CLOUD_TRIP_ID = "japan-tokyo-2026";
     const CLOUD_SYNC_KEYS = {
@@ -6402,15 +6403,23 @@
       tokyoSettlements: "settlements",
       tokyoDailyBudgets: "daily_budgets"
     };
+    const FIREBASE_SYNC_KEYS = {
+      emenuTokyo: "itinerary",
+      tokyoTickets: "tickets",
+      tokyoFlights: "flights",
+      tokyoAccommodations: "accommodations",
+      tokyoExpenses: "expenses",
+      tokyoReservedExpenses: "reservedExpenses"
+    };
     const cloudSyncTimers = {};
     let cloudHydrating = false;
-    let cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {} };
+    let cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {}, provider: "" };
 
     function cloudSessionRead() {
       try {
         const saved = JSON.parse(sessionStorage.getItem("japanTokyoCloudSession") || "null") || {};
-        return { token: saved.token || "", user: saved.user || null, revisions: saved.revisions || {}, recordVersions: saved.recordVersions || {} };
-      } catch { return { token: "", user: null, revisions: {}, recordVersions: {} }; }
+        return { token: saved.token || "", user: saved.user || null, revisions: saved.revisions || {}, recordVersions: saved.recordVersions || {}, provider: saved.provider || "" };
+      } catch { return { token: "", user: null, revisions: {}, recordVersions: {}, provider: "" }; }
     }
 
     function cloudSessionWrite() {
@@ -6422,7 +6431,10 @@
 
     cloudAuthState = cloudSessionRead();
 
-    function cloudConfigured() { return Boolean(CLOUD_API_BASE_URL); }
+    function firebaseConfigured() { return Boolean(window.travelFirebase?.configured?.()); }
+    function cloudProvider() { return firebaseConfigured() ? "firebase" : (CLOUD_API_BASE_URL ? "api" : ""); }
+    function cloudConfigured() { return Boolean(cloudProvider()); }
+    function cloudHasSession() { return Boolean(cloudAuthState.user && (cloudAuthState.token || cloudAuthState.provider === "firebase")); }
 
     async function cloudRequest(path, options = {}) {
       if (!cloudConfigured()) throw new Error("尚未設定 API 網址，現在仍是本機模式。");
@@ -6449,7 +6461,7 @@
     }
 
     function cloudRecordsForKey(key, value) {
-      const dataset = CLOUD_SYNC_KEYS[key];
+      const dataset = firebaseConfigured() && FIREBASE_SYNC_KEYS[key] ? FIREBASE_SYNC_KEYS[key] : CLOUD_SYNC_KEYS[key];
       const decorate = (item, fallbackId) => {
         const id = String(item?.id || fallbackId);
         const version = item?._cloudVersion || cloudAuthState.recordVersions?.[dataset]?.[id];
@@ -6473,7 +6485,17 @@
 
     async function syncCloudDataset(key, value) {
       const dataset = CLOUD_SYNC_KEYS[key];
-      if (!dataset || !cloudAuthState.token || cloudHydrating) return;
+      if (!dataset || !cloudHasSession() || cloudHydrating) return;
+      if (firebaseConfigured()) {
+        const firebaseDataset = FIREBASE_SYNC_KEYS[key];
+        if (!firebaseDataset) return;
+        const result = await window.travelFirebase.writeDataset(firebaseDataset, cloudRecordsForKey(key, value), cloudAuthState.revisions?.[firebaseDataset]?.revision ?? 0);
+        cloudAuthState.revisions[firebaseDataset] = { revision: result.revision };
+        cloudAuthState.recordVersions[firebaseDataset] = Object.fromEntries((result.records || []).map(item => [String(item.id), Number(item._cloudVersion || 0)]));
+        cloudAuthState.provider = "firebase";
+        cloudSessionWrite();
+        return;
+      }
       const result = await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/datasets/${encodeURIComponent(dataset)}`, {
         method: "PUT",
         body: JSON.stringify({ records: cloudRecordsForKey(key, value), expectedRevision: cloudAuthState.revisions?.[dataset]?.revision ?? 0 })
@@ -6484,7 +6506,7 @@
     }
 
     function queueCloudSync(key, value) {
-      if (!CLOUD_SYNC_KEYS[key] || !cloudAuthState.token || cloudHydrating) return;
+      if (!CLOUD_SYNC_KEYS[key] || !cloudHasSession() || cloudHydrating) return;
       clearTimeout(cloudSyncTimers[key]);
       cloudSyncTimers[key] = setTimeout(() => syncCloudDataset(key, value).catch(error => {
         if (error.code === "REVISION_CONFLICT" || error.code === "RECORD_CONFLICT") setCloudAuthStatus("雲端版本衝突：請先重新載入，再合併後儲存。", true);
@@ -6493,24 +6515,27 @@
     }
 
     async function pullCloudTripData() {
-      if (!cloudAuthState.token) return setCloudAuthStatus("請先登入再載入雲端資料。", true);
+      if (!cloudHasSession()) return setCloudAuthStatus("請先登入再載入雲端資料。", true);
       try {
-        setCloudAuthStatus("正在載入私人試算表資料…");
-        const snapshot = await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/snapshot`);
+        setCloudAuthStatus(firebaseConfigured() ? "正在載入 Firestore 旅程資料…" : "正在載入雲端旅程資料…");
+        const snapshot = firebaseConfigured()
+          ? await window.travelFirebase.readSnapshot()
+          : await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/snapshot`);
         const datasets = snapshot.datasets || {};
         const total = Object.values(datasets).reduce((sum, list) => sum + (Array.isArray(list) ? list.length : 0), 0);
         if (!total) return setCloudAuthStatus("雲端試算表目前沒有資料；確認後可上傳本機資料。", false);
         cloudHydrating = true;
-        Object.entries(CLOUD_SYNC_KEYS).forEach(([key]) => {
-          if (!Array.isArray(datasets[key])) return;
-          const value = localValueForCloudDataset(key, datasets[key]);
+        const syncMap = firebaseConfigured() ? FIREBASE_SYNC_KEYS : CLOUD_SYNC_KEYS;
+        Object.entries(syncMap).forEach(([key, dataset]) => {
+          if (!Array.isArray(datasets[dataset])) return;
+          const value = localValueForCloudDataset(key, datasets[dataset]);
           if (value !== null && value !== undefined) safeSet(key, value);
         });
         cloudAuthState.revisions = snapshot.revisions || {};
         cloudAuthState.recordVersions = Object.fromEntries(Object.entries(datasets).map(([dataset, records]) => [dataset, Object.fromEntries((records || []).map(item => [String(item.id), Number(item._cloudVersion || 0)]))]));
         cloudSessionWrite();
         cloudHydrating = false;
-        setCloudAuthStatus("雲端資料已載入；請重新整理畫面以套用完整行程。", false);
+        setCloudAuthStatus(firebaseConfigured() ? "Firestore 資料已載入；請重新整理畫面以套用完整行程。" : "雲端資料已載入；請重新整理畫面以套用完整行程。", false);
         showAppToast("雲端資料已載入");
       } catch (error) {
         cloudHydrating = false;
@@ -6520,16 +6545,17 @@
     }
 
     async function syncLocalDataToCloud() {
-      if (!cloudAuthState.token) return setCloudAuthStatus("請先登入再上傳本機資料。", true);
+      if (!cloudHasSession()) return setCloudAuthStatus("請先登入再上傳本機資料。", true);
       if (!confirm("上傳會以目前本機資料更新雲端；若雲端已有其他旅伴修改，系統會停止並提示衝突。確定繼續嗎？")) return;
       try {
         setCloudAuthStatus("正在上傳本機資料…");
-        for (const [key, dataset] of Object.entries(CLOUD_SYNC_KEYS)) {
+        const syncMap = firebaseConfigured() ? FIREBASE_SYNC_KEYS : CLOUD_SYNC_KEYS;
+        for (const [key] of Object.entries(syncMap)) {
           const value = key === "emenuTokyo" ? data : safeParse(key, null);
           if (value === null || value === undefined) continue;
           await syncCloudDataset(key, value);
         }
-        setCloudAuthStatus("本機資料已同步到私人 Google 試算表。", false);
+        setCloudAuthStatus(firebaseConfigured() ? "本機資料已同步到 Firestore。" : "本機資料已同步到雲端。", false);
         showAppToast("雲端同步完成");
       } catch (error) {
         setCloudAuthStatus(error.message, true);
@@ -6538,7 +6564,7 @@
 
     function cloudDatasetsFromBackup(payload) {
       const source = payload || {};
-      return {
+      const all = {
         itinerary: cloudRecordsForKey("emenuTokyo", source.data || {}),
         flights: cloudRecordsForKey("tokyoFlights", source.flights || []),
         accommodations: cloudRecordsForKey("tokyoAccommodations", source.accommodations || []),
@@ -6553,20 +6579,32 @@
         settlements: cloudRecordsForKey("tokyoSettlements", source.settlementsState || {}),
         daily_budgets: cloudRecordsForKey("tokyoDailyBudgets", source.dailyBudgets || {})
       };
+      if (!firebaseConfigured()) return all;
+      return {
+        itinerary: all.itinerary,
+        tickets: all.tickets,
+        flights: all.flights,
+        accommodations: all.accommodations,
+        expenses: all.expenses,
+        reservedExpenses: all.reserved_expenses
+      };
     }
 
     async function previewCloudImport(event) {
       const file = event.target.files[0];
       event.target.value = "";
-      if (!file || !cloudAuthState.token) return setCloudAuthStatus("請先登入，再選擇 JSON 備份。", true);
+      if (!file || !cloudHasSession()) return setCloudAuthStatus("請先登入，再選擇 JSON 備份。", true);
       try {
         const payload = JSON.parse(await file.text());
         if (payload.format !== "japan-tokyo-travel-backup" || !payload.data) throw new Error("不是有效的旅行備份檔");
         const datasets = cloudDatasetsFromBackup(payload);
-        const previewResult = await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import/preview`, { method: "POST", body: JSON.stringify({ datasets }) });
+        const previewResult = firebaseConfigured()
+          ? await window.travelFirebase.previewImport(datasets)
+          : await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import/preview`, { method: "POST", body: JSON.stringify({ datasets }) });
         const lines = Object.entries(previewResult.preview || {}).map(([dataset, item]) => `${dataset}: 新增 ${item.added}、更新 ${item.updated}、移除 ${item.removed}`).join("\n");
         if (!confirm(`雲端匯入預覽（尚未寫入）：\n\n${lines}\n\n確定要以此備份更新私人試算表嗎？`)) return;
-        await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import`, { method: "POST", body: JSON.stringify({ datasets, revisions: cloudAuthState.revisions, confirmed: true }) });
+        if (firebaseConfigured()) await window.travelFirebase.importDatasets(datasets, cloudAuthState.revisions);
+        else await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/import`, { method: "POST", body: JSON.stringify({ datasets, revisions: cloudAuthState.revisions, confirmed: true }) });
         await pullCloudTripData();
         setCloudAuthStatus("備份已匯入雲端；畫面即將重新整理。", false);
         setTimeout(() => location.reload(), 500);
@@ -6574,7 +6612,7 @@
     }
 
     function clearCloudSession() {
-      cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {} };
+      cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {}, provider: "" };
       cloudSessionWrite();
       if (typeof privateTravelDrafts !== "undefined") {
         privateTravelDrafts.flight = {};
@@ -6592,8 +6630,8 @@
       const adminPanel = document.getElementById("adminUserPanel");
       if (!form || !actions || !summary || !badge) return;
       const configured = cloudConfigured();
-      const loggedIn = Boolean(cloudAuthState.token && cloudAuthState.user);
-      badge.textContent = !configured ? "本機模式" : loggedIn ? "已登入" : "API 已連線";
+      const loggedIn = cloudHasSession();
+      badge.textContent = !configured ? "本機模式" : loggedIn ? (firebaseConfigured() ? "Firebase 已登入" : "已登入") : (firebaseConfigured() ? "Firebase" : "API 已連線");
       badge.classList.toggle("offline", !configured);
       form.hidden = !configured || loggedIn || Boolean(window.__cloudSetupToken);
       if (setupForm && !window.__cloudSetupToken) setupForm.hidden = true;
@@ -6602,8 +6640,8 @@
       if (loggedIn) {
         summary.innerHTML = `<div><strong>${escapeHtml(cloudAuthState.user.name)} · ${escapeHtml(cloudAuthState.user.email)}</strong><small>角色：${escapeHtml(cloudAuthState.user.role)} · 狀態：${escapeHtml(cloudAuthState.user.status)}</small></div><span class="adminUserBadge">✓ session</span>`;
       }
-      if (adminPanel) adminPanel.hidden = !loggedIn || cloudAuthState.user.role !== "admin";
-      if (!configured) setCloudAuthStatus("尚未設定 API 網址，App 目前仍使用本機 localStorage；請先部署 server 並填入 api-config.js。");
+      if (adminPanel) adminPanel.hidden = firebaseConfigured() || !loggedIn || cloudAuthState.user.role !== "admin";
+      if (!configured) setCloudAuthStatus("尚未設定 Firebase Web App config，App 目前仍使用本機 localStorage；請填入 firebase-config.js 後重新整理。\n若使用舊版 API，請改填 api-config.js。");
     }
 
     function cloudSetupContext() {
@@ -6630,10 +6668,11 @@
       const setup = window.__cloudSetupToken || cloudSetupContext();
       const password = document.getElementById("cloudSetupPassword")?.value || "";
       if (!setup?.token) return setCloudAuthStatus("設定連結無效或已過期。", true);
+      if (firebaseConfigured()) return setCloudAuthStatus("Firebase Spark 模式的首次密碼設定請在 Firebase Console 建立帳號；一次性連結需要 Admin SDK／後端服務。", true);
       try {
         setCloudAuthStatus("正在設定密碼…");
         const result = await cloudRequest("/api/auth/setup-password", { method: "POST", body: JSON.stringify({ token: setup.token, purpose: setup.purpose, password }) });
-        cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {} };
+        cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {}, provider: "api" };
         cloudSessionWrite();
         window.__cloudSetupToken = null;
         window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
@@ -6649,8 +6688,10 @@
         const email = document.getElementById("cloudLoginEmail")?.value.trim();
         const password = document.getElementById("cloudLoginPassword")?.value;
         setCloudAuthStatus("正在登入…");
-        const result = await cloudRequest("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
-        cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {} };
+        const result = firebaseConfigured()
+          ? await window.travelFirebase.signIn(email, password)
+          : await cloudRequest("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+        cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {}, provider: firebaseConfigured() ? "firebase" : "api" };
         cloudSessionWrite();
         renderCloudAuthPanel();
         setCloudAuthStatus(`已登入 ${result.user.name}；正在檢查雲端資料…`);
@@ -6660,7 +6701,10 @@
     }
 
     async function logoutCloudAccount() {
-      try { if (cloudAuthState.token) await cloudRequest("/api/auth/logout", { method: "POST" }); } catch {}
+      try {
+        if (firebaseConfigured() && cloudAuthState.provider === "firebase") await window.travelFirebase.signOut();
+        else if (cloudAuthState.token) await cloudRequest("/api/auth/logout", { method: "POST" });
+      } catch {}
       clearCloudSession();
       setCloudAuthStatus("已登出；本機資料仍保留在此裝置。", false);
     }
@@ -6668,10 +6712,22 @@
     async function restoreCloudSession() {
       if (!cloudConfigured()) return renderCloudAuthPanel();
       if (showCloudSetupForm()) return renderCloudAuthPanel();
+      if (firebaseConfigured()) {
+        try {
+          const result = await window.travelFirebase.currentSession();
+          if (!result) return renderCloudAuthPanel();
+          cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {}, provider: "firebase" };
+          cloudSessionWrite();
+          renderCloudAuthPanel();
+          await pullCloudTripData();
+        } catch (error) { clearCloudSession(); setCloudAuthStatus(error.message, true); }
+        return;
+      }
       if (!cloudAuthState.token) return renderCloudAuthPanel();
       try {
         const result = await cloudRequest("/api/auth/me");
         cloudAuthState.user = result.user;
+        cloudAuthState.provider = "api";
         cloudSessionWrite();
         renderCloudAuthPanel();
         await pullCloudTripData();
@@ -6680,13 +6736,15 @@
     }
 
     async function openChangePasswordPrompt() {
-      if (!cloudAuthState.token) return setCloudAuthStatus("請先登入。", true);
+      if (!cloudHasSession()) return setCloudAuthStatus("請先登入。", true);
       const currentPassword = prompt("請輸入目前密碼");
       if (currentPassword === null) return;
       const newPassword = prompt("請輸入新密碼（至少 10 碼）");
       if (newPassword === null) return;
       try {
-        const result = await cloudRequest("/api/auth/change-password", { method: "POST", body: JSON.stringify({ currentPassword, newPassword }) });
+        const result = firebaseConfigured()
+          ? await window.travelFirebase.changePassword(currentPassword, newPassword)
+          : await cloudRequest("/api/auth/change-password", { method: "POST", body: JSON.stringify({ currentPassword, newPassword }) });
         cloudAuthState.token = result.token;
         cloudAuthState.user = result.user;
         cloudSessionWrite();
@@ -6697,6 +6755,7 @@
 
     async function loadAdminUsers() {
       if (cloudAuthState.user?.role !== "admin") return;
+      if (firebaseConfigured()) return setCloudAuthStatus("Firebase 帳號管理需由 Firebase Console 或 Admin SDK／後端管理服務執行；旅伴不能自行變更角色。", false);
       try {
         const result = await cloudRequest("/api/admin/users");
         renderAdminUsers(result.users || []);
@@ -6712,6 +6771,7 @@
     }
 
     async function createCompanionAccount() {
+      if (firebaseConfigured()) return setCloudAuthStatus("Firebase Spark 模式無法由前端安全建立旅伴；請在 Firebase Console 建立 Email／密碼帳號，再由管理員建立對應的旅程 members 文件。", true);
       const name = prompt("旅伴姓名");
       if (name === null) return;
       const email = prompt("旅伴 Email");
@@ -6725,6 +6785,7 @@
     }
 
     async function editCompanionAccount(id, currentName, currentEmail, currentRole, currentStatus) {
+      if (firebaseConfigured()) return setCloudAuthStatus("Firebase 角色與啟用狀態需由 Firebase Console／Admin SDK 管理。", true);
       const name = prompt("姓名", currentName);
       if (name === null) return;
       const email = prompt("Email", currentEmail);
@@ -6740,6 +6801,7 @@
     }
 
     async function resetCompanionPassword(id) {
+      if (firebaseConfigured()) return setCloudAuthStatus("Firebase 密碼重設請使用 Firebase Console 的使用者管理；一次性連結需要 Admin SDK／後端服務。", true);
       if (!confirm("產生新的一次性密碼設定連結，並撤銷此帳號既有登入狀態？")) return;
       try {
         const result = await cloudRequest(`/api/admin/users/${encodeURIComponent(id)}/reset-password`, { method: "POST" });
@@ -6748,6 +6810,7 @@
     }
 
     async function deleteCompanionAccount(id) {
+      if (firebaseConfigured()) return setCloudAuthStatus("Firebase 帳號刪除請使用 Firebase Console／Admin SDK；旅程歷史紀錄不會由前端刪除。", true);
       if (!confirm("永久刪除帳號？歷史行程與分帳資料會保留，但帳號本身無法復原。")) return;
       try {
         await cloudRequest(`/api/admin/users/${encodeURIComponent(id)}`, { method: "DELETE" });
