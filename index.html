@@ -6556,7 +6556,7 @@
       const loggedIn = Boolean(cloudAuthState.token && cloudAuthState.user);
       badge.textContent = !configured ? "本機模式" : loggedIn ? "已登入" : "API 已連線";
       badge.classList.toggle("offline", !configured);
-      form.hidden = !configured || loggedIn;
+      form.hidden = !configured || loggedIn || Boolean(window.__cloudSetupToken);
       if (setupForm && !window.__cloudSetupToken) setupForm.hidden = true;
       actions.hidden = !loggedIn;
       summary.hidden = !loggedIn;
