@@ -1,8 +1,9 @@
-const CACHE_NAME = "japan-tokyo-pwa-v2";
+const CACHE_NAME = "japan-tokyo-pwa-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
+  "./api-config.js",
   "./assets/app-icon.svg",
   "./assets/app-icon-192.png",
   "./assets/app-icon-512.png",
