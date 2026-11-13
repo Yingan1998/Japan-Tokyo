@@ -10,6 +10,19 @@
   const config = window.__FIREBASE_CONFIG__ || {};
   let initPromise = null;
 
+  function withTimeout(promise, milliseconds, code, message) {
+    return Promise.race([
+      promise,
+      new Promise(function (_, reject) {
+        setTimeout(function () {
+          const error = new Error(message || "Firebase ????暹?嚗?蝣箄???蝬脰楝敺?閰艾?);
+          error.code = code || "auth/network-request-failed";
+          reject(error);
+        }, milliseconds);
+      })
+    ]);
+  }
+
   function configured() {
     return Boolean(
       config.projectId &&
@@ -105,10 +118,24 @@
   }
 
   async function signIn(email, password, remember = true) {
-    const sdk = await ensureInitialized();
+    const sdk = await withTimeout(ensureInitialized(), 15000, "auth/network-request-failed", "Firebase SDK 頛?暹?嚗?蝣箄???蝬脰楝敺?閰艾?);
     const persistence = window.firebase.auth.Auth.Persistence;
-    await sdk.auth.setPersistence(remember ? persistence.LOCAL : persistence.SESSION);
-    const credential = await sdk.auth.signInWithEmailAndPassword(String(email || "").trim(), String(password || ""));
+    try {
+      await withTimeout(sdk.auth.setPersistence(remember ? persistence.LOCAL : persistence.SESSION), 8000, "auth/unsupported-persistence-type", "???急??⊥?靽??餃???);
+    } catch (persistenceError) {
+      // ?典? iOS 蝘??汗?撋汗?冽? PWA 摰孵??蝯?IndexedDB??      // ???啣極雿?畾萄摮?隞?閮望甈∠?亙???銝?蝙?刻脣 App??      console.warn("Firebase persistence fallback", persistenceError);
+      try {
+        await withTimeout(sdk.auth.setPersistence(persistence.SESSION), 5000, "auth/unsupported-persistence-type", "???急??⊥?靽??餃???);
+      } catch (sessionPersistenceError) {
+        console.warn("Firebase session persistence unavailable", sessionPersistenceError);
+      }
+    }
+    const credential = await withTimeout(
+      sdk.auth.signInWithEmailAndPassword(String(email || "").trim(), String(password || "")),
+      20000,
+      "auth/network-request-failed",
+      "?餃????暹?嚗?蝣箄???蝬脰楝敺?閰艾?
+    );
     try {
       return { user: userLabel(credential.user, null) };
     } catch (error) {
