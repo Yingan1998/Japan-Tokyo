@@ -7027,7 +7027,11 @@
     function resetTripState(meta) {
       const selectedMeta = meta || { id: CLOUD_TRIP_ID, name: "Japan Tokyo", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard" };
       activeTripId = String(selectedMeta.id || CLOUD_TRIP_ID);
-      activeTripMeta = { ...selectedMeta, id: activeTripId, theme: selectedMeta.theme || (activeTripId === CLOUD_TRIP_ID ? "postcard" : "journal") };
+      const requestedTheme = String(selectedMeta.theme || "");
+      const safeTheme = activeTripId === CLOUD_TRIP_ID
+        ? (requestedTheme || "postcard")
+        : (requestedTheme === "postcard" || !requestedTheme ? "journal" : requestedTheme);
+      activeTripMeta = { ...selectedMeta, id: activeTripId, theme: safeTheme };
       window.__ACTIVE_TRIP_ID__ = activeTripId;
       if (window.travelFirebase?.setTrip) window.travelFirebase.setTrip(activeTripId);
       START_DATE = activeTripMeta.startDate || "2026-11-28";
@@ -7237,6 +7241,7 @@
       const submit = form.querySelector('[type="submit"]');
       const status = document.getElementById("tripCreateStatus");
       const payload = { name: document.getElementById("newTripName").value.trim(), destination: document.getElementById("newTripDestination").value.trim(), startDate: document.getElementById("newTripStartDate").value, endDate: document.getElementById("newTripEndDate").value, timezone: document.getElementById("newTripTimezone").value, currency: document.getElementById("newTripCurrency").value, settlementCurrency: document.getElementById("newTripSettlementCurrency").value, theme: document.getElementById("newTripTheme").value };
+      if (payload.theme === "postcard" && !/東京|tokyo/i.test(payload.destination)) payload.theme = "journal";
       if (!payload.name || !payload.destination || payload.endDate < payload.startDate) { if (status) status.textContent = "請確認必填欄位與日期範圍。"; return; }
       submit.disabled = true;
       if (status) status.textContent = editingTripId ? "正在更新旅行設定…" : "正在建立旅行與權限…";
