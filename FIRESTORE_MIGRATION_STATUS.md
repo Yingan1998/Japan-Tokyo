@@ -4,7 +4,7 @@
 
 ## 已完成
 
-- 已保留原版檔案：`index(20261113-004507).html`。
+- 已保留 `index(20261113-004507).html`：這是本工作區在加入 Firestore 前的原版快照；使用者指定的同名原始附件未出現在目前可讀取的工作區，因此未假稱已取得外部版本。
 - 新版 `index.html` 已加入 Firebase Web App 設定入口與 Firestore adapter。
 - 新版仍保留原有 UI、A／B 行程、地圖、票券、住宿、記帳、分帳與本機備份。
 - Firestore adapter 預設使用六個資料集：
