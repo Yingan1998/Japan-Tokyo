@@ -6637,7 +6637,7 @@
       badge.textContent = !configured ? "本機模式" : loggedIn ? (firebaseConfigured() ? "Firebase 已登入" : "已登入") : (firebaseConfigured() ? "Firebase" : "API 已連線");
       badge.classList.toggle("offline", !configured);
       form.hidden = !configured || loggedIn || Boolean(window.__cloudSetupToken);
-      if (setupForm && !window.__cloudSetupToken) setupForm.hidden = true;
+      if (setupForm) setupForm.hidden = firebaseConfigured() || !window.__cloudSetupToken;
       actions.hidden = !loggedIn;
       summary.hidden = !loggedIn;
       if (loggedIn) {
@@ -6655,6 +6655,7 @@
     }
 
     function showCloudSetupForm() {
+      if (firebaseConfigured()) return false;
       const setup = cloudSetupContext();
       const setupForm = document.getElementById("cloudSetupForm");
       const loginForm = document.getElementById("cloudLoginForm");
