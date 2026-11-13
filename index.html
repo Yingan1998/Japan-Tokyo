@@ -5638,14 +5638,14 @@
       flex-direction: column;
       justify-content: flex-end;
       overflow: hidden;
-      background-image: linear-gradient(180deg, rgba(224, 239, 245, .22), rgba(28, 57, 81, .62)), url('./assets/fuji-winter-watercolor.jpg');
+      background-image: radial-gradient(circle at 82% 22%, rgba(255, 216, 145, .75) 0 8%, transparent 8.4%), linear-gradient(145deg, #dfeef0 0%, #aecbd8 58%, #7694ab 100%);
       background-size: cover;
       background-position: center 45%;
       color: #fff;
     }
 
     .accountCover::after {
-      content: "TOKYO · WINTER POSTCARD";
+      content: "TRAVEL NOTEBOOK";
       position: absolute;
       top: 16px;
       right: 16px;
@@ -5737,6 +5737,10 @@
     .travel-list-mode .app > .topbar,
     .travel-list-mode .app > .infoCard,
     .travel-list-mode .bottomNav { display: none !important; }
+    body[data-info-context="account"] .tripOnlyPanel { display: none !important; }
+    body[data-info-context="trip"] .accountOnlyPanel { display: none !important; }
+    .tripToolsTitle { margin: 3px 0 0; color: #19344f; font-size: 20px; }
+    .tripToolsDescription { line-height: 1.5; }
     .travel-list-mode .app { padding-top: 22px; }
     .travelListPage { max-width: 760px; margin: 0 auto; }
     .travelListHero { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 22px; border: 1px solid rgba(255,255,255,.86); border-radius: 26px; background: linear-gradient(145deg, rgba(255,255,255,.84), rgba(221,238,245,.72)); box-shadow: 0 18px 40px rgba(37,64,87,.14); }
@@ -5751,6 +5755,10 @@
     .travelGroup h2 small { color: #7890a0; font-size: 11px; font-weight: 700; }
     .travelCards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .travelCard { display: flex; flex-direction: column; min-width: 0; min-height: 154px; padding: 15px; border: 1px solid rgba(255,255,255,.9); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(232,243,247,.74)); box-shadow: 0 8px 18px rgba(37,64,87,.08); text-align: left; }
+    .travelCard[data-theme="postcard"] { background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(221,236,246,.78)); }
+    .travelCard[data-theme="journal"], .travelCard[data-theme="minimal"] { background: linear-gradient(145deg, rgba(255,252,242,.94), rgba(224,239,233,.8)); }
+    .travelCard[data-theme="sakura"] { background: linear-gradient(145deg, rgba(255,251,249,.95), rgba(247,225,230,.8)); }
+    .travelCard[data-theme="sunset"] { background: linear-gradient(145deg, rgba(255,252,243,.95), rgba(250,224,199,.82)); }
     .travelCard.is-active { border-color: rgba(47,143,140,.5); box-shadow: 0 0 0 3px rgba(47,143,140,.1), 0 12px 24px rgba(37,64,87,.1); }
     .travelCardTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .travelCardStatus { padding: 5px 8px; border-radius: 999px; color: #2d7655; background: rgba(111,207,151,.18); font-size: 10px; font-weight: 900; white-space: nowrap; }
@@ -5776,6 +5784,49 @@
     .tripSettingValue small { display: block; color: #7890a0; font-size: 10px; }
     .tripSettingValue strong { display: block; margin-top: 2px; color: #294861; font-size: 13px; overflow-wrap: anywhere; }
     .tripListBack { margin-bottom: 8px; }
+
+    /* 每趟旅行使用自己的手繪明信片色調；只有東京 postcard 使用富士山圖片。 */
+    body:not([data-auth-screen="app"]) .bg,
+    body.travel-list-mode .bg {
+      background-color: #eaf1f3;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,.85) 0 3%, transparent 3.3%),
+        linear-gradient(135deg, #f4f1e9 0%, #d9e9ed 52%, #c7dce3 100%);
+      background-size: auto, cover;
+    }
+    body[data-trip-theme="journal"] .bg,
+    body[data-trip-theme="minimal"] .bg {
+      background-color: #dfece5;
+      background-image:
+        radial-gradient(ellipse at 16% 76%, rgba(113,157,139,.22) 0 12%, transparent 12.4%),
+        radial-gradient(ellipse at 76% 22%, rgba(255,255,255,.72) 0 14%, transparent 14.5%),
+        linear-gradient(145deg, #f8f4e9 0%, #dcece5 58%, #bdd8d3 100%);
+      background-size: auto, auto, cover;
+    }
+    body[data-trip-theme="sakura"] .bg {
+      background-color: #f4e4e3;
+      background-image:
+        radial-gradient(circle at 18% 22%, rgba(224,132,157,.2) 0 5%, transparent 5.5%),
+        radial-gradient(circle at 82% 28%, rgba(255,255,255,.76) 0 10%, transparent 10.5%),
+        linear-gradient(145deg, #fff8f1 0%, #f7e5e4 52%, #e8c6cc 100%);
+      background-size: auto, auto, cover;
+    }
+    body[data-trip-theme="sunset"] .bg {
+      background-color: #f4e1cc;
+      background-image:
+        radial-gradient(ellipse at 70% 22%, rgba(255,188,105,.34) 0 12%, transparent 12.5%),
+        radial-gradient(ellipse at 18% 78%, rgba(189,128,88,.16) 0 10%, transparent 10.5%),
+        linear-gradient(145deg, #fff7e9 0%, #f7e0c6 56%, #e6c2ab 100%);
+      background-size: auto, auto, cover;
+    }
+    body[data-trip-theme="postcard"] .bg {
+      background-color: #d8eaf4;
+      background-image:
+        linear-gradient(180deg, rgba(244, 249, 252, .42) 0%, rgba(224, 239, 246, .28) 48%, rgba(201, 222, 236, .48) 100%),
+        url("assets/fuji-winter-watercolor.jpg");
+      background-size: cover;
+      background-position: center center;
+    }
 
     @media (max-width: 720px) {
       .homeShortcutGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -6298,46 +6349,58 @@
 
     <section class="page" id="page-info">
       <div class="sectionTitleRow">
-        <div class="sectionTitle">資訊 <span class="muted">Info</span></div>
+        <div class="sectionTitle"><span id="infoPageTitle">我的帳號</span> <span class="muted" id="infoPageTitleEn">Account</span></div>
         <button class="btnGhost tripListBack" type="button" onclick="loadTravelList()">← 我的旅行</button>
       </div>
       <div class="cloudAuthCard" id="cloudAuthCard">
         <div class="cloudAuthHeader">
           <div><span class="dashboardKicker">CLOUD TRIP ACCOUNT</span>
             <h2 id="cloudAuthTitle" tabindex="-1">我的帳號</h2>
-            <p id="cloudAuthDescription">管理登入、密碼與旅程同步。</p>
+            <p id="cloudAuthDescription">管理你的登入、密碼與個人設定。</p>
           </div>
           <span class="offlineStatusBadge" id="cloudAuthModeBadge">本機模式</span>
         </div>
         <div id="cloudAuthBody" class="cloudAuthBody">
-          <div id="cloudAuthUserSummary" class="cloudUserSummary" hidden></div>
-          <div class="cloudAuthActions">
-            <button class="btnGhost" type="button" onclick="syncLocalDataToCloud()">上傳目前本機資料</button>
-            <button class="btnGhost" type="button" onclick="pullCloudTripData()">重新載入雲端資料</button>
-            <label class="btnGhost" for="cloudImportFile">預覽匯入備份</label>
-            <input id="cloudImportFile" type="file" accept="application/json,.json" hidden onchange="previewCloudImport(event)">
+          <div id="accountProfilePanel" class="accountOnlyPanel">
+            <div id="cloudAuthUserSummary" class="cloudUserSummary" hidden></div>
+            <div id="accountSecurity" class="cloudAuthActions" hidden>
+              <span class="accountSecurityLabel">帳號安全</span>
+              <button class="btnGhost" type="button" onclick="openChangePasswordPrompt()">修改密碼</button>
+              <button class="btnGhost accountDanger" id="accountLogout" type="button" onclick="logoutCloudAccount()">登出</button>
+            </div>
+            <form id="accountChangeForm" hidden onsubmit="submitAccountPassword(event)">
+              <label>目前密碼<input id="accountCurrentPassword" class="formControl" type="password" autocomplete="current-password" required></label>
+              <label>新密碼<input id="accountNewPassword" class="formControl" type="password" autocomplete="new-password" minlength="10" required></label>
+              <label>確認新密碼<input id="accountConfirmPassword" class="formControl" type="password" autocomplete="new-password" minlength="10" required></label>
+              <button class="btnPill primary" type="submit">儲存新密碼</button>
+              <button class="btnGhost" type="button" onclick="this.form.reset(); this.form.hidden = true">取消</button>
+            </form>
           </div>
-          <div id="accountSecurity" class="cloudAuthActions" hidden>
-            <span class="accountSecurityLabel">帳號安全</span>
-            <button class="btnGhost" type="button" onclick="openChangePasswordPrompt()">修改密碼</button>
-            <button class="btnGhost accountDanger" id="accountLogout" type="button" onclick="logoutCloudAccount()">登出</button>
-          </div>
-          <form id="accountChangeForm" hidden onsubmit="submitAccountPassword(event)">
-            <label>目前密碼<input id="accountCurrentPassword" class="formControl" type="password" autocomplete="current-password" required></label>
-            <label>新密碼<input id="accountNewPassword" class="formControl" type="password" autocomplete="new-password" minlength="10" required></label>
-            <label>確認新密碼<input id="accountConfirmPassword" class="formControl" type="password" autocomplete="new-password" minlength="10" required></label>
-            <button class="btnPill primary" type="submit">儲存新密碼</button>
-            <button class="btnGhost" type="button" onclick="this.form.reset(); this.form.hidden = true">取消</button>
-          </form>
-          <p id="legacyBackupNotice" class="muted" hidden>此裝置可能有舊版本機資料。請用舊版匯出 JSON，再從這裡預覽匯入。</p>
-          <div id="cloudAuthStatus" class="cloudAuthStatus" aria-live="polite">未設定 API 時，App 仍可使用本機模式。</div>
-          <div id="adminUserPanel" class="adminUserPanel" hidden>
-            <div class="rowBetween"><h3>旅伴帳號管理</h3><button class="btnGhost" type="button" onclick="createCompanionAccount()">＋ 新增旅伴</button></div>
-            <div id="adminUserList" class="adminUserList"></div>
+          <div id="tripSyncPanel" class="tripOnlyPanel">
+            <div class="cloudAuthActions">
+              <button class="btnGhost" type="button" onclick="syncLocalDataToCloud()">上傳目前本機資料</button>
+              <button class="btnGhost" type="button" onclick="pullCloudTripData()">重新載入雲端資料</button>
+              <label class="btnGhost" for="cloudImportFile">預覽匯入備份</label>
+              <input id="cloudImportFile" type="file" accept="application/json,.json" hidden onchange="previewCloudImport(event)">
+            </div>
+            <p id="legacyBackupNotice" class="muted" hidden>此裝置可能有舊版本機資料。請用舊版匯出 JSON，再從這裡預覽匯入。</p>
+            <div id="cloudAuthStatus" class="cloudAuthStatus" aria-live="polite">未設定 API 時，App 仍可使用本機模式。</div>
+            <div id="adminUserPanel" class="adminUserPanel" hidden>
+              <div class="rowBetween"><h3>本趟旅伴權限</h3><button class="btnGhost" type="button" onclick="createCompanionAccount()">＋ 新增旅伴</button></div>
+              <div id="adminUserList" class="adminUserList"></div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="simpleCard">
+      <div class="simpleCard tripOnlyPanel">
+        <div class="rowBetween">
+          <div><span class="dashboardKicker">CURRENT TRIP</span><h2 id="tripToolsTitle">目前旅行</h2>
+            <div class="muted" id="tripToolsDescription" style="margin-top:4px">這裡只放目前旅行的工具與資料。</div>
+          </div>
+          <button class="btnGhost" type="button" onclick="openCurrentTripSettings()">旅行設定</button>
+        </div>
+      </div>
+      <div class="simpleCard tripOnlyPanel">
         <div class="rowBetween">
           <div><b>更多功能</b>
             <div class="muted" style="margin-top:4px">較少使用的工具集中在這裡，首頁保持清爽。</div>
@@ -6352,12 +6415,12 @@
         </div>
       </div>
 
-      <div class="simpleCard aboutAppCard">
+      <div class="simpleCard aboutAppCard accountOnlyPanel">
         <div class="aboutAppMark"><img src="./assets/app-icon-192.png" alt="Japan Tokyo App icon"></div>
         <div><span class="dashboardKicker">ABOUT THIS APP</span><h2>Japan Tokyo｜旅する手帳</h2><p>東京九天八夜的行程、票夾、旅費與旅伴同步都集中在這裡。</p><small>Firebase 雲端同步 · 可安裝 PWA · 2026 冬季旅程</small></div>
       </div>
 
-      <div class="travelSafetyCard" id="travelSafetyCard">
+      <div class="travelSafetyCard tripOnlyPanel" id="travelSafetyCard">
         <div class="travelSafetyHeading">
           <div><span class="dashboardKicker">LOCAL GUIDE & SOS</span>
             <h2>日本當地提醒與 SOS</h2>
@@ -6379,7 +6442,7 @@
         <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btnGhost" type="button" onclick="openExternal('https://www.boca.gov.tw/sp-trwa-print-2137-338f3-1.html')">查看外交部公告</button></div>
       </div>
 
-      <div class="travelInfoGrid">
+      <div class="travelInfoGrid tripOnlyPanel">
         <div class="travelPrepCard" id="travelPrepCard">
           <div class="travelPrepHeading">
             <div><span class="dashboardKicker">BEFORE YOU GO</span>
@@ -6409,7 +6472,7 @@
         </div>
       </div>
 
-      <div class="simpleCard backupCard installCard" id="installCard">
+      <div class="simpleCard backupCard installCard tripOnlyPanel" id="installCard">
         <div class="backupHeader">
           <div>
             <span class="backupKicker">TRAVEL APP</span>
@@ -6423,7 +6486,7 @@
         </div>
         <div id="installStatus" class="backupStatus" aria-live="polite">正在檢查手機安裝功能…</div>
       </div>
-      <div class="simpleCard backupCard">
+      <div class="simpleCard backupCard tripOnlyPanel">
         <div class="backupHeader">
           <div>
             <span class="backupKicker">BACKUP & RESTORE</span>
@@ -6964,13 +7027,13 @@
     function resetTripState(meta) {
       const selectedMeta = meta || { id: CLOUD_TRIP_ID, name: "Japan Tokyo", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard" };
       activeTripId = String(selectedMeta.id || CLOUD_TRIP_ID);
-      activeTripMeta = { ...selectedMeta, id: activeTripId };
+      activeTripMeta = { ...selectedMeta, id: activeTripId, theme: selectedMeta.theme || (activeTripId === CLOUD_TRIP_ID ? "postcard" : "journal") };
       window.__ACTIVE_TRIP_ID__ = activeTripId;
       if (window.travelFirebase?.setTrip) window.travelFirebase.setTrip(activeTripId);
       START_DATE = activeTripMeta.startDate || "2026-11-28";
       END_DATE = activeTripMeta.endDate || "2026-12-06";
       DASHBOARD_TIMEZONE = activeTripMeta.timezone || "Asia/Tokyo";
-      document.body.dataset.tripTheme = activeTripMeta.theme || "postcard";
+      document.body.dataset.tripTheme = activeTripMeta.theme || (activeTripId === CLOUD_TRIP_ID ? "postcard" : "journal");
       const locationChip = document.getElementById("tripLocationChip");
       if (locationChip) locationChip.textContent = `📍 ${activeTripMeta.destination || "旅行目的地"}`;
       const kicker = document.getElementById("dashboardKickerLabel");
@@ -7074,7 +7137,8 @@
       const state = tripStatus(trip);
       const isActive = activeTripId === trip.id && activeTripMeta;
       const role = trip.member?.role === "admin" ? "擁有者" : trip.member?.role === "editor" ? "編輯者" : "檢視者";
-      return `<article class="travelCard${isActive ? " is-active" : ""}"><div class="travelCardTop"><span class="pill">${escapeHtml(trip.destination || "未設定目的地")}</span><span class="travelCardStatus${state.key === "ended" || state.key === "archived" ? " ended" : ""}">${state.label}</span></div><h3>${escapeHtml(trip.name || "未命名旅行")}</h3><p>${escapeHtml(formatTripRange(trip))}</p><div class="travelCardMeta"><span>${escapeHtml(trip.timezone || "時區待設定")}</span><span>${escapeHtml(trip.currency || "JPY")} → ${escapeHtml(trip.settlementCurrency || "TWD")}</span><span>${role}</span></div><div class="travelCardActions"><button class="btnPill primary" type="button" onclick="openTripById('${encodeURIComponent(trip.id)}')">開啟旅行</button>${trip.member?.role === "admin" ? `<button class="btnGhost" type="button" onclick="openTripSettings('${encodeURIComponent(trip.id)}')">設定</button>` : ""}</div></article>`;
+      const theme = trip.theme || (trip.id === CLOUD_TRIP_ID ? "postcard" : "journal");
+      return `<article class="travelCard${isActive ? " is-active" : ""}" data-theme="${escapeHtml(theme)}"><div class="travelCardTop"><span class="pill">${escapeHtml(trip.destination || "未設定目的地")}</span><span class="travelCardStatus${state.key === "ended" || state.key === "archived" ? " ended" : ""}">${state.label}</span></div><h3>${escapeHtml(trip.name || "未命名旅行")}</h3><p>${escapeHtml(formatTripRange(trip))}</p><div class="travelCardMeta"><span>${escapeHtml(trip.timezone || "時區待設定")}</span><span>${escapeHtml(trip.currency || "JPY")} → ${escapeHtml(trip.settlementCurrency || "TWD")}</span><span>${role}</span></div><div class="travelCardActions"><button class="btnPill primary" type="button" onclick="openTripById('${encodeURIComponent(trip.id)}')">開啟旅行</button>${trip.member?.role === "admin" ? `<button class="btnGhost" type="button" onclick="openTripSettings('${encodeURIComponent(trip.id)}')">設定</button>` : ""}</div></article>`;
     }
 
     async function loadTravelList({ quiet = false } = {}) {
@@ -7107,8 +7171,39 @@
     }
 
     function openAccountFromTravelList() {
+      setInfoContext("account");
       switchPage("info");
       document.getElementById("cloudAuthTitle")?.focus();
+    }
+
+    function setInfoContext(context) {
+      const mode = context === "trip" && activeTripMeta ? "trip" : "account";
+      document.body.dataset.infoContext = mode;
+      const pageTitle = document.getElementById("infoPageTitle");
+      const pageTitleEn = document.getElementById("infoPageTitleEn");
+      const authTitle = document.getElementById("cloudAuthTitle");
+      const authDescription = document.getElementById("cloudAuthDescription");
+      const toolsTitle = document.getElementById("tripToolsTitle");
+      const toolsDescription = document.getElementById("tripToolsDescription");
+      if (mode === "trip") {
+        const tripName = activeTripMeta?.name || "目前旅行";
+        if (pageTitle) pageTitle.textContent = "旅行工具";
+        if (pageTitleEn) pageTitleEn.textContent = "Trip tools";
+        if (authTitle) authTitle.textContent = "旅程同步";
+        if (authDescription) authDescription.textContent = `${tripName} 的同步、備份與旅伴權限。`;
+        if (toolsTitle) toolsTitle.textContent = tripName;
+        if (toolsDescription) toolsDescription.textContent = `${activeTripMeta?.destination || "旅行目的地"} · ${formatTripRange(activeTripMeta || {})}`;
+      } else {
+        if (pageTitle) pageTitle.textContent = "我的帳號";
+        if (pageTitleEn) pageTitleEn.textContent = "Account";
+        if (authTitle) authTitle.textContent = "我的帳號";
+        if (authDescription) authDescription.textContent = "管理你的登入、密碼與個人設定。";
+      }
+    }
+
+    function openCurrentTripSettings() {
+      if (!activeTripId) return;
+      openTripSettings(encodeURIComponent(activeTripId));
     }
 
     function openTripCreateSheet() {
@@ -9143,6 +9238,7 @@
       if (tab === "accommodations") renderAccommodations();
       if (tab === "weather") loadRegionalWeather();
       if (tab === "info") {
+        setInfoContext("trip");
         renderTravelPrep();
         renderCompanionNotes();
         updateOfflineStatus();
@@ -9266,6 +9362,7 @@
       if (tab === "accommodations") renderAccommodations();
       if (tab === "weather") loadRegionalWeather();
       if (tab === "info") {
+        setInfoContext(document.body.classList.contains("travel-list-mode") ? "account" : "trip");
         renderTravelPrep();
         renderCompanionNotes();
         updateOfflineStatus();
@@ -11019,7 +11116,7 @@
         <div class="formField"><label for="newTripTimezone">旅行時區</label><select class="formControl" id="newTripTimezone"><option value="Asia/Tokyo">日本時間 Asia/Tokyo</option><option value="Asia/Taipei">台北時間 Asia/Taipei</option><option value="Asia/Seoul">韓國時間 Asia/Seoul</option><option value="Europe/London">英國時間 Europe/London</option><option value="America/Los_Angeles">美西時間 America/Los_Angeles</option></select></div>
         <div class="formField"><label for="newTripCurrency">旅行幣別</label><select class="formControl" id="newTripCurrency"><option value="JPY">JPY 日圓</option><option value="TWD">TWD 新台幣</option><option value="KRW">KRW 韓元</option><option value="USD">USD 美元</option><option value="EUR">EUR 歐元</option></select></div>
         <div class="formField"><label for="newTripSettlementCurrency">換算幣別</label><select class="formControl" id="newTripSettlementCurrency"><option value="TWD">TWD 新台幣</option><option value="JPY">JPY 日圓</option><option value="USD">USD 美元</option><option value="EUR">EUR 歐元</option></select></div>
-        <div class="formField"><label for="newTripTheme">封面風格</label><select class="formControl" id="newTripTheme"><option value="postcard">冬日明信片</option><option value="minimal">簡約旅誌</option><option value="sunset">暖色夕陽</option></select></div>
+        <div class="formField"><label for="newTripTheme">封面風格</label><select class="formControl" id="newTripTheme"><option value="journal" selected>北國手繪旅誌</option><option value="sakura">櫻色散步</option><option value="sunset">暖陽公路</option><option value="postcard">富士山冬日明信片（東京）</option><option value="minimal">簡約旅誌（舊版）</option></select></div>
         <div id="tripCreateStatus" class="tripCreateStatus full" role="status" aria-live="polite"></div>
         <div class="modalActions full"><button class="btnGhost" type="button" onclick="closeTripCreateSheet()">取消</button><button class="btnPill primary" type="submit">建立旅行</button></div>
       </form>
