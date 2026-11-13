@@ -5533,17 +5533,148 @@
         min-width: 0;
       }
     }
+    [hidden] { display: none !important; }
+    body:not([data-auth-screen="app"]) > :is(.app, .bottomNav, .modalSheet, .sheet, .sheetOverlay) { display: none !important; }
+    body[data-auth-screen="app"] .accountGate { display: none; }
+    .accountGate { min-height: 100dvh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)); position: relative; }
+    .accountEntry { width: min(100%, 440px); overflow: hidden; border-radius: 26px; background: #fffaf3; color: #172b43; box-shadow: 0 18px 48px #20385226; border: 1px solid #fff; }
+    .accountCover { padding: 26px 26px 22px; background: radial-gradient(circle at 83% 25%, #ffe3ad 0 9%, transparent 9.5%), linear-gradient(145deg,#e9f3f6,#bfd9e6); }
+    .accountMountain { font-size: 38px; line-height: 1; margin-bottom: 14px; }
+    .accountBrand { font-size: 14px; letter-spacing: .06em; color: #294c66; }
+    .accountCover h1 { margin: 6px 0 0; font-size: clamp(28px, 8vw, 38px); }
+    .accountEntryBody { padding: 22px 24px 10px; }
+    .accountEntryBody h2 { margin: 0 0 16px; font-size: 22px; }
+    .accountEntry form, #accountChangeForm { display: grid; gap: 11px; }
+    .accountEntry form label, #accountChangeForm label { display: grid; gap: 6px; font-weight: 650; }
+    .accountEntry .formControl, #accountChangeForm .formControl { min-height: 46px; width: 100%; font-size: 16px; }
+    .accountEntry .accountRemember { display: flex; align-items: center; gap: 9px; min-height: 38px; font-size: 14px; font-weight: 500; }
+    .accountRemember input { width: 19px; height: 19px; accent-color: #315a76; }
+    .accountPasswordRow { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; }
+    .accountEntry button, #accountSecurity button, #accountChangeForm button { min-height: 44px; }
+    .accountEntry .accountPrimary { background: #315a76; color: white; justify-content: center; font-size: 16px; width: 100%; }
+    .accountLinks { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    .accountEntry footer { text-align: center; padding: 10px 16px 20px; font-size: 12px; color: #526577; }
+    .accountStatus { margin: 12px 0 0; line-height: 1.5; overflow-wrap: anywhere; }
+    .accountStatus:empty { display: none; }
+    .accountDanger { color: #a12f26 !important; }
+    .accountShortcut { min-height: 44px; white-space: nowrap; }
+    @media (max-width: 420px) { .topActions { flex-wrap: wrap; justify-content: flex-end; } }
+    #cloudAuthUserSummary { margin-bottom: 12px; overflow-wrap: anywhere; }
+    #accountChangeForm { margin: 16px 0; max-width: 430px; }
+  </style>
+  <style>
+    /* 首頁手機資訊分層：保留核心資訊，次要操作可展開 */
+    .homeFoldToggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1px solid rgba(69, 112, 137, .16);
+      border-radius: 12px;
+      color: #2f6f70;
+      background: rgba(255, 255, 255, .64);
+      box-shadow: 0 6px 14px rgba(49, 83, 110, .07);
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .homeFoldBody {
+      min-width: 0;
+    }
+
+    @media (max-width: 600px) {
+      .homeFoldToggle {
+        display: inline-flex;
+      }
+
+      .homeFoldCard.is-collapsed .homeFoldBody {
+        display: none;
+      }
+
+      .homeFoldCard.is-collapsed {
+        padding-bottom: 12px;
+      }
+
+      .dashboardGuideHeading,
+      .travelHelperHeading {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .dashboardGuideHeading > div:first-child,
+      .travelHelperHeading > div:first-child {
+        min-width: 0;
+      }
+
+      .dashboardGuideHeading h2,
+      .travelHelperHeading h2 {
+        font-size: 16px;
+      }
+
+      .homeFoldBody {
+        margin-top: 10px;
+      }
+    }
   </style>
 </head>
 
-<body>
+<body data-auth-screen="loading">
+  <main class="accountGate" id="accountGate" aria-labelledby="accountGateTitle">
+    <div class="accountEntry">
+      <header class="accountCover">
+        <div class="accountMountain" aria-hidden="true">🗻</div>
+        <div class="accountBrand">Japan Tokyo · 旅する手帳</div>
+        <h1 id="accountGateTitle">東京九天八夜</h1>
+      </header>
+      <div class="accountEntryBody">
+        <p id="accountLoading" role="status">正在確認登入狀態…</p>
+        <section id="accountSignIn" hidden>
+          <h2 id="accountFormTitle" tabindex="-1">旅伴登入</h2>
+          <form id="cloudLoginForm" onsubmit="loginCloudAccount(event)">
+            <label>Email<input class="formControl" id="cloudLoginEmail" type="email" autocomplete="username" required></label>
+            <label for="cloudLoginPassword">密碼</label>
+            <div class="accountPasswordRow">
+              <input class="formControl" id="cloudLoginPassword" type="password" autocomplete="current-password" required>
+              <button type="button" class="btnGhost" onclick="toggleAccountPassword(this)">顯示密碼</button>
+            </div>
+            <label class="accountRemember" id="accountRememberRow"><input id="accountRemember" type="checkbox"> 在這台裝置保持登入</label>
+            <button class="btnPill primary accountPrimary" type="submit">登入</button>
+            <div class="accountLinks">
+              <button class="btnGhost" type="button" id="accountForgot" onclick="setAccountForm('reset')">忘記密碼</button>
+              <button class="btnGhost" type="button" onclick="setAccountForm('invite')">首次使用</button>
+            </div>
+          </form>
+          <form id="accountResetForm" hidden onsubmit="requestAccountReset(event)">
+            <p>輸入旅伴帳號的 Email，即可申請密碼重設信。</p>
+            <label>Email<input class="formControl" id="accountResetEmail" type="email" autocomplete="email" required></label>
+            <button class="btnPill primary accountPrimary" type="submit">寄送重設信</button>
+            <button class="btnGhost" type="button" onclick="setAccountForm('login')">返回登入</button>
+          </form>
+          <div id="accountInvite" hidden>
+            <p>請向旅程管理員索取旅伴帳號。收到帳號後，就能使用 Email 和密碼登入。</p>
+            <button class="btnGhost" type="button" onclick="setAccountForm('login')">返回登入</button>
+          </div>
+          <form id="cloudSetupForm" hidden onsubmit="setupCloudPassword(event)">
+            <label>設定新密碼<input class="formControl" id="cloudSetupPassword" type="password" autocomplete="new-password" required minlength="10"></label>
+            <button class="btnPill primary accountPrimary" type="submit">完成設定並登入</button>
+          </form>
+        </section>
+        <p id="accountEntryStatus" class="accountStatus" role="status"></p>
+      </div>
+      <footer>© 2026 Japan Tokyo｜旅する手帳</footer>
+    </div>
+  </main>
   <div class="bg"></div>
 
-  <div class="app">
+  <div class="app" inert>
     <div class="topbar">
       <button class="brand brandHome" type="button" onclick="goHome()" aria-label="回到行程首頁" title="回到行程首頁"><span
           class="fujiMark" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><circle cx="23" cy="9" r="3" fill="#f2b86b"/><path d="M4 25.5 14.35 9.65a1.98 1.98 0 0 1 3.3 0L28 25.5H4Z" fill="#466f9c"/><path d="m14.35 9.65-3.6 5.5 3.08-1.82 1.76 2.1 1.45-2.12 2.06 1.55-2.45-5.21a1.3 1.3 0 0 0-2.3 0Z" fill="#fff"/><path d="M3 25.5h26v2H3z" fill="#6aa49e" opacity=".82"/></svg></span> Japan Tokyo</button>
       <div class="topActions">
+        <button id="accountShortcut" class="btnGhost accountShortcut" type="button" onclick="switchPage('info', document.querySelector('.bottomNav .bItem:last-child')); document.getElementById('cloudAuthTitle').focus()" hidden>我的</button>
         <div class="rate" id="rateBox">匯率讀取中…</div>
       </div>
     </div>
@@ -5627,33 +5758,38 @@
           </div>
         </div>
 
-        <div class="dashboardGuideCard" id="dashboardGuideCard">
+        <div class="dashboardGuideCard homeFoldCard" id="dashboardGuideCard">
           <div class="dashboardGuideHeading">
             <div><span class="dashboardKicker">DAY GUIDE</span>
               <h2 id="dashboardGuideTitle">本日詳細行程</h2>
-            </div>
-            <button class="btnGhost" type="button" onclick="openDayGuideModal()">查看詳細行程</button>
+            </div><button class="homeFoldToggle" type="button" aria-expanded="true"
+              onclick="toggleHomeFold('dashboardGuideCard', this)">收合</button>
           </div>
-          <p id="dashboardGuideSummary">切換日期後，這裡會顯示 TXT 行程明細的重點與提醒。</p>
-          <div class="dashboardGuideMeta"><span id="dashboardGuideChecklist">行前提醒載入中…</span><span
-              id="dashboardGuideSource">來源：行程明細 TXT</span></div>
+          <div class="homeFoldBody dashboardGuideBody">
+            <button class="btnGhost" type="button" onclick="openDayGuideModal()">查看詳細行程</button>
+            <p id="dashboardGuideSummary">切換日期後，這裡會顯示 TXT 行程明細的重點與提醒。</p>
+            <div class="dashboardGuideMeta"><span id="dashboardGuideChecklist">行前提醒載入中…</span><span
+                id="dashboardGuideSource">來源：行程明細 TXT</span></div>
+          </div>
         </div>
 
-        <div class="travelHelperCard" id="dashboardTravelHelperCard">
+        <div class="travelHelperCard homeFoldCard is-collapsed" id="dashboardTravelHelperCard">
           <div class="travelHelperHeading">
             <div><span class="dashboardKicker">TRAVEL HELPER</span>
               <h2>今天的小幫手</h2>
               <p id="dashboardHelperSummary">以目前日期的下一個景點為中心，快速找吃的、逛的與重要提醒。</p>
+            </div><span class="offlineStatusBadge" id="offlineStatusBadge">● 線上</span><button class="homeFoldToggle" type="button" aria-expanded="false"
+              onclick="toggleHomeFold('dashboardTravelHelperCard', this)">展開</button>
+          </div>
+          <div class="homeFoldBody travelHelperBody">
+            <div class="travelHelperActions" aria-label="今日旅遊小幫手">
+              <button type="button" onclick="openNearbySearch('餐廳')"><span>🍜</span>附近吃</button>
+              <button type="button" onclick="openNearbySearch('購物')"><span>🛍️</span>附近逛</button>
+              <button type="button" onclick="focusTravelSafety()"><span>🆘</span>當地提醒</button>
+              <button type="button" onclick="checkOfflineStatus()"><span>📶</span>離線檢查</button>
             </div>
-            <span class="offlineStatusBadge" id="offlineStatusBadge">● 線上</span>
+            <p class="travelHelperFootnote">地圖搜尋會開啟 Google Maps；離線時仍可查看已快取的行程、票券與備份資料。</p>
           </div>
-          <div class="travelHelperActions" aria-label="今日旅遊小幫手">
-            <button type="button" onclick="openNearbySearch('餐廳')"><span>🍜</span>附近吃</button>
-            <button type="button" onclick="openNearbySearch('購物')"><span>🛍️</span>附近逛</button>
-            <button type="button" onclick="focusTravelSafety()"><span>🆘</span>當地提醒</button>
-            <button type="button" onclick="checkOfflineStatus()"><span>📶</span>離線檢查</button>
-          </div>
-          <p class="travelHelperFootnote">地圖搜尋會開啟 Google Maps；離線時仍可查看已快取的行程、票券與備份資料。</p>
         </div>
 
       </section>
@@ -5905,30 +6041,31 @@
       <div class="cloudAuthCard" id="cloudAuthCard">
         <div class="cloudAuthHeader">
           <div><span class="dashboardKicker">CLOUD TRIP ACCOUNT</span>
-            <h2 id="cloudAuthTitle">旅伴登入與雲端同步</h2>
-            <p id="cloudAuthDescription">登入後可將六個核心資料集同步到私人 Firestore；尚未填入 Firebase 設定時仍可使用本機模式。</p>
+            <h2 id="cloudAuthTitle" tabindex="-1">我的帳號</h2>
+            <p id="cloudAuthDescription">管理登入、密碼與旅程同步。</p>
           </div>
           <span class="offlineStatusBadge" id="cloudAuthModeBadge">本機模式</span>
         </div>
         <div id="cloudAuthBody" class="cloudAuthBody">
-          <form id="cloudLoginForm" class="cloudAuthForm" onsubmit="loginCloudAccount(event)">
-            <label><span>Email</span><input class="formControl" id="cloudLoginEmail" type="email" autocomplete="username" required placeholder="旅伴 Email"></label>
-            <label><span>密碼</span><input class="formControl" id="cloudLoginPassword" type="password" autocomplete="current-password" required placeholder="至少 10 碼"></label>
-            <button class="btnPill primary" type="submit">登入</button>
-          </form>
-          <form id="cloudSetupForm" class="cloudAuthForm" hidden onsubmit="setupCloudPassword(event)">
-            <label><span>設定新密碼</span><input class="formControl" id="cloudSetupPassword" type="password" autocomplete="new-password" required minlength="10" placeholder="至少 10 碼"></label>
-            <button class="btnPill primary" type="submit">完成設定並登入</button>
-          </form>
+          <div id="cloudAuthUserSummary" class="cloudUserSummary" hidden></div>
           <div class="cloudAuthActions">
             <button class="btnGhost" type="button" onclick="syncLocalDataToCloud()">上傳目前本機資料</button>
             <button class="btnGhost" type="button" onclick="pullCloudTripData()">重新載入雲端資料</button>
             <label class="btnGhost" for="cloudImportFile">預覽匯入備份</label>
             <input id="cloudImportFile" type="file" accept="application/json,.json" hidden onchange="previewCloudImport(event)">
-            <button class="btnGhost" type="button" onclick="openChangePasswordPrompt()">修改密碼</button>
-            <button class="btnGhost" type="button" onclick="logoutCloudAccount()">登出</button>
           </div>
-          <div id="cloudAuthUserSummary" class="cloudUserSummary" hidden></div>
+          <div id="accountSecurity" class="cloudAuthActions" hidden>
+            <button class="btnGhost" type="button" onclick="openChangePasswordPrompt()">修改密碼</button>
+            <button class="btnGhost accountDanger" id="accountLogout" type="button" onclick="logoutCloudAccount()">登出</button>
+          </div>
+          <form id="accountChangeForm" hidden onsubmit="submitAccountPassword(event)">
+            <label>目前密碼<input id="accountCurrentPassword" class="formControl" type="password" autocomplete="current-password" required></label>
+            <label>新密碼<input id="accountNewPassword" class="formControl" type="password" autocomplete="new-password" minlength="10" required></label>
+            <label>確認新密碼<input id="accountConfirmPassword" class="formControl" type="password" autocomplete="new-password" minlength="10" required></label>
+            <button class="btnPill primary" type="submit">儲存新密碼</button>
+            <button class="btnGhost" type="button" onclick="this.form.reset(); this.form.hidden = true">取消</button>
+          </form>
+          <p id="legacyBackupNotice" class="muted" hidden>此裝置可能有舊版本機資料。請用舊版匯出 JSON，再從這裡預覽匯入。</p>
           <div id="cloudAuthStatus" class="cloudAuthStatus" aria-live="polite">未設定 API 時，App 仍可使用本機模式。</div>
           <div id="adminUserPanel" class="adminUserPanel" hidden>
             <div class="rowBetween"><h3>旅伴帳號管理</h3><button class="btnGhost" type="button" onclick="createCompanionAccount()">＋ 新增旅伴</button></div>
@@ -6043,7 +6180,7 @@
   </div>
 
   <!-- Bottom Nav -->
-  <div class="bottomNav">
+  <div class="bottomNav" inert>
     <div class="bItem active" onclick="switchPage('trip', this)">
       <div class="bIcon">📅</div>
       行程
@@ -6066,12 +6203,12 @@
     </div>
     <div class="bItem" onclick="switchPage('info', this)">
       <div class="bIcon">☰</div>
-      更多
+      我的
     </div>
   </div>
 
   <script src="./firebase-config.js?v=2"></script>
-  <script src="./firebase-adapter.js?v=2"></script>
+  <script src="./firebase-adapter.js?v=3"></script>
   <script src="./api-config.js"></script>
   <script>
 
@@ -6375,7 +6512,7 @@
 
     function safeParse(key, fallback) {
       try {
-        const value = localStorage.getItem(key);
+        const value = localStorage.getItem(accountStorageKey(key));
         return value ? JSON.parse(value) : fallback;
       } catch (error) {
         console.warn(`資料讀取失敗：${key}`, error);
@@ -6424,12 +6561,97 @@
 
     function cloudSessionWrite() {
       try {
-        if (cloudAuthState.token) sessionStorage.setItem("japanTokyoCloudSession", JSON.stringify(cloudAuthState));
+        if (cloudAuthState.token && cloudAuthState.provider !== "firebase") sessionStorage.setItem("japanTokyoCloudSession", JSON.stringify(cloudAuthState));
         else sessionStorage.removeItem("japanTokyoCloudSession");
       } catch (error) { console.warn("雲端登入狀態無法儲存", error); }
     }
 
     cloudAuthState = cloudSessionRead();
+    const accountScope = (cloudConfigured() || window.__FIREBASE_CONFIG__?.projectId)
+      ? sessionStorage.getItem("tokyoAccountScope") || "locked" : "";
+    const legacyBackupNotice = Boolean(accountScope && localStorage.getItem("emenuTokyo"));
+    if (firebaseConfigured()) {
+      cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {}, provider: "" };
+      cloudSessionWrite();
+    }
+    let accountBusy = false;
+    let accountLeaving = false;
+    let accountSyncReady = false;
+    const pendingAccountWrites = new Map();
+
+    function accountStorageKey(key) {
+      return accountScope ? `tokyo-account:${accountScope}:${key}` : key;
+    }
+
+    function changeAccountScope(uid) {
+      if (accountScope === uid) return false;
+      sessionStorage.setItem("tokyoAccountScope", uid);
+      location.reload();
+      return true;
+    }
+
+    function setAccountScreen(screen) {
+      document.body.dataset.authScreen = screen;
+      document.querySelector(".app").inert = screen !== "app";
+      document.querySelector(".bottomNav").inert = screen !== "app";
+      document.getElementById("accountLoading").hidden = screen !== "loading";
+      document.getElementById("accountSignIn").hidden = screen !== "login";
+    }
+
+    function setAccountForm(mode) {
+      document.getElementById("cloudLoginForm").hidden = mode !== "login";
+      document.getElementById("accountResetForm").hidden = mode !== "reset";
+      document.getElementById("accountInvite").hidden = mode !== "invite";
+      document.getElementById("cloudSetupForm").hidden = mode !== "setup";
+      const title = document.getElementById("accountFormTitle");
+      title.textContent = {login: "旅伴登入", reset: "忘記密碼", invite: "首次使用", setup: "設定密碼"}[mode];
+      setCloudAuthStatus("");
+      if (mode === "reset") document.getElementById("accountResetEmail").value = document.getElementById("cloudLoginEmail").value;
+      title.focus();
+    }
+
+    function toggleAccountPassword(button) {
+      const field = document.getElementById("cloudLoginPassword");
+      field.type = field.type === "password" ? "text" : "password";
+      button.textContent = field.type === "password" ? "顯示密碼" : "隱藏密碼";
+    }
+
+    function accountError(error) {
+      const messages = {
+        "auth/invalid-credential": "Email 或密碼不正確，請確認後再試一次。",
+        "auth/wrong-password": "密碼不正確，請再試一次。",
+        "auth/user-not-found": "Email 或密碼不正確，請確認後再試一次。",
+        "auth/user-disabled": "此帳號已停用，請聯絡旅程管理員。",
+        "auth/network-request-failed": "無法連線，請確認網路後重試。",
+        "auth/too-many-requests": "嘗試次數過多，請稍後再試。",
+        "permission-denied": "旅程存取遭拒，請管理員核對成員資格與 Firestore 規則。"
+      };
+      return messages[error?.code] || error?.message || "操作失敗，請稍後重試。";
+    }
+
+    async function runAccountForm(form, action) {
+      if (accountBusy) return;
+      accountBusy = true;
+      const submit = form.querySelector('[type="submit"]');
+      submit.disabled = true;
+      form.setAttribute("aria-busy", "true");
+      try { await action(); }
+      catch (error) { setCloudAuthStatus(accountError(error), true); }
+      finally {
+        accountBusy = false;
+        submit.disabled = false;
+        form.removeAttribute("aria-busy");
+      }
+    }
+
+    async function requestAccountReset(event) {
+      event.preventDefault();
+      await runAccountForm(event.currentTarget, async () => {
+        setCloudAuthStatus("正在處理重設申請…");
+        await window.travelFirebase.sendPasswordReset(document.getElementById("accountResetEmail").value);
+        setCloudAuthStatus("若此 Email 有旅伴帳號，請到信箱查看重設信，也可以檢查垃圾郵件。");
+      });
+    }
 
     function firebaseConfigured() { return Boolean(window.travelFirebase?.configured?.()); }
     function cloudProvider() { return firebaseConfigured() ? "firebase" : (CLOUD_API_BASE_URL ? "api" : ""); }
@@ -6457,17 +6679,18 @@
     }
 
     function setCloudAuthStatus(message, isError = false) {
-      const status = document.getElementById("cloudAuthStatus");
-      if (!status) return;
-      status.textContent = message;
-      status.style.color = isError ? "#9e3434" : "";
+      for (const id of ["cloudAuthStatus", "accountEntryStatus"]) {
+        const status = document.getElementById(id);
+        status.textContent = message;
+        status.style.color = isError ? "#9e3434" : "";
+      }
     }
 
     function cloudRecordsForKey(key, value) {
       const dataset = firebaseConfigured() && FIREBASE_SYNC_KEYS[key] ? FIREBASE_SYNC_KEYS[key] : CLOUD_SYNC_KEYS[key];
       const decorate = (item, fallbackId) => {
         const id = String(item?.id || fallbackId);
-        const version = item?._cloudVersion || cloudAuthState.recordVersions?.[dataset]?.[id];
+        const version = cloudAuthState.recordVersions?.[dataset]?.[id] ?? item?._cloudVersion;
         return version ? { ...item, id, _cloudVersion: version } : { ...item, id };
       };
       if (key === "emenuTokyo") return [decorate({ id: "trip-state", data: value }, "trip-state")];
@@ -6482,7 +6705,7 @@
     function localValueForCloudDataset(key, records) {
       if (key === "emenuTokyo") return records.find(item => item.id === "trip-state")?.data || null;
       if (["tokyoMembers"].includes(key)) return records.map(item => item.value ?? item.name ?? item.id.replace(`${CLOUD_SYNC_KEYS[key]}-`, ""));
-      if (Array.isArray(safeParse(key, null))) return records;
+      if (["tokyoTickets", "tokyoFlights", "tokyoAccommodations", "tokyoExpenses", "tokyoReservedExpenses", "tokyoShoppingItems", "tokyoCompanionNotes"].includes(key)) return records;
       return Object.fromEntries(records.map(item => [item.key || String(item.id).replace("kv-", ""), item.value]));
     }
 
@@ -6509,16 +6732,27 @@
     }
 
     function queueCloudSync(key, value) {
-      if (!CLOUD_SYNC_KEYS[key] || !cloudHasSession() || cloudHydrating) return;
+      if (!CLOUD_SYNC_KEYS[key] || !cloudHasSession() || !accountSyncReady || accountLeaving || cloudHydrating) return;
+      if (firebaseConfigured() && (!FIREBASE_SYNC_KEYS[key] || !["admin", "editor"].includes(cloudAuthState.user.role))) return;
+      const owner = cloudAuthState.user.id;
       clearTimeout(cloudSyncTimers[key]);
-      cloudSyncTimers[key] = setTimeout(() => syncCloudDataset(key, value).catch(error => {
-        if (error.code === "REVISION_CONFLICT" || error.code === "RECORD_CONFLICT") setCloudAuthStatus("雲端版本衝突：請先重新載入，再合併後儲存。", true);
-        else setCloudAuthStatus(error.message, true);
-      }), 650);
+      cloudSyncTimers[key] = setTimeout(() => {
+        delete cloudSyncTimers[key];
+        if (cloudAuthState.user?.id !== owner) return;
+        const previous = pendingAccountWrites.get(key) || Promise.resolve();
+        const task = previous.then(() => syncCloudDataset(key, value)).catch(error => {
+          setCloudAuthStatus(accountError(error), true);
+        });
+        pendingAccountWrites.set(key, task);
+        task.finally(() => { if (pendingAccountWrites.get(key) === task) pendingAccountWrites.delete(key); });
+      }, 650);
     }
 
-    async function pullCloudTripData() {
+    async function pullCloudTripData({ quiet = false } = {}) {
       if (!cloudHasSession()) return setCloudAuthStatus("請先登入再載入雲端資料。", true);
+      if (Object.keys(cloudSyncTimers).length || pendingAccountWrites.size) {
+        return setCloudAuthStatus("仍在同步變更，請稍後再重新載入。", true);
+      }
       try {
         setCloudAuthStatus(firebaseConfigured() ? "正在載入 Firestore 旅程資料…" : "正在載入雲端旅程資料…");
         const snapshot = firebaseConfigured()
@@ -6526,28 +6760,50 @@
           : await cloudRequest(`/api/trips/${encodeURIComponent(CLOUD_TRIP_ID)}/snapshot`);
         const datasets = snapshot.datasets || {};
         const total = Object.values(datasets).reduce((sum, list) => sum + (Array.isArray(list) ? list.length : 0), 0);
-        if (!total) return setCloudAuthStatus("雲端試算表目前沒有資料；確認後可上傳本機資料。", false);
+        if (!total && !Object.values(snapshot.revisions || {}).some(entry => entry.revision > 0)) {
+          accountSyncReady = true;
+          return setCloudAuthStatus("雲端尚無旅程資料。可由管理員從「我的」匯入備份。");
+        }
         cloudHydrating = true;
         const syncMap = firebaseConfigured() ? FIREBASE_SYNC_KEYS : CLOUD_SYNC_KEYS;
         Object.entries(syncMap).forEach(([key, dataset]) => {
-          if (!Array.isArray(datasets[dataset])) return;
+          if (!Array.isArray(datasets[dataset]) || (firebaseConfigured() && !snapshot.revisions?.[dataset]?.revision)) return;
           const value = localValueForCloudDataset(key, datasets[dataset]);
-          if (value !== null && value !== undefined) safeSet(key, value);
+          if (value !== null && value !== undefined) {
+            safeSet(key, value);
+            if (key === "emenuTokyo") data = migrateData(value);
+            if (key === "tokyoTickets") tickets = value;
+            if (key === FLIGHTS_KEY) flights = value;
+            if (key === ACCOMMODATIONS_KEY) accommodations = value;
+            if (key === RESERVED_EXPENSES_KEY) reservedExpenses = value;
+            if (key === "tokyoExpenses") expenses = value.map(normalizeExpense);
+          }
         });
         cloudAuthState.revisions = snapshot.revisions || {};
         cloudAuthState.recordVersions = Object.fromEntries(Object.entries(datasets).map(([dataset, records]) => [dataset, Object.fromEntries((records || []).map(item => [String(item.id), Number(item._cloudVersion || 0)]))]));
         cloudSessionWrite();
         cloudHydrating = false;
-        setCloudAuthStatus(firebaseConfigured() ? "Firestore 資料已載入；請重新整理畫面以套用完整行程。" : "雲端資料已載入；請重新整理畫面以套用完整行程。", false);
-        showAppToast("雲端資料已載入");
+        accountSyncReady = true;
+        if (firebaseConfigured()) {
+          cloudHydrating = true;
+          refreshItineraryViews();
+          renderFlights();
+          renderAccommodations();
+          renderTickets();
+          renderExpenses();
+          cloudHydrating = false;
+        }
+        setCloudAuthStatus(firebaseConfigured() ? "已載入雲端旅程。" : "雲端資料已載入，重新整理後即可套用。");
+        if (!quiet) showAppToast("雲端資料已載入");
       } catch (error) {
         cloudHydrating = false;
-        if (error.status === 401) clearCloudSession();
+        if (error.status === 401) { clearCloudSession(); setAccountScreen("login"); }
         setCloudAuthStatus(error.message, true);
       }
     }
 
     async function syncLocalDataToCloud() {
+      if (cloudAuthState.user?.role !== "admin") return;
       if (!cloudHasSession()) return setCloudAuthStatus("請先登入再上傳本機資料。", true);
       if (!confirm("上傳會以目前本機資料更新雲端；若雲端已有其他旅伴修改，系統會停止並提示衝突。確定繼續嗎？")) return;
       try {
@@ -6596,7 +6852,7 @@
     async function previewCloudImport(event) {
       const file = event.target.files[0];
       event.target.value = "";
-      if (!file || !cloudHasSession()) return setCloudAuthStatus("請先登入，再選擇 JSON 備份。", true);
+      if (!file || cloudAuthState.user?.role !== "admin" || !cloudHasSession()) return setCloudAuthStatus("請先登入，再選擇 JSON 備份。", true);
       try {
         const payload = JSON.parse(await file.text());
         if (payload.format !== "japan-tokyo-travel-backup" || !payload.data) throw new Error("不是有效的旅行備份檔");
@@ -6632,16 +6888,23 @@
       const badge = document.getElementById("cloudAuthModeBadge");
       const adminPanel = document.getElementById("adminUserPanel");
       if (!form || !actions || !summary || !badge) return;
+      document.getElementById("accountForgot").hidden = !firebaseConfigured();
+      document.getElementById("accountRememberRow").hidden = !firebaseConfigured();
       const configured = cloudConfigured();
       const loggedIn = cloudHasSession();
       badge.textContent = !configured ? "本機模式" : loggedIn ? (firebaseConfigured() ? "Firebase 已登入" : "已登入") : (firebaseConfigured() ? "Firebase" : "API 已連線");
       badge.classList.toggle("offline", !configured);
-      form.hidden = !configured || loggedIn || Boolean(window.__cloudSetupToken);
+      document.getElementById("accountSecurity").hidden = !loggedIn;
+      document.getElementById("accountShortcut").hidden = !loggedIn;
+      const canManageData = cloudAuthState.user?.role === "admin";
+      document.getElementById("legacyBackupNotice").hidden = !canManageData || !legacyBackupNotice;
+      actions.querySelector("button").hidden = !canManageData;
+      actions.querySelector('label[for="cloudImportFile"]').hidden = !canManageData;
       if (setupForm) setupForm.hidden = firebaseConfigured() || !window.__cloudSetupToken;
       actions.hidden = !loggedIn;
       summary.hidden = !loggedIn;
       if (loggedIn) {
-        summary.innerHTML = `<div><strong>${escapeHtml(cloudAuthState.user.name)} · ${escapeHtml(cloudAuthState.user.email)}</strong><small>角色：${escapeHtml(cloudAuthState.user.role)} · 狀態：${escapeHtml(cloudAuthState.user.status)}</small></div><span class="adminUserBadge">✓ session</span>`;
+        summary.innerHTML = `<div><strong>${escapeHtml(cloudAuthState.user.name)} · ${escapeHtml(cloudAuthState.user.email)}</strong><small>角色：${escapeHtml(cloudAuthState.user.role)} · 狀態：${escapeHtml(cloudAuthState.user.status)}</small></div><span class="adminUserBadge">已登入</span>`;
       }
       if (adminPanel) adminPanel.hidden = firebaseConfigured() || !loggedIn || cloudAuthState.user.role !== "admin";
       if (!configured) setCloudAuthStatus("尚未設定 Firebase Web App config，App 目前仍使用本機 localStorage；請填入 firebase-config.js 後重新整理。\n若使用舊版 API，請改填 api-config.js。");
@@ -6661,6 +6924,8 @@
       const loginForm = document.getElementById("cloudLoginForm");
       if (!setupForm || !setup) return false;
       window.__cloudSetupToken = setup;
+      setAccountScreen("login");
+      setAccountForm("setup");
       setupForm.hidden = false;
       if (loginForm) loginForm.hidden = true;
       setCloudAuthStatus(setup.purpose === "password_reset" ? "請設定新的旅伴密碼。此連結只能使用一次。" : "首次設定旅伴密碼。此連結只能使用一次。", false);
@@ -6681,83 +6946,130 @@
         window.__cloudSetupToken = null;
         window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
         renderCloudAuthPanel();
-        setCloudAuthStatus("密碼設定完成，已自動登入。", false);
+        if (changeAccountScope(result.user.id)) return;
+        setAccountScreen("app");
         await pullCloudTripData();
       } catch (error) { setCloudAuthStatus(error.message, true); }
     }
 
     async function loginCloudAccount(event) {
-      event?.preventDefault();
-      try {
-        const email = document.getElementById("cloudLoginEmail")?.value.trim();
-        const password = document.getElementById("cloudLoginPassword")?.value;
+      event.preventDefault();
+      const form = event.currentTarget;
+      await runAccountForm(form, async () => {
+        const email = document.getElementById("cloudLoginEmail").value.trim();
+        const password = document.getElementById("cloudLoginPassword");
         setCloudAuthStatus("正在登入…");
-        const result = firebaseConfigured()
-          ? await window.travelFirebase.signIn(email, password)
-          : await cloudRequest("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
-        cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {}, provider: firebaseConfigured() ? "firebase" : "api" };
-        cloudSessionWrite();
-        renderCloudAuthPanel();
-        setCloudAuthStatus(`已登入 ${result.user.name}；正在檢查雲端資料…`);
-        await pullCloudTripData();
-        if (cloudAuthState.user.role === "admin") await loadAdminUsers();
-      } catch (error) { setCloudAuthStatus(error.message, true); }
+        try {
+          const result = firebaseConfigured()
+            ? await window.travelFirebase.signIn(email, password.value, document.getElementById("accountRemember").checked)
+            : await cloudRequest("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password: password.value }) });
+          await openAccountSession(result);
+        } finally { password.value = ""; }
+      });
+    }
+
+    async function openAccountSession(result) {
+      cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {}, provider: cloudProvider() };
+      if (!firebaseConfigured()) cloudSessionWrite();
+      if (changeAccountScope(result.user.id)) {
+        setAccountScreen("loading");
+        return;
+      }
+      goHome();
+      renderCloudAuthPanel();
+      setCloudAuthStatus("正在載入旅程…");
+      await pullCloudTripData({ quiet: true });
+      if (!cloudHasSession()) return;
+      setAccountScreen("app");
+      if (!firebaseConfigured() && result.user.role === "admin") await loadAdminUsers();
     }
 
     async function logoutCloudAccount() {
+      if (accountBusy) return;
+      if (!confirm("確定要登出這台裝置？")) return;
+      const button = document.getElementById("accountLogout");
+      accountBusy = true;
+      button.disabled = true;
+      accountLeaving = true;
       try {
-        if (firebaseConfigured() && cloudAuthState.provider === "firebase") await window.travelFirebase.signOut();
+        if (Object.keys(cloudSyncTimers).length) await new Promise(resolve => setTimeout(resolve, 700));
+        await Promise.all(pendingAccountWrites.values());
+        if (firebaseConfigured()) await window.travelFirebase.signOut();
         else if (cloudAuthState.token) await cloudRequest("/api/auth/logout", { method: "POST" });
-      } catch {}
-      clearCloudSession();
-      setCloudAuthStatus("已登出；本機資料仍保留在此裝置。", false);
+        accountSyncReady = false;
+        Object.values(cloudSyncTimers).forEach(clearTimeout);
+        clearCloudSession();
+        setAccountScreen("login");
+        sessionStorage.removeItem("tokyoAccountScope");
+        sessionStorage.setItem("tokyoSignedOut", "1");
+        location.reload();
+      } catch (error) {
+        setCloudAuthStatus(accountError(error), true);
+      } finally {
+        accountBusy = false;
+        button.disabled = false;
+        accountLeaving = false;
+      }
     }
 
     async function restoreCloudSession() {
-      if (!cloudConfigured()) return renderCloudAuthPanel();
-      if (showCloudSetupForm()) return renderCloudAuthPanel();
-      if (firebaseConfigured()) {
-        try {
-          const result = await window.travelFirebase.currentSession();
-          if (!result) {
-            clearCloudSession();
+      try {
+        if (!cloudConfigured()) {
+          if (window.__FIREBASE_CONFIG__?.projectId) {
+            document.getElementById("cloudLoginForm").hidden = true;
+            setAccountScreen("login");
+            setCloudAuthStatus("帳號服務未載入。請確認部署檔案齊全後重新整理。", true);
             return;
           }
-          cloudAuthState = { token: result.token, user: result.user, revisions: {}, recordVersions: {}, provider: "firebase" };
-          cloudSessionWrite();
-          renderCloudAuthPanel();
-          await pullCloudTripData();
-        } catch (error) { clearCloudSession(); setCloudAuthStatus(error.message, true); }
-        return;
+          setAccountScreen("app");
+          return;
+        }
+        if (showCloudSetupForm()) return;
+        const result = firebaseConfigured()
+          ? await window.travelFirebase.currentSession()
+          : cloudAuthState.token
+            ? { ...(await cloudRequest("/api/auth/me")), token: cloudAuthState.token }
+            : null;
+        if (result) return await openAccountSession(result);
+        clearCloudSession();
+        setAccountScreen("login");
+        if (sessionStorage.getItem("tokyoSignedOut")) {
+          sessionStorage.removeItem("tokyoSignedOut");
+          setCloudAuthStatus("已登出這台裝置。");
+        }
+      } catch (error) {
+        clearCloudSession();
+        setAccountScreen("login");
+        setCloudAuthStatus(accountError(error), true);
       }
-      if (!cloudAuthState.token) return renderCloudAuthPanel();
-      try {
-        const result = await cloudRequest("/api/auth/me");
-        cloudAuthState.user = result.user;
-        cloudAuthState.provider = "api";
-        cloudSessionWrite();
-        renderCloudAuthPanel();
-        await pullCloudTripData();
-        if (cloudAuthState.user.role === "admin") await loadAdminUsers();
-      } catch { clearCloudSession(); }
     }
 
-    async function openChangePasswordPrompt() {
-      if (!cloudHasSession()) return setCloudAuthStatus("請先登入。", true);
-      const currentPassword = prompt("請輸入目前密碼");
-      if (currentPassword === null) return;
-      const newPassword = prompt("請輸入新密碼（至少 10 碼）");
-      if (newPassword === null) return;
-      try {
+    function openChangePasswordPrompt() {
+      const form = document.getElementById("accountChangeForm");
+      form.hidden = false;
+      document.getElementById("accountCurrentPassword").focus();
+    }
+
+    async function submitAccountPassword(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const currentPassword = document.getElementById("accountCurrentPassword").value;
+      const newPassword = document.getElementById("accountNewPassword").value;
+      if (newPassword !== document.getElementById("accountConfirmPassword").value) {
+        setCloudAuthStatus("兩次輸入的新密碼不一致。", true);
+        return;
+      }
+      await runAccountForm(form, async () => {
         const result = firebaseConfigured()
           ? await window.travelFirebase.changePassword(currentPassword, newPassword)
           : await cloudRequest("/api/auth/change-password", { method: "POST", body: JSON.stringify({ currentPassword, newPassword }) });
         cloudAuthState.token = result.token;
         cloudAuthState.user = result.user;
-        cloudSessionWrite();
-        renderCloudAuthPanel();
-        setCloudAuthStatus("密碼已修改，舊的登入狀態已撤銷。", false);
-      } catch (error) { setCloudAuthStatus(error.message, true); }
+        if (!firebaseConfigured()) cloudSessionWrite();
+        form.reset();
+        form.hidden = true;
+        setCloudAuthStatus("密碼已更新。");
+      });
     }
 
     async function loadAdminUsers() {
@@ -6827,7 +7139,7 @@
 
     function safeSet(key, value) {
       try {
-        localStorage.setItem(key, JSON.stringify(value));
+        localStorage.setItem(accountStorageKey(key), JSON.stringify(value));
         queueCloudSync(key, value);
         return true;
       } catch (error) {
@@ -7135,7 +7447,7 @@
     }
 
     function mergeImportedShoppingItems() {
-      if (localStorage.getItem("tokyoShoppingImportVersion") === SHOPPING_IMPORT_VERSION) return;
+      if (localStorage.getItem(accountStorageKey("tokyoShoppingImportVersion")) === SHOPPING_IMPORT_VERSION) return;
       shoppingItems = shoppingItems.filter(item => !isLegacyShoppingSeed(item));
       const byName = new Map(shoppingItems.map(item => [String(item.name || "").trim().toLocaleLowerCase(), item]));
       importedShoppingItems.forEach(imported => {
@@ -7157,7 +7469,7 @@
         shoppingItems.push({ ...clone(imported), id: `shop-${imported.importKey}`, referencePricePending: !Number(imported.price) });
       });
       safeSet("tokyoShoppingItems", shoppingItems);
-      localStorage.setItem("tokyoShoppingImportVersion", SHOPPING_IMPORT_VERSION);
+      localStorage.setItem(accountStorageKey("tokyoShoppingImportVersion"), SHOPPING_IMPORT_VERSION);
     }
 
     mergeImportedShoppingItems();
@@ -9379,6 +9691,14 @@
 
     function dashboardTicketLabel(ticket) {
       return ticket.entryTime ? String(ticket.entryTime) + " · " + String(ticket.status || "未設定") : String(ticket.status || "未設定");
+    }
+
+    function toggleHomeFold(cardId, button) {
+      const card = document.getElementById(cardId);
+      if (!card || !button) return;
+      const collapsed = card.classList.toggle("is-collapsed");
+      button.setAttribute("aria-expanded", String(!collapsed));
+      button.textContent = collapsed ? "展開" : "收合";
     }
 
     function renderDashboard() {
