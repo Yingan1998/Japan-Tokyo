@@ -106,6 +106,17 @@
     return member;
   }
 
+  async function userLabelWithMembership(user) {
+    let member = null;
+    try {
+      member = await memberFor(user, activeTripId);
+    } catch (error) {
+      // \u6C92\u6709\u4EFB\u4F55\u65C5\u7A0B\u7684\u65B0\u5E33\u865F\u4ECD\u53EF\u767B\u5165\uFF1B\u7B49\u9032\u5165\u6709\u6B0A\u9650\u7684\u65C5\u7A0B\u5F8C\u518D\u88DC\u8B80\u89D2\u8272\u3002
+      console.warn("\u767B\u5165\u89D2\u8272\u5C1A\u672A\u8B80\u53D6\uFF0C\u5148\u4F7F\u7528\u57FA\u672C\u5E33\u865F\u8CC7\u6599\uFF1A", error);
+    }
+    return userLabel(user, member);
+  }
+
   async function ensureInitialized() {
     if (!configured()) {
       const error = new Error("\u5C1A\u672A\u586B\u5165 Firebase Web App config\u3002");
@@ -152,7 +163,7 @@
       "\u767B\u5165\u9023\u7DDA\u903E\u6642\uFF0C\u8ACB\u78BA\u8A8D\u624B\u6A5F\u7DB2\u8DEF\u5F8C\u91CD\u8A66\u3002"
     );
     try {
-      return { user: userLabel(credential.user, null) };
+      return { user: await userLabelWithMembership(credential.user) };
     } catch (error) {
       await sdk.auth.signOut();
       throw error;
@@ -183,7 +194,7 @@
       );
     });
     if (!user) return null;
-    return { user: userLabel(user, null) };
+    return { user: await userLabelWithMembership(user) };
   }
 
   async function sendPasswordReset(email) {
