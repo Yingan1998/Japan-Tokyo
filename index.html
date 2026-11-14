@@ -6502,6 +6502,32 @@
       }
     }
   </style>
+  <style>
+    /* 導覽更新：首頁不再顯示獨立的「我的」，資訊與採購改由底部導覽進入。 */
+    @media (max-width: 600px) {
+      .topbar {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .topActions {
+        width: auto;
+        max-width: 172px;
+      }
+
+      .topActions > .rate {
+        flex: 0 1 auto;
+        max-width: 172px;
+      }
+
+      .bottomNav {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+
+      .bottomNav .bItem {
+        min-width: 0;
+      }
+    }
+  </style>
 </head>
 
 <body data-auth-screen="loading">
@@ -6568,7 +6594,6 @@
       <button class="brand brandHome" type="button" onclick="goHome()" aria-label="回到行程首頁" title="回到行程首頁"><span
           class="fujiMark" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><circle cx="23" cy="9" r="3" fill="#f2b86b"/><path d="M4 25.5 14.35 9.65a1.98 1.98 0 0 1 3.3 0L28 25.5H4Z" fill="#466f9c"/><path d="m14.35 9.65-3.6 5.5 3.08-1.82 1.76 2.1 1.45-2.12 2.06 1.55-2.45-5.21a1.3 1.3 0 0 0-2.3 0Z" fill="#fff"/><path d="M3 25.5h26v2H3z" fill="#6aa49e" opacity=".82"/></svg></span> Japan Tokyo</button>
       <div class="topActions">
-        <button id="accountShortcut" class="btnGhost accountShortcut" type="button" onclick="switchPage('info', document.querySelector('.bottomNav .bItem:last-child')); document.getElementById('cloudAuthTitle').focus()" hidden>我的</button>
         <div class="rate" id="rateBox">匯率讀取中…</div>
       </div>
     </div>
@@ -6646,18 +6671,6 @@
           <button class="btnGhost dashboardReviewBtn" id="dashboardReviewBtn" type="button"
             onclick="openPageWithoutNav('info')" hidden>查看回顧</button>
         </div>
-
-        <section class="homeShortcutCard" aria-labelledby="homeShortcutTitle">
-          <div class="homeShortcutHeader"><div><span class="dashboardKicker">TRAVEL SHORTCUTS</span><h2 id="homeShortcutTitle">旅行捷徑</h2><p>把今天最常用的功能放在手邊。</p></div><span class="postmarkStamp" id="tripPostmark" aria-hidden="true">東京<br>2026</span></div>
-          <div class="homeShortcutGrid">
-            <button type="button" onclick="goHome()"><span>📅</span><strong>今日行程</strong><small>時間軸與導航</small></button>
-            <button type="button" onclick="openPageWithoutNav('tickets')"><span>🎫</span><strong>票券</strong><small>票券與預約</small></button>
-            <button type="button" onclick="openPageWithoutNav('accommodations')"><span>🏨</span><strong>住宿</strong><small>入住資訊</small></button>
-            <button type="button" onclick="openExpenseFromDashboard()"><span>💴</span><strong>快速記帳</strong><small>記一筆支出</small></button>
-            <button type="button" onclick="openPageWithoutNav('shopping')"><span>🛍️</span><strong>購物清單</strong><small>採購進度</small></button>
-            <button type="button" onclick="focusTravelSafety()"><span>🆘</span><strong>SOS</strong><small>緊急協助</small></button>
-          </div>
-        </section>
 
         <div class="dashboardStats" aria-label="今日旅行摘要">
           <article class="dashboardStat dashboardBudgetStat">
@@ -6982,7 +6995,7 @@
 
     <section class="page" id="page-info">
       <div class="sectionTitleRow">
-        <div class="sectionTitle"><span id="infoPageTitle">我的帳號</span> <span class="muted" id="infoPageTitleEn">Account</span></div>
+        <div class="sectionTitle"><span id="infoPageTitle">資訊</span> <span class="muted" id="infoPageTitleEn">Info</span></div>
         <button class="btnGhost tripListBack" type="button" onclick="loadTravelList()">← 我的旅行</button>
       </div>
       <div class="cloudAuthCard" id="cloudAuthCard">
@@ -7035,16 +7048,17 @@
       </div>
       <div class="simpleCard tripOnlyPanel">
         <div class="rowBetween">
-          <div><b>更多功能</b>
-            <div class="muted" style="margin-top:4px">較少使用的工具集中在這裡，首頁保持清爽。</div>
-          </div><span class="pill">More</span>
+          <div><b>旅程文件與工具</b>
+            <div class="muted" style="margin-top:4px">航班、住宿、票券與備份集中在資訊裡。</div>
+          </div><span class="pill">Info</span>
         </div>
-        <div class="moreToolsGrid" aria-label="更多功能">
+        <div class="moreToolsGrid" aria-label="旅程文件與工具">
           <button type="button" onclick="openPageWithoutNav('flights')"><span>✈️</span>航班資訊<small>航廈、時區與
               Check-in</small></button>
           <button type="button"
             onclick="openPageWithoutNav('accommodations')"><span>🏨</span>住宿管理<small>飯店、地址與換宿</small></button>
-          <button type="button" onclick="openPageWithoutNav('shopping')"><span>🛍️</span>購物清單<small>採購與確認進度</small></button>
+          <button type="button" onclick="openPageWithoutNav('tickets')"><span>🎫</span>票券與預約<small>日期、狀態與訂單</small></button>
+          <button type="button" onclick="document.querySelector('#page-info .backupCard:not(.installCard)')?.scrollIntoView({behavior:'smooth',block:'start'})"><span>💾</span>備份與匯入<small>保存或還原旅程資料</small></button>
         </div>
       </div>
 
@@ -7163,9 +7177,13 @@
       <div class="bIcon">🎫</div>
       票夾
     </div>
+    <div class="bItem" data-tab="shopping" onclick="switchPage('shopping', this)">
+      <div class="bIcon">🛍️</div>
+      採購
+    </div>
     <div class="bItem" data-tab="info" onclick="switchPage('info', this)">
       <div class="bIcon">☰</div>
-      我的
+      資訊
     </div>
   </div>
 
@@ -7991,15 +8009,15 @@
       const toolsDescription = document.getElementById("tripToolsDescription");
       if (mode === "trip") {
         const tripName = activeTripMeta?.name || "目前旅行";
-        if (pageTitle) pageTitle.textContent = "旅行工具";
-        if (pageTitleEn) pageTitleEn.textContent = "Trip tools";
+        if (pageTitle) pageTitle.textContent = "資訊";
+        if (pageTitleEn) pageTitleEn.textContent = "Info";
         if (authTitle) authTitle.textContent = "旅程同步";
         if (authDescription) authDescription.textContent = `${tripName} 的同步、備份與旅伴權限。`;
         if (toolsTitle) toolsTitle.textContent = tripName;
         if (toolsDescription) toolsDescription.textContent = `${activeTripMeta?.destination || "旅行目的地"} · ${formatTripRange(activeTripMeta || {})}`;
       } else {
-        if (pageTitle) pageTitle.textContent = "我的帳號";
-        if (pageTitleEn) pageTitleEn.textContent = "Account";
+        if (pageTitle) pageTitle.textContent = "資訊";
+        if (pageTitleEn) pageTitleEn.textContent = "Info";
         if (authTitle) authTitle.textContent = "我的帳號";
         if (authDescription) authDescription.textContent = "管理你的登入、密碼與個人設定。";
       }
@@ -8433,7 +8451,6 @@
       badge.textContent = !configured ? "本機模式" : loggedIn ? (firebaseConfigured() ? "Firebase 已登入" : "已登入") : (firebaseConfigured() ? "Firebase" : "API 已連線");
       badge.classList.toggle("offline", !configured);
       document.getElementById("accountSecurity").hidden = !loggedIn;
-      document.getElementById("accountShortcut").hidden = !loggedIn;
       const canManageData = cloudAuthState.user?.role === "admin";
       document.getElementById("legacyBackupNotice").hidden = !canManageData || !legacyBackupNotice;
       actions.querySelector("button").hidden = !canManageData;
@@ -10117,7 +10134,7 @@
         tickets: "tickets",
         flights: "tickets",
         accommodations: "tickets",
-        shopping: "info",
+        shopping: "shopping",
         info: "info",
         weather: "trip"
         ,"travel-list": "info"
