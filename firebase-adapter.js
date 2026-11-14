@@ -15,7 +15,7 @@
       promise,
       new Promise(function (_, reject) {
         setTimeout(function () {
-          const error = new Error(message || "Firebase \u9023\u7dda\u903e\u6642\uff0c\u8acb\u78ba\u8a8d\u624b\u6a5f\u7db2\u8def\u5f8c\u91cd\u8a66\u3002");
+          const error = new Error(message || "Firebase \u9023\u7DDA\u903E\u6642\uFF0C\u8ACB\u78BA\u8A8D\u624B\u6A5F\u7DB2\u8DEF\u5F8C\u91CD\u8A66\u3002");
           error.code = code || "auth/network-request-failed";
           reject(error);
         }, milliseconds);
@@ -44,14 +44,14 @@
         if (error) reject(error); else resolve();
       };
       timer = setTimeout(function () {
-        const error = new Error("Firebase SDK \u8f09\u5165\u903e\u6642\uff0c\u8acb\u78ba\u8a8d\u624b\u6a5f\u7db2\u8def\u6216\u95dc\u9589\u5167\u5bb9\u963b\u64cb\u5668\u5f8c\u91cd\u8a66\u3002");
+        const error = new Error("Firebase SDK \u8F09\u5165\u903E\u6642\uFF0C\u8ACB\u78BA\u8A8D\u624B\u6A5F\u7DB2\u8DEF\u6216\u95DC\u9589\u5167\u5BB9\u963B\u64CB\u5668\u5F8C\u91CD\u8A66\u3002");
         error.code = "auth/network-request-failed";
         finish(error);
       }, 12000);
       if (existing) {
         if (window.firebase) return finish();
         existing.addEventListener("load", function () { finish(); }, { once: true });
-        existing.addEventListener("error", function () { finish(new Error("Firebase SDK \u8f09\u5165\u5931\u6557\uff0c\u8acb\u91cd\u65b0\u6574\u7406\u9801\u9762\u3002")); }, { once: true });
+        existing.addEventListener("error", function () { finish(new Error("Firebase SDK \u8F09\u5165\u5931\u6557\uFF0C\u8ACB\u91CD\u65B0\u6574\u7406\u9801\u9762\u3002")); }, { once: true });
         return;
       }
       const script = document.createElement("script");
@@ -59,7 +59,7 @@
       script.async = true;
       script.dataset.firebaseSrc = src;
       script.onload = function () { finish(); };
-      script.onerror = function () { finish(new Error("Firebase SDK \u8f09\u5165\u5931\u6557\uff1a" + src)); };
+      script.onerror = function () { finish(new Error("Firebase SDK \u8F09\u5165\u5931\u6557\uFF1A" + src)); };
       document.head.appendChild(script);
     });
   }
@@ -77,7 +77,7 @@
 
   function normalizeTripId(value) {
     const tripId = String(value || "").trim();
-    if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{2,96}$/.test(tripId)) throw new Error("\u65c5\u884c ID \u683c\u5f0f\u4e0d\u6b63\u78ba\u3002");
+    if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{2,96}$/.test(tripId)) throw new Error("\u65C5\u884C ID \u683C\u5F0F\u4E0D\u6B63\u78BA\u3002");
     return tripId;
   }
 
@@ -90,16 +90,16 @@
   }
 
   async function memberFor(user, tripId = activeTripId) {
-    if (!user) throw new Error("\u8acb\u5148\u767b\u5165\u3002");
+    if (!user) throw new Error("\u8ACB\u5148\u767B\u5165\u3002");
     const snapshot = await memberRef(tripId, user.uid).get({ source: "server" });
     if (!snapshot.exists) {
-      const error = new Error("\u6b64\u5e33\u865f\u5c1a\u672a\u52a0\u5165\u9019\u8d9f\u65c5\u884c\u3002");
+      const error = new Error("\u6B64\u5E33\u865F\u5C1A\u672A\u52A0\u5165\u9019\u8D9F\u65C5\u884C\u3002");
       error.code = "TRIP_MEMBER_REQUIRED";
       throw error;
     }
     const member = snapshot.data() || {};
     if (member.status !== "active") {
-      const error = new Error("\u6b64\u65c5\u4f34\u5e33\u865f\u5df2\u505c\u7528\u3002");
+      const error = new Error("\u6B64\u65C5\u4F34\u5E33\u865F\u5DF2\u505C\u7528\u3002");
       error.code = "ACCOUNT_DISABLED";
       throw error;
     }
@@ -108,7 +108,7 @@
 
   async function ensureInitialized() {
     if (!configured()) {
-      const error = new Error("\u5c1a\u672a\u586b\u5165 Firebase Web App config\u3002");
+      const error = new Error("\u5C1A\u672A\u586B\u5165 Firebase Web App config\u3002");
       error.code = "FIREBASE_CONFIG_MISSING";
       throw error;
     }
@@ -117,7 +117,7 @@
         await loadScript(CDN_BASE + "firebase-app-compat.js");
         await loadScript(CDN_BASE + "firebase-auth-compat.js");
         await loadScript(CDN_BASE + "firebase-firestore-compat.js");
-        if (!window.firebase) throw new Error("Firebase SDK \u5c1a\u672a\u53ef\u7528\u3002");
+        if (!window.firebase) throw new Error("Firebase SDK \u5C1A\u672A\u53EF\u7528\u3002");
         if (!window.firebase.apps.length) window.firebase.initializeApp(config);
         return { app: window.firebase.app(), auth: window.firebase.auth(), db: window.firebase.firestore() };
       }());
@@ -126,21 +126,21 @@
   }
 
   function firestore() {
-    if (!window.firebase || !window.firebase.firestore) throw new Error("Firestore \u5c1a\u672a\u521d\u59cb\u5316\u3002");
+    if (!window.firebase || !window.firebase.firestore) throw new Error("Firestore \u5C1A\u672A\u521D\u59CB\u5316\u3002");
     return window.firebase.firestore();
   }
 
   async function signIn(email, password, remember = true) {
-    const sdk = await withTimeout(ensureInitialized(), 15000, "auth/network-request-failed", "Firebase SDK \u8f09\u5165\u903e\u6642\uff0c\u8acb\u78ba\u8a8d\u624b\u6a5f\u7db2\u8def\u5f8c\u91cd\u8a66\u3002");
+    const sdk = await withTimeout(ensureInitialized(), 15000, "auth/network-request-failed", "Firebase SDK \u8F09\u5165\u903E\u6642\uFF0C\u8ACB\u78BA\u8A8D\u624B\u6A5F\u7DB2\u8DEF\u5F8C\u91CD\u8A66\u3002");
     const persistence = window.firebase.auth.Auth.Persistence;
     try {
-      await withTimeout(sdk.auth.setPersistence(remember ? persistence.LOCAL : persistence.SESSION), 8000, "auth/unsupported-persistence-type", "\u624b\u6a5f\u66ab\u6642\u7121\u6cd5\u4fdd\u5b58\u767b\u5165\u72c0\u614b\u3002");
+      await withTimeout(sdk.auth.setPersistence(remember ? persistence.LOCAL : persistence.SESSION), 8000, "auth/unsupported-persistence-type", "\u624B\u6A5F\u66AB\u6642\u7121\u6CD5\u4FDD\u5B58\u767B\u5165\u72C0\u614B\u3002");
     } catch (persistenceError) {
-      // \u90e8\u5206 iOS \u79c1\u5bc6\u700f\u89bd\u3001\u5167\u5d4c\u700f\u89bd\u5668\u6216 PWA \u5bb9\u5668\u6703\u62d2\u7d55 IndexedDB\u3002
-      // \u964d\u7d1a\u5230\u5de5\u4f5c\u968e\u6bb5\u5132\u5b58\uff0c\u4ecd\u5141\u8a31\u672c\u6b21\u767b\u5165\u5b8c\u6210\uff0c\u4e0d\u963b\u64cb\u4f7f\u7528\u8005\u9032\u5165 App\u3002
+      // \u90E8\u5206 iOS \u79C1\u5BC6\u700F\u89BD\u3001\u5167\u5D4C\u700F\u89BD\u5668\u6216 PWA \u5BB9\u5668\u6703\u62D2\u7D55 IndexedDB\u3002
+      // \u964D\u7D1A\u5230\u5DE5\u4F5C\u968E\u6BB5\u5132\u5B58\uFF0C\u4ECD\u5141\u8A31\u672C\u6B21\u767B\u5165\u5B8C\u6210\uFF0C\u4E0D\u963B\u64CB\u4F7F\u7528\u8005\u9032\u5165 App\u3002
       console.warn("Firebase persistence fallback", persistenceError);
       try {
-        await withTimeout(sdk.auth.setPersistence(persistence.SESSION), 5000, "auth/unsupported-persistence-type", "\u624b\u6a5f\u66ab\u6642\u7121\u6cd5\u4fdd\u5b58\u767b\u5165\u72c0\u614b\u3002");
+        await withTimeout(sdk.auth.setPersistence(persistence.SESSION), 5000, "auth/unsupported-persistence-type", "\u624B\u6A5F\u66AB\u6642\u7121\u6CD5\u4FDD\u5B58\u767B\u5165\u72C0\u614B\u3002");
       } catch (sessionPersistenceError) {
         console.warn("Firebase session persistence unavailable", sessionPersistenceError);
       }
@@ -149,7 +149,7 @@
       sdk.auth.signInWithEmailAndPassword(String(email || "").trim(), String(password || "")),
       20000,
       "auth/network-request-failed",
-      "\u767b\u5165\u9023\u7dda\u903e\u6642\uff0c\u8acb\u78ba\u8a8d\u624b\u6a5f\u7db2\u8def\u5f8c\u91cd\u8a66\u3002"
+      "\u767B\u5165\u9023\u7DDA\u903E\u6642\uFF0C\u8ACB\u78BA\u8A8D\u624B\u6A5F\u7DB2\u8DEF\u5F8C\u91CD\u8A66\u3002"
     );
     try {
       return { user: userLabel(credential.user, null) };
@@ -160,7 +160,7 @@
   }
 
   async function currentSession() {
-    const sdk = await withTimeout(ensureInitialized(), 15000, "auth/network-request-failed", "Firebase SDK \u8f09\u5165\u903e\u6642\uff0c\u8acb\u78ba\u8a8d\u624b\u6a5f\u7db2\u8def\u5f8c\u91cd\u8a66\u3002");
+    const sdk = await withTimeout(ensureInitialized(), 15000, "auth/network-request-failed", "Firebase SDK \u8F09\u5165\u903E\u6642\uFF0C\u8ACB\u78BA\u8A8D\u624B\u6A5F\u7DB2\u8DEF\u5F8C\u91CD\u8A66\u3002");
     const user = await new Promise((resolve, reject) => {
       let settled = false;
       let unsubscribe = () => {};
@@ -173,7 +173,7 @@
         if (error) reject(error); else resolve(current);
       };
       timer = setTimeout(function () {
-        const error = new Error("Firebase \u767b\u5165\u72c0\u614b\u6062\u5fa9\u903e\u6642\uff0c\u8acb\u91cd\u65b0\u6574\u7406\u5f8c\u518d\u8a66\u3002");
+        const error = new Error("Firebase \u767B\u5165\u72C0\u614B\u6062\u5FA9\u903E\u6642\uFF0C\u8ACB\u91CD\u65B0\u6574\u7406\u5F8C\u518D\u8A66\u3002");
         error.code = "auth/network-request-failed";
         finish(error);
       }, 12000);
@@ -203,7 +203,7 @@
   async function changePassword(currentPassword, newPassword) {
     const sdk = await ensureInitialized();
     const user = sdk.auth.currentUser;
-    if (!user || !user.email) throw new Error("\u8acb\u5148\u767b\u5165\u3002");
+    if (!user || !user.email) throw new Error("\u8ACB\u5148\u767B\u5165\u3002");
     const credential = window.firebase.auth.EmailAuthProvider.credential(user.email, String(currentPassword || ""));
     await user.reauthenticateWithCredential(credential);
     await user.updatePassword(String(newPassword || ""));
@@ -211,7 +211,7 @@
   }
 
   function datasetRef(dataset, tripId = activeTripId) {
-    if (!DATASETS.includes(dataset)) throw new Error("\u4e0d\u652f\u63f4\u7684 Firestore \u8cc7\u6599\u96c6\uff1a" + dataset);
+    if (!DATASETS.includes(dataset)) throw new Error("\u4E0D\u652F\u63F4\u7684 Firestore \u8CC7\u6599\u96C6\uFF1A" + dataset);
     return firestore().doc(tripPath(tripId) + "/datasets/" + dataset);
   }
 
@@ -241,7 +241,7 @@
       const data = snapshot.exists ? snapshot.data() || {} : {};
       const records = Array.isArray(data.records) ? data.records.filter(item => !item._deleted) : [];
       if (snapshot.exists && !Array.isArray(data.records)) {
-        throw new Error("\u96f2\u7aef\u8cc7\u6599\u683c\u5f0f\u8207 App \u4e0d\u76f8\u5bb9\uff1a" + dataset);
+        throw new Error("\u96F2\u7AEF\u8CC7\u6599\u683C\u5F0F\u8207 App \u4E0D\u76F8\u5BB9\uFF1A" + dataset);
       }
       revisions[dataset] = { revision: Number(data.revision || 0), updatedAt: data.updatedAt || null };
       return [dataset, records.map(item => ({ ...item, _cloudVersion: Number(item._cloudVersion || 1), _cloudUpdatedAt: data.updatedAt || "", _cloudUpdatedBy: data.updatedBy || "" }))];
@@ -255,7 +255,7 @@
     const selectedTripId = normalizeTripId(tripId);
     const member = await memberFor(user, selectedTripId);
     if (!["admin", "editor"].includes(member.role)) {
-      const error = new Error("\u6aa2\u8996\u8005\u4e0d\u80fd\u4fee\u6539\u65c5\u7a0b\u8cc7\u6599\u3002");
+      const error = new Error("\u6AA2\u8996\u8005\u4E0D\u80FD\u4FEE\u6539\u65C5\u7A0B\u8CC7\u6599\u3002");
       error.code = "FORBIDDEN";
       throw error;
     }
@@ -266,7 +266,7 @@
       const currentData = snapshot.exists ? snapshot.data() || {} : {};
       const revision = Number(currentData.revision || 0);
       if (expectedRevision !== undefined && expectedRevision !== null && Number(expectedRevision) !== revision) {
-        const error = new Error("Firestore \u8cc7\u6599\u96c6\u7248\u672c\u885d\u7a81\uff0c\u8acb\u5148\u91cd\u65b0\u8f09\u5165\u3002");
+        const error = new Error("Firestore \u8CC7\u6599\u96C6\u7248\u672C\u885D\u7A81\uFF0C\u8ACB\u5148\u91CD\u65B0\u8F09\u5165\u3002");
         error.code = "REVISION_CONFLICT";
         error.details = { dataset, expectedRevision: Number(expectedRevision), currentRevision: revision };
         throw error;
@@ -277,7 +277,7 @@
         const old = currentById.get(item.id);
         const expectedVersion = Number(item._cloudVersion || 0);
         if (old && expectedVersion !== Number(old._cloudVersion || 0)) {
-          const error = new Error("Firestore \u55ae\u7b46\u8cc7\u6599\u7248\u672c\u885d\u7a81\uff0c\u8acb\u5148\u91cd\u65b0\u8f09\u5165\u3002");
+          const error = new Error("Firestore \u55AE\u7B46\u8CC7\u6599\u7248\u672C\u885D\u7A81\uFF0C\u8ACB\u5148\u91CD\u65B0\u8F09\u5165\u3002");
           error.code = "RECORD_CONFLICT";
           error.details = { dataset, id: item.id, expectedVersion, currentVersion: Number(old._cloudVersion || 0) };
           throw error;
@@ -335,8 +335,8 @@
     const user = window.firebase.auth().currentUser;
     const member = await memberFor(user, selectedTripId);
     const fallback = selectedTripId === DEFAULT_TRIP_ID ? {
-      name: "Japan Tokyo\uff5c\u65c5\u3059\u308b\u624b\u5e33",
-      destination: "\u6771\u4eac",
+      name: "Japan Tokyo\uFF5C\u65C5\u3059\u308B\u624B\u5E33",
+      destination: "\u6771\u4EAC",
       startDate: "2026-11-28",
       endDate: "2026-12-06",
       timezone: "Asia/Tokyo",
@@ -352,9 +352,9 @@
       snapshot = await firestore().doc(tripPath(selectedTripId)).get({ source: "server" });
     } catch (error) {
       if (selectedTripId !== DEFAULT_TRIP_ID) throw error;
-      console.warn("\u820a Firestore \u898f\u5247\u5c1a\u672a\u958b\u653e\u65c5\u884c\u8a2d\u5b9a\u8b80\u53d6\uff0c\u4f7f\u7528\u6771\u4eac\u76f8\u5bb9\u8a2d\u5b9a\uff1a", error);
+      console.warn("\u820A Firestore \u898F\u5247\u5C1A\u672A\u958B\u653E\u65C5\u884C\u8A2D\u5B9A\u8B80\u53D6\uFF0C\u4F7F\u7528\u6771\u4EAC\u76F8\u5BB9\u8A2D\u5B9A\uFF1A", error);
     }
-    if (snapshot && !snapshot.exists && selectedTripId !== DEFAULT_TRIP_ID) throw new Error("\u627e\u4e0d\u5230\u9019\u8d9f\u65c5\u884c\u8a2d\u5b9a\u3002");
+    if (snapshot && !snapshot.exists && selectedTripId !== DEFAULT_TRIP_ID) throw new Error("\u627E\u4E0D\u5230\u9019\u8D9F\u65C5\u884C\u8A2D\u5B9A\u3002");
     const stored = snapshot?.data() || {};
     const hasTripSettings = Boolean(stored.startDate && stored.endDate && stored.destination);
     return { id: selectedTripId, ...fallback, ...(selectedTripId === DEFAULT_TRIP_ID && !hasTripSettings ? {} : stored), member };
@@ -368,17 +368,17 @@
     try {
       refsSnapshot = await firestore().collection("users").doc(user.uid).collection("tripRefs").get({ source: "server" });
     } catch (error) {
-      // \u820a\u898f\u5247\u5c1a\u672a\u90e8\u7f72\u6642\uff0c\u5148\u8d70\u65e2\u6709\u6771\u4eac members \u6587\u4ef6\u76f8\u5bb9\u8def\u5f91\u3002
-      console.warn("\u65c5\u884c\u7d22\u5f15\u5c1a\u672a\u53ef\u8b80\uff0c\u6539\u7528\u65e2\u6709\u6210\u54e1\u6587\u4ef6\uff1a", error);
+      // \u820A\u898F\u5247\u5C1A\u672A\u90E8\u7F72\u6642\uFF0C\u5148\u8D70\u65E2\u6709\u6771\u4EAC members \u6587\u4EF6\u76F8\u5BB9\u8DEF\u5F91\u3002
+      console.warn("\u65C5\u884C\u7D22\u5F15\u5C1A\u672A\u53EF\u8B80\uFF0C\u6539\u7528\u65E2\u6709\u6210\u54E1\u6587\u4EF6\uFF1A", error);
     }
     const ids = new Set((refsSnapshot?.docs || []).map(doc => doc.id));
-    // \u820a\u6771\u4eac\u65c5\u7a0b\u6c92\u6709\u7d22\u5f15\u6642\uff0c\u4ecd\u900f\u904e\u65e2\u6709 members \u6587\u4ef6\u76f8\u5bb9\u8b80\u53d6\u3002
+    // \u820A\u6771\u4EAC\u65C5\u7A0B\u6C92\u6709\u7D22\u5F15\u6642\uFF0C\u4ECD\u900F\u904E\u65E2\u6709 members \u6587\u4EF6\u76F8\u5BB9\u8B80\u53D6\u3002
     if (!ids.has(DEFAULT_TRIP_ID)) {
       try { await memberFor(user, DEFAULT_TRIP_ID); ids.add(DEFAULT_TRIP_ID); } catch (error) { if (!['TRIP_MEMBER_REQUIRED', 'ACCOUNT_DISABLED'].includes(error.code)) throw error; }
     }
     const trips = [];
     for (const tripId of ids) {
-      try { trips.push(await tripFor(tripId)); } catch (error) { console.warn("\u65c5\u884c\u5217\u8868\u7565\u904e\u7121\u6cd5\u8b80\u53d6\u7684\u65c5\u884c\uff1a" + tripId, error); }
+      try { trips.push(await tripFor(tripId)); } catch (error) { console.warn("\u65C5\u884C\u5217\u8868\u7565\u904E\u7121\u6CD5\u8B80\u53D6\u7684\u65C5\u884C\uFF1A" + tripId, error); }
     }
     return trips;
   }
@@ -386,12 +386,12 @@
   async function createTrip(settings) {
     await ensureInitialized();
     const user = window.firebase.auth().currentUser;
-    if (!user) throw new Error("\u8acb\u5148\u767b\u5165\u3002");
+    if (!user) throw new Error("\u8ACB\u5148\u767B\u5165\u3002");
     const payload = settings || {};
     const tripId = normalizeTripId(payload.id || ("trip-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8)));
     const trip = {
       id: tripId,
-      name: String(payload.name || "\u672a\u547d\u540d\u65c5\u884c").trim(),
+      name: String(payload.name || "\u672A\u547D\u540D\u65C5\u884C").trim(),
       destination: String(payload.destination || "").trim(),
       startDate: String(payload.startDate || ""),
       endDate: String(payload.endDate || ""),
@@ -407,7 +407,7 @@
       updatedAt: new Date().toISOString()
     };
     if (!trip.name || !trip.destination || !/^\d{4}-\d{2}-\d{2}$/.test(trip.startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(trip.endDate) || trip.endDate < trip.startDate) {
-      throw new Error("\u8acb\u586b\u5beb\u6b63\u78ba\u7684\u65c5\u884c\u540d\u7a31\u3001\u76ee\u7684\u5730\u8207\u65e5\u671f\u3002");
+      throw new Error("\u8ACB\u586B\u5BEB\u6B63\u78BA\u7684\u65C5\u884C\u540D\u7A31\u3001\u76EE\u7684\u5730\u8207\u65E5\u671F\u3002");
     }
     const batch = firestore().batch();
     batch.set(firestore().doc(tripPath(tripId)), trip);
@@ -422,13 +422,23 @@
     const selectedTripId = normalizeTripId(tripId);
     const user = window.firebase.auth().currentUser;
     const member = await memberFor(user, selectedTripId);
-    if (member.role !== "admin") { const error = new Error("\u53ea\u6709\u65c5\u884c\u64c1\u6709\u8005\uff0f\u7ba1\u7406\u54e1\u53ef\u4ee5\u4fee\u6539\u65c5\u884c\u8a2d\u5b9a\u3002"); error.code = "FORBIDDEN"; throw error; }
+    if (member.role !== "admin") { const error = new Error("\u53EA\u6709\u65C5\u884C\u64C1\u6709\u8005\uFF0F\u7BA1\u7406\u54E1\u53EF\u4EE5\u4FEE\u6539\u65C5\u884C\u8A2D\u5B9A\u3002"); error.code = "FORBIDDEN"; throw error; }
+    const tripSnapshot = await firestore().doc(tripPath(selectedTripId)).get({ source: "server" });
+    const storedTrip = tripSnapshot.exists ? (tripSnapshot.data() || {}) : {};
     const current = await tripFor(selectedTripId);
-    const next = { ...current, ...patch, id: selectedTripId, ownerId: current.ownerId || user.uid, updatedAt: new Date().toISOString() };
-    delete next.member;
-    await firestore().doc(tripPath(selectedTripId)).set(next, { merge: true });
+    const editableFields = ["name", "destination", "startDate", "endDate", "timezone", "currency", "settlementCurrency", "cover", "theme", "backgroundTone", "status"];
+    const update = {};
+    editableFields.forEach(function (field) {
+      if (Object.prototype.hasOwnProperty.call(patch || {}, field)) update[field] = patch[field];
+    });
+    // \u4FDD\u7559\u820A\u6771\u4EAC\u6587\u4EF6\u7684 ownerId \u72C0\u614B\uFF1A\u82E5\u539F\u6587\u4EF6\u6C92\u6709 ownerId\uFF0C\u4E0D\u5728\u524D\u7AEF\u88DC\u5BEB\uFF0C
+    // \u8B93\u5DF2\u5B58\u5728\u7684\u65C5\u7A0B\u80FD\u5148\u6B63\u5E38\u7DE8\u8F2F\uFF0C\u4E4B\u5F8C\u518D\u7531\u7BA1\u7406\u54E1\uFF0F\u5F8C\u7AEF\u88DC\u5EFA\u6B04\u4F4D\u3002
+    if (Object.prototype.hasOwnProperty.call(storedTrip, "ownerId") && storedTrip.ownerId) update.ownerId = storedTrip.ownerId;
+    update.updatedAt = new Date().toISOString();
+    await firestore().doc(tripPath(selectedTripId)).set(update, { merge: true });
+    const next = { ...current, ...update, id: selectedTripId, member };
     await firestore().doc("users/" + user.uid + "/tripRefs/" + selectedTripId).set({ tripId: selectedTripId, name: next.name, destination: next.destination, startDate: next.startDate, endDate: next.endDate, status: next.status || "active", updatedAt: next.updatedAt }, { merge: true });
-    return { ...next, member };
+    return next;
   }
 
   function setTrip(tripId) {
