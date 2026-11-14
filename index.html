@@ -6723,84 +6723,112 @@
     // 行程資料已由下方 Notion 匯出版本統一管理。
     // ====== Notion 匯出的正式 9 天行程 ======
     // 版本號讓更新後的內容可覆蓋瀏覽器中舊的 localStorage 行程。
-    const DATA_VERSION = "notion-tokyo-2026-v3-details-20261108";
+    const TOKYO_ITINERARY_SOURCE_VERSION = "txt-tokyo-itinerary-20261114-v1";
+    const DATA_VERSION = "notion-tokyo-2026-v4-details-20261114";
     const defaultData = {
       version: DATA_VERSION,
+      itinerarySourceVersion: TOKYO_ITINERARY_SOURCE_VERSION,
       selectedDay: 1,
       days: [
         {
           labelZh: "DAY1", labelJp: "巢鴨・上野", date: "2026-11-28", items: [
-            { title: "抵達東京 ✈️｜入住巢鴨", sub: "07:15 TSA → 11:00 HND；12:20 京急線／JR 山手線前往巢鴨，13:30 寄放行李", place: "APA Hotel Sugamo Ekimae" },
-            { title: "巢鴨地藏通商店街｜14:30–16:00", sub: "高岩寺、洗地藏、Sugamon；元祖塩大福與巢鴨小吃", place: "巣鴨地蔵通り商店街" },
-            { title: "上野・阿美橫町｜16:30–21:00", sub: "藥妝、零食、上野公園；晚餐可選鰻魚飯、海鮮丼或豬排", place: "アメヤ横丁" },
-            { title: "返回巢鴨飯店｜21:30", sub: "JR 山手線；單程約 170 日圓", place: "APA Hotel Sugamo Ekimae" }
+            { id: "tokyo-day1-airport", title: "抵達松山機場｜05:15", sub: "預留報到、行李託運及出境時間。", place: "台北松山機場 T1", category: "航班", startTime: "05:15", endTime: "06:45", transportMethod: "機場報到", legacyKeywords: ["抵達松山", "抵達機場"] },
+            { id: "tokyo-day1-flight", title: "BR192 松山 → 羽田｜07:15–11:00", sub: "抵達後領行李、入境；原規劃預留約 40–60 分鐘，出關後先確認交通卡餘額。", place: "東京羽田機場 T3", category: "航班", startTime: "07:15", endTime: "11:00", transportMethod: "EVA Air BR192", transportDuration: "2 小時 45 分", legacyKeywords: ["抵達東京", "BR192", "入住巢鴨"] },
+            { id: "tokyo-day1-transfer", title: "羽田 → 巢鴨｜出關後", sub: "京急線往品川，轉 JR 山手線到巢鴨；交通約 ¥610。", place: "巢鴨站", category: "交通", transportMethod: "京急線＋JR 山手線", transportCost: 610, legacyKeywords: ["羽田", "京急", "前往巢鴨"] },
+            { id: "tokyo-day1-hotel", title: "APA Hotel 巢鴨站前寄放行李", sub: "住宿 11/28–12/2 共四晚；15:00 起入住，退房日 10:00 前離開。", place: "APA Hotel Sugamo Ekimae", category: "住宿", legacyKeywords: ["APA", "寄放行李", "入住巢鴨"] },
+            { id: "tokyo-day1-sugamo", title: "巢鴨地藏通商店街｜14:30–16:00", sub: "從飯店步行；可逛高岩寺、水洗地藏、紅色內褲店與 Sugamon，並安排鹽大福或小吃。", place: "巣鴨地蔵通り商店街", category: "景點", startTime: "14:30", endTime: "16:00", legacyKeywords: ["巢鴨地藏", "巣鴨地蔵"] },
+            { id: "tokyo-day1-ueno", title: "上野・阿美橫町｜16:30 起", sub: "巢鴨搭 JR 山手線到上野，單程約 ¥170；可逛阿美橫町、二木菓子、多慶屋與上野公園。", place: "アメヤ横丁", category: "購物", startTime: "16:30", legacyKeywords: ["上野", "阿美橫", "アメヤ"] },
+            { id: "tokyo-day1-dinner", title: "勝治上野御徒町晚餐候選｜19:00", sub: "確定有去上野再訂，先核對人數、雞／豬肉套餐與取消條件；備案為鰻魚飯、海鮮丼或炸豬排。", place: "勝治上野御徒町", category: "餐廳", startTime: "19:00", legacyKeywords: ["勝治", "晚餐"] },
+            { id: "tokyo-day1-return", title: "返回巢鴨飯店｜約 21:30", sub: "依晚餐結束時間調整，從上野搭 JR 山手線回巢鴨。", place: "APA Hotel Sugamo Ekimae", category: "交通", startTime: "21:30", legacyKeywords: ["返回巢鴨", "返回巢鴨飯店"] }
           ]
         },
         {
           labelZh: "DAY2", labelJp: "哈利波特・池袋", date: "2026-11-29", items: [
-            { title: "前往豐島園影城｜09:30", sub: "巢鴨 → 池袋轉乘 → 豐島園；交通約 360 日圓", place: "としまえん駅" },
-            { title: "東京華納兄弟哈利波特影城｜10:30–15:30", sub: "大禮堂、魔法部、九又四分之三月台、斜角巷；門票需預約", place: "ワーナー ブラザース スタジオツアー東京" },
-            { title: "池袋逛街與晚餐｜16:30–19:30", sub: "寶可夢中心、水族館、Animate、吉卜力共和國；無敵家／燒肉／居酒屋", place: "池袋サンシャインシティ" },
-            { title: "返回巢鴨飯店｜21:30", sub: "JR 山手線；單程約 170 日圓", place: "APA Hotel Sugamo Ekimae" }
+            { id: "tokyo-day2-transfer", title: "巢鴨 → 池袋 → 豐島園｜09:15–09:30", sub: "JR 山手線到池袋，轉西武線到豐島園；交通約 ¥360，建議提早約 20 分鐘到場。", place: "としまえん駅", category: "交通", startTime: "09:15", endTime: "09:30", transportMethod: "JR 山手線＋西武線", transportCost: 360, legacyKeywords: ["前往豐島園", "豐島園"] },
+            { id: "tokyo-day2-warner", title: "東京華納兄弟哈利波特影城｜10:30–15:30", sub: "KKday 票已購；大禮堂、魔法部、九又四分之三月台、霍格華茲特快車、斜角巷與室外展區。", place: "ワーナー ブラザース スタジオツアー東京", category: "展覽", startTime: "10:30", endTime: "15:30", legacyKeywords: ["哈利波特", "華納兄弟", "Warner"] },
+            { id: "tokyo-day2-ikebukuro", title: "池袋 Sunshine City／K-BOOKS｜16:30", sub: "豐島園搭西武線回池袋；可逛寶可夢中心、K-BOOKS、Animate、蠟筆小新商店或吉卜力共和國。", place: "池袋サンシャインシティ", category: "購物", startTime: "16:30", legacyKeywords: ["池袋", "Sunshine"] },
+            { id: "tokyo-day2-crab", title: "池袋帝王蟹吃到飽｜18:00（個人）", sub: "個人行動，同行人數與其他旅伴晚餐分開計算；餐後是否會合待確認。", place: "池袋帝王蟹餐廳", category: "餐廳", startTime: "18:00", legacyKeywords: ["帝王蟹", "個人"] },
+            { id: "tokyo-day2-dinner", title: "池袋晚餐候選｜約 19:00（部分同行）", sub: "無敵家、敘敘苑池袋東口店或鳥貴族；回巢鴨搭 JR 山手線約 ¥170。", place: "池袋東口", category: "餐廳", startTime: "19:00", legacyKeywords: ["池袋逛街與晚餐", "晚餐"] },
+            { id: "tokyo-day2-return", title: "返回巢鴨飯店｜約 21:30", sub: "依晚餐結束時間調整，JR 山手線回巢鴨。", place: "APA Hotel Sugamo Ekimae", category: "交通", startTime: "21:30", legacyKeywords: ["返回巢鴨"] }
           ]
         },
         {
           labelZh: "DAY3", labelJp: "原宿・澀谷・新宿", date: "2026-11-30", items: [
-            { title: "前往原宿｜09:30", sub: "巢鴨站搭乘 JR 山手線；交通約 210 日圓", place: "原宿駅" },
-            { title: "原宿・明治神宮｜10:00–12:30", sub: "明治神宮森林參道、Kiddy Land（蠟筆小新）、表參道街拍", place: "明治神宮" },
-            { title: "澀谷潮流巡禮｜13:00–17:00", sub: "忠犬八公、Shibuya Crossing、SHIBUYA PARCO 任天堂／寶可夢、SHIBUYA SKY", place: "SHIBUYA SKY" },
-            { title: "新宿霓虹之夜｜17:30–21:00", sub: "3D 三色貓、北村相機、歌舞伎町；晚餐安排高品質燒肉", place: "歌舞伎町一番街" },
-            { title: "返回巢鴨飯店｜21:30", sub: "新宿 → 巢鴨約 180 日圓", place: "APA Hotel Sugamo Ekimae" }
+            { id: "tokyo-day3-transfer", title: "巢鴨 → 原宿｜09:30", sub: "搭 JR 山手線直達，交通約 ¥210。", place: "原宿駅", category: "交通", startTime: "09:30", transportMethod: "JR 山手線", transportCost: 210, legacyKeywords: ["前往原宿"] },
+            { id: "tokyo-day3-meiji", title: "明治神宮｜10:00", sub: "走大鳥居與森林參道，到本殿參拜，再拍照散步。", place: "明治神宮", category: "景點", startTime: "10:00", legacyKeywords: ["明治神宮", "原宿・明治神宮"] },
+            { id: "tokyo-day3-harajuku", title: "原宿・表參道｜11:30", sub: "可逛 Kiddy Land 蠟筆小新周邊，順路街拍；午餐可考慮 AFURI。", place: "表参道", category: "購物", startTime: "11:30", legacyKeywords: ["原宿", "表參道"] },
+            { id: "tokyo-day3-shibuya", title: "澀谷十字路口・八公 → PARCO｜13:00 起", sub: "拍八公與十字路口，再逛 PARCO 的 JUMP SHOP、Nintendo TOKYO、寶可夢中心；有餘裕再去 MIYASHITA PARK。", place: "渋谷スクランブル交差点", category: "景點", startTime: "13:00", legacyKeywords: ["澀谷潮流", "澀谷", "SHIBUYA"] },
+            { id: "tokyo-day3-sky", title: "SHIBUYA SKY｜15:30（暫定）", sub: "想接白天、夕陽與夜景；實際入場以票面為準。", place: "SHIBUYA SKY", category: "景點", startTime: "15:30", legacyKeywords: ["SHIBUYA SKY"] },
+            { id: "tokyo-day3-shinjuku", title: "新宿東口與歌舞伎町｜17:30", sub: "3D 三色貓 → 北村相機 → 歌舞伎町一番街；可加逛伊勢丹地下食品樓層。", place: "歌舞伎町一番街", category: "景點", startTime: "17:30", legacyKeywords: ["新宿", "歌舞伎町"] },
+            { id: "tokyo-day3-dinner", title: "六歌仙晚餐候選｜19:00", sub: "先確認分店、套餐、用餐人數與取消條件；燒肉備案為亭久五。", place: "六歌仙", category: "餐廳", startTime: "19:00", legacyKeywords: ["六歌仙", "晚餐"] },
+            { id: "tokyo-day3-return", title: "返回巢鴨飯店｜約 21:30", sub: "新宿搭 JR 山手線回巢鴨，交通約 ¥180。", place: "APA Hotel Sugamo Ekimae", category: "交通", startTime: "21:30", transportCost: 180, legacyKeywords: ["返回巢鴨"] }
           ]
         },
         {
           labelZh: "DAY4", labelJp: "東京迪士尼", date: "2026-12-01", items: [
-            { title: "前往舞濱｜07:30", sub: "巢鴨 → 東京 → 舞濱；來回交通約 820 日圓", place: "舞浜駅" },
-            { title: "東京迪士尼樂園｜08:30–21:00", sub: "提早入園搶 DPA；美女與野獸、維尼、太空山、聖誕遊行、夜間遊行與煙火", place: "東京ディズニーランド" },
-            { title: "迪士尼實用提醒", sub: "提前下載 Tokyo Disney Resort App；準備暖暖包、防風外套，門票與 DPA 預算約 17,000–18,000 日圓", place: "東京ディズニーランド" },
-            { title: "返回巢鴨飯店｜22:00", sub: "舞濱 → 東京 → 巢鴨", place: "APA Hotel Sugamo Ekimae" }
+            { id: "tokyo-day4-breakfast", title: "起床與早餐｜06:30", sub: "前一晚先買好早餐；出門前確認 Tokyo Disney Resort App、同行票券與 DPA 預算。", place: "APA Hotel Sugamo Ekimae", category: "準備", startTime: "06:30", legacyKeywords: ["起床", "早餐", "迪士尼實用提醒"] },
+            { id: "tokyo-day4-transfer", title: "巢鴨 → 東京站 → 舞濱｜07:30", sub: "JR 山手線到東京站，再轉京葉線；交通約 ¥440，東京站轉乘要預留站內步行時間。", place: "舞浜駅", category: "交通", startTime: "07:30", transportMethod: "JR 山手線＋京葉線", transportCost: 440, legacyKeywords: ["前往舞濱"] },
+            { id: "tokyo-day4-disney", title: "東京迪士尼樂園（陸地）｜全天", sub: "優先安排美女與野獸、灰姑娘城堡、維尼獵蜜記；小小世界與加勒比海盜作悠閒選項。", place: "東京ディズニーランド", category: "景點", startTime: "08:30", endTime: "20:30", legacyKeywords: ["東京迪士尼", "迪士尼樂園"] },
+            { id: "tokyo-day4-meals", title: "園內午餐／晚餐｜約 11:30、17:30（彈性）", sub: "午餐可選 Queen of Hearts Banquet Hall，晚餐可選 Hungry Bear Restaurant 咖哩；爆米花作途中點心。", place: "東京ディズニーランド", category: "餐廳", startTime: "11:30", endTime: "17:30", legacyKeywords: ["午餐", "晚餐"] },
+            { id: "tokyo-day4-evening", title: "城堡拍照、遊行及夜間演出｜下午至晚上", sub: "先看當天節目表再決定卡位；約 20:30 開始往舞濱站移動以避開散場人潮。", place: "東京ディズニーランド", category: "景點", startTime: "15:00", endTime: "20:30", legacyKeywords: ["夜間", "遊行", "城堡"] },
+            { id: "tokyo-day4-return", title: "舞濱 → 東京站 → 巢鴨｜離園後", sub: "搭京葉線到東京站，轉山手線回巢鴨；依體力可提早離園。", place: "APA Hotel Sugamo Ekimae", category: "交通", startTime: "20:30", endTime: "22:00", legacyKeywords: ["返回巢鴨飯店"] }
           ]
         },
         {
           labelZh: "DAY5", labelJp: "吉卜力・吉祥寺", date: "2026-12-02", items: [
-            { title: "退房與前往三鷹｜09:45–10:45", sub: "巢鴨 → 新宿 → 三鷹；大行李建議寄放三鷹或新宿置物櫃", place: "三鷹駅" },
-            { title: "三鷹之森吉卜力美術館｜11:00–13:30", sub: "龍貓售票亭、天空之城機器人、土星座影院、手稿展示室；門票需提前預約", place: "三鷹の森ジブリ美術館" },
-            { title: "吉祥寺漫遊與晚餐｜17:30–18:30", sub: "Sunroad、LOFT、Petit Village；Satou 牛肉丸或名代炸豬排", place: "吉祥寺サンロード商店街" },
-            { title: "田原町飯店 Check-in｜20:30", sub: "Toyoko Inn 東京上野田原町站；田原町站 2 號出口，入住 12/02–12/06 共 4 晚", place: "東横INN上野田原町駅" }
+            { id: "tokyo-day5-checkout", title: "APA 巢鴨退房｜10:00 前", sub: "帶行李由巢鴨經春日、藏前前往東橫 INN；交通約 ¥220。", place: "APA Hotel Sugamo Ekimae", category: "住宿", startTime: "09:30", endTime: "10:00", transportMethod: "都營三田線＋大江戶線", transportCost: 220, legacyKeywords: ["退房", "前往三鷹", "退房與前往三鷹"] },
+            { id: "tokyo-day5-luggage", title: "田原町東橫 INN 寄放行李｜10:45–11:15", sub: "到櫃檯確認寄放，晚上再入住；飯店為 12/2–12/6 共四晚。", place: "東横INN上野田原町駅", category: "住宿", startTime: "10:45", endTime: "11:15", legacyKeywords: ["東橫", "寄放行李", "田原町飯店"] },
+            { id: "tokyo-day5-transfer", title: "田原町 → 神田 → 吉祥寺｜約 11:15", sub: "銀座線往澀谷，在神田轉 JR 中央線快速；田原町至神田約 ¥178，神田至吉祥寺約 ¥440。", place: "吉祥寺駅", category: "交通", startTime: "11:15", transportMethod: "銀座線＋JR 中央線快速", transportCost: 618, legacyKeywords: ["田原町", "神田", "吉祥寺", "前往三鷹"] },
+            { id: "tokyo-day5-kichijoji", title: "吉祥寺午餐、逛街與井之頭公園｜12:00–15:15", sub: "午餐可選 Satou 牛肉丸或 Katsukura；視時間逛 SUNROAD、LOFT、Petit Village，再往井之頭公園。", place: "井の頭恩賜公園", category: "景點", startTime: "12:00", endTime: "15:15", legacyKeywords: ["吉祥寺漫遊", "吉祥寺", "井之頭"] },
+            { id: "tokyo-day5-ghibli-arrival", title: "抵達三鷹之森吉卜力美術館｜約 15:45", sub: "從吉祥寺南口步行約 15–20 分鐘；接駁備案為三鷹站南口 9 號站牌。", place: "三鷹の森ジブリ美術館", category: "交通", startTime: "15:45", legacyKeywords: ["抵達三鷹", "吉卜力", "Ghibli"] },
+            { id: "tokyo-day5-ghibli", title: "三鷹之森吉卜力美術館｜16:00–18:00", sub: "Lawson 成人電子票四張已付款；訂票人帶護照，進館先確認土星座影院場次，再看展區、手稿、屋頂機器人與商店。", place: "三鷹の森ジブリ美術館", category: "展覽", startTime: "16:00", endTime: "18:00", legacyKeywords: ["三鷹之森吉卜力美術館"] },
+            { id: "tokyo-day5-return", title: "美術館 → 三鷹 → 神田 → 田原町｜18:00 後", sub: "接駁車原列 18:05、18:20、18:35；錯過可步行約 15 分鐘回三鷹站。", place: "東横INN上野田原町駅", category: "交通", startTime: "18:00", transportMethod: "接駁車＋JR 中央線＋銀座線", transportCost: 848, legacyKeywords: ["美術館", "返回田原町"] },
+            { id: "tokyo-day5-checkin", title: "東橫 INN 入住、田原町／淺草晚餐｜19:15–20:00", sub: "回飯店取行李辦入住，再於田原町或淺草就近用餐。", place: "東横INN上野田原町駅", category: "住宿", startTime: "19:15", endTime: "20:00", legacyKeywords: ["Check-in", "入住", "田原町飯店"] }
           ]
         },
         {
           labelZh: "DAY6", labelJp: "淺草・東京鐵塔", date: "2026-12-03", items: [
-            { title: "淺草寺與下町巡禮｜11:00–13:30", sub: "雷門、仲見世商店街、淺草寺本堂、淺草橫町；大黑家天丼與花月堂", place: "浅草寺" },
-            { title: "東京車站一番街｜14:30–16:30", sub: "Tokyo Character Street、吉卜力／蠟筆小新／Chiikawa、TOKYO Me+ 伴手禮", place: "東京駅一番街" },
-            { title: "東京鐵塔｜17:30–20:30", sub: "芝公園 4 號地、赤羽橋站階梯拍攝夕陽與點燈；可安排豆腐屋 Ukai 或雞白湯拉麵", place: "東京タワー" },
-            { title: "返回田原町飯店｜20:30", sub: "濱松町 → 神田 → 田原町", place: "東横INN上野田原町駅" }
+            { id: "tokyo-day6-mappa", title: "MAPPA EXPO 15th｜10:00–12:00（個人）", sub: "10:00 入場已購；從田原町搭銀座線到銀座，再步行至東京國際論壇 B1 一帶。", place: "東京國際論壇", category: "展覽", startTime: "10:00", endTime: "12:00", legacyKeywords: ["MAPPA", "MAPPA 15周年"] },
+            { id: "tokyo-day6-asakusa", title: "淺草寺與仲見世｜11:00–13:30（部分同行）", sub: "雷門 → 仲見世 → 淺草寺本堂 → 淺草神社，可加淺草橫町；小吃可選大黑家、花月堂與淺草九重。", place: "浅草寺", category: "景點", startTime: "11:00", endTime: "13:30", legacyKeywords: ["淺草寺", "下町巡禮", "淺草"] },
+            { id: "tokyo-day6-kiji", title: "お好み焼 きじ 丸之內店｜約 12:10（個人）", sub: "店在東京大樓 TOKIA B1；推薦牛筋蔥燒或炒麵大阪燒，時間依展覽離場和候位調整。", place: "お好み焼 きじ 東京ビルTOKIA", category: "餐廳", startTime: "12:10", legacyKeywords: ["きじ", "大阪燒", "東京鐵塔"] },
+            { id: "tokyo-day6-transfer", title: "淺草 → 日本橋 → 東京站｜13:30–14:30（部分同行）", sub: "搭銀座線到日本橋，再步行往八重洲；交通約 ¥180，可視情況加小網神社。", place: "東京駅八重洲", category: "交通", startTime: "13:30", endTime: "14:30", transportMethod: "銀座線", transportCost: 180, legacyKeywords: ["淺草 → 日本橋", "日本橋", "轉乘"] },
+            { id: "tokyo-day6-character", title: "東京車站一番街・JUMP SHOP｜14:30–16:30（部分同行）", sub: "重點為 Tokyo Character Street；可逛 JUMP SHOP、吉卜力共和國、蠟筆小新、角落生物與吉伊卡哇。", place: "東京駅一番街", category: "購物", startTime: "14:30", endTime: "16:30", legacyKeywords: ["東京車站", "一番街", "Character Street"] },
+            { id: "tokyo-day6-haikyu", title: "《排球少年!!》展候選｜14:30 後（個人）", sub: "代購目標為 12/3 14:30 後，待購票確認；若取得票依票面時間前往六本木之丘。", place: "六本木之丘", category: "展覽", startTime: "14:30", legacyKeywords: ["排球少年", "原畫展"] },
+            { id: "tokyo-day6-beef", title: "檸檬牛舌淺草店｜17:00（個人）", sub: "個人行動；若當天也去六本木看展，離場後預留返回淺草時間。", place: "淺草牛舌餐廳", category: "餐廳", startTime: "17:00", legacyKeywords: ["檸檬牛舌", "個人行程"] },
+            { id: "tokyo-day6-tower", title: "東京鐵塔／晚餐會合（備案）｜傍晚", sub: "可由東京站搭 JR 到濱松町，再步行經芝公園；實際會合地點與用餐人數待定。", place: "東京タワー", category: "景點", startTime: "17:30", legacyKeywords: ["東京鐵塔", "東京タワー"] },
+            { id: "tokyo-day6-return", title: "返回田原町飯店｜約 20:30", sub: "依會合地點調整，回飯店後確認隔日富士山團單與保暖衣物。", place: "東横INN上野田原町駅", category: "交通", startTime: "20:30", legacyKeywords: ["返回田原町", "返回田原町飯店"] }
           ]
         },
         {
           labelZh: "DAY7", labelJp: "富士山・河口湖", date: "2026-12-04", items: [
-            { title: "跟團集合｜07:20–08:00", sub: "田原町 → 上野 → 東京站丸之內北口；08:00 巴士出發，記得保暖", place: "東京駅丸の内北口" },
-            { title: "富士山・河口湖｜10:30–12:00", sub: "大石公園、河口湖 Lawson；可吃不動餺飥，留意山區低溫與天氣", place: "大石公園" },
-            { title: "忍野八海｜12:10–13:30", sub: "清澈湧泉池、現烤草餅、富士湧泉豆腐", place: "忍野八海" },
-            { title: "山中湖 KABA 水陸巴士｜14:00–15:30", sub: "體驗兩棲巴士衝入湖中，從湖面遠眺富士山", place: "山中湖" },
-            { title: "日川時計店與階梯街景｜16:00–16:30", sub: "下吉田街道、復古招牌與通往富士山的街景", place: "日川時計店" },
-            { title: "東京車站一番街與晚餐｜17:00–20:30", sub: "拉麵、Calbee+ 現炸薯條、New York Perfect Cheese；先寄放行李再逛", place: "東京駅一番街" }
+            { id: "tokyo-day7-meet", title: "富士山一日遊集合｜時間依團單", sub: "參考動線為田原町 → 上野 → 東京站丸之內北口；舊稿列 07:50 報到、08:00 出發，實際以團單為準。", place: "東京駅丸の内北口", category: "交通", startTime: "07:50", endTime: "08:00", transportMethod: "跟團巴士", legacyKeywords: ["跟團集合", "集合"] },
+            { id: "tokyo-day7-oishi", title: "河口湖・大石公園｜10:30–12:00", sub: "拍富士山與河口湖；若導遊安排可加河口湖 Lawson，午餐先核對是否含餐。", place: "大石公園", category: "景點", startTime: "10:30", endTime: "12:00", legacyKeywords: ["富士山", "河口湖", "大石公園"] },
+            { id: "tokyo-day7-oshino", title: "忍野八海｜12:10–13:30", sub: "看融雪湧泉，重點可留給湧池；小吃可找現烤草餅與富士湧泉豆腐。", place: "忍野八海", category: "景點", startTime: "12:10", endTime: "13:30", legacyKeywords: ["忍野八海"] },
+            { id: "tokyo-day7-kaba", title: "山中湖 KABA 水陸巴士｜14:00–15:30", sub: "搭兩棲巴士下水，從湖面看富士山；場次以團單及當日運行為準，湖邊風大請保暖。", place: "山中湖", category: "景點", startTime: "14:00", endTime: "15:30", legacyKeywords: ["山中湖", "KABA"] },
+            { id: "tokyo-day7-hikawa", title: "日川時計店街景｜約 16:00–16:30（視團程）", sub: "拍下吉田復古招牌與遠方富士山；停留與否依導遊安排。", place: "日川時計店", category: "景點", startTime: "16:00", endTime: "16:30", legacyKeywords: ["日川時計店", "階梯街景"] },
+            { id: "tokyo-day7-backup", title: "市區備案：築地場外／排球少年展｜白天", sub: "留在市區者可選築地；排球少年展須先取得對應日期票券，時段以票面為準。", place: "築地場外市場", category: "備案", legacyKeywords: ["市區備案", "排球少年"] },
+            { id: "tokyo-day7-dinner", title: "東京站一番街／上野晚餐候選｜回東京後", sub: "依團車下車點決定會合；可選拉麵街、Calbee+ 或伴手禮，行李多可先找置物櫃。", place: "東京駅一番街", category: "餐廳", startTime: "17:00", endTime: "20:30", legacyKeywords: ["東京車站", "晚餐"] }
           ]
         },
         {
           labelZh: "DAY8", labelJp: "台場・彩虹煙火", date: "2026-12-05", items: [
-            { title: "前往台場｜10:45", sub: "田原町 → 新橋 → 百合海鷗號；交通約 510 日圓", place: "台場駅" },
-            { title: "台場鋼彈與海濱採買｜11:00–16:30", sub: "DiverCity 1:1 獨角獸鋼彈、AQUA CiTY；午餐可選金子半之助或雞三和", place: "ダイバーシティ東京 プラザ" },
-            { title: "彩虹大橋與自由女神像｜16:30–18:30", sub: "夕陽與點燈後拍攝彩虹大橋", place: "お台場海浜公園" },
-            { title: "冬季限定台場彩虹煙火｜19:00–19:10", sub: "18:40 前到海濱公園卡位；煙火配合彩虹大橋點燈", place: "お台場海浜公園" },
-            { title: "晚餐、回飯店整理行李｜19:30–21:30", sub: "AQUA CiTY 拉麵國技館或 bills；21:30 回田原町，確認行李重量", place: "東横INN上野田原町駅" }
+            { id: "tokyo-day8-asakusa", title: "淺草寺・雷門・仲見世｜09:15（彈性）", sub: "從田原町飯店步行；若前兩天已逛過淺草，可直接前往台場。", place: "浅草寺", category: "景點", startTime: "09:15", legacyKeywords: ["淺草寺", "雷門", "仲見世"] },
+            { id: "tokyo-day8-transfer", title: "田原町 → 新橋 → 台場｜約 10:45", sub: "搭銀座線到新橋，轉百合海鷗號；交通約 ¥510。", place: "台場駅", category: "交通", startTime: "10:45", transportMethod: "銀座線＋百合海鷗號", transportCost: 510, legacyKeywords: ["前往台場"] },
+            { id: "tokyo-day8-divercity", title: "DiverCity・實物大獨角獸鋼彈｜11:00 起", sub: "先到 DiverCity 門口拍鋼彈，再逛商場；午餐可選金子半之助或雞三和。", place: "ダイバーシティ東京 プラザ", category: "購物", startTime: "11:00", legacyKeywords: ["台場鋼彈", "DiverCity"] },
+            { id: "tokyo-day8-seaside", title: "台場海濱、自由女神像與彩虹大橋｜16:30–18:30", sub: "在自由女神像附近拍夕陽與大橋點燈，四人想一起站可提早找位置。", place: "お台場海浜公園", category: "景點", startTime: "16:30", endTime: "18:30", legacyKeywords: ["彩虹大橋", "自由女神", "海濱"] },
+            { id: "tokyo-day8-fireworks", title: "台場彩虹煙火｜19:00–19:10", sub: "規劃從台場海濱公園觀賞，實際施放依活動公告；建議 18:15–18:30 左右先到海濱。", place: "お台場海浜公園", category: "活動", startTime: "19:00", endTime: "19:10", legacyKeywords: ["彩虹煙火", "煙火"] },
+            { id: "tokyo-day8-dinner", title: "bills 台場晚餐候選｜19:30", sub: "先查位與最後點餐時間；備案為 AQUA CiTY 5F 拉麵國技館。", place: "bills お台場", category: "餐廳", startTime: "19:30", legacyKeywords: ["bills", "晚餐"] },
+            { id: "tokyo-day8-return", title: "台場 → 新橋 → 田原町｜約 20:30", sub: "百合海鷗號約 ¥330、銀座線約 ¥180；回飯店整理行李並確認隔天護照與重量。", place: "東横INN上野田原町駅", category: "交通", startTime: "20:30", transportCost: 510, legacyKeywords: ["回飯店", "整理行李"] }
           ]
         },
         {
           labelZh: "DAY9", labelJp: "告別東京", date: "2026-12-06", items: [
-            { title: "退房與前往羽田｜07:30–09:45", sub: "08:15 退房；田原町 → 淺草轉都營淺草線／京急直達羽田，建議 09:45 前到櫃檯", place: "羽田空港 第3ターミナル" },
-            { title: "羽田機場最後採買｜10:15–11:45", sub: "BR191 辦理登機與托運；可到 4 樓江戶小路用餐或免稅店採買", place: "羽田空港 第3ターミナル" },
-            { title: "返程 ✈️｜12:15–15:05", sub: "BR191 東京羽田 → 台北松山；交通約 760 日圓", place: "松山空港" }
+            { id: "tokyo-day9-packing", title: "最後打包｜07:30", sub: "核對護照、行動電源、易碎品與行李重量。", place: "東横INN上野田原町駅", category: "準備", startTime: "07:30", legacyKeywords: ["最後打包", "打包"] },
+            { id: "tokyo-day9-checkout", title: "田原町東橫 INN 退房｜08:15", sub: "退房後直接帶行李往車站。", place: "東横INN上野田原町駅", category: "住宿", startTime: "08:15", legacyKeywords: ["退房", "田原町東橫"] },
+            { id: "tokyo-day9-transfer", title: "前往羽田機場 T3｜08:30", sub: "可由田原町搭銀座線到淺草，轉都營淺草線羽田空港行直通車；交通約 ¥760。", place: "羽田空港 第3ターミナル", category: "交通", startTime: "08:30", transportMethod: "銀座線＋都營淺草線／京急", transportCost: 760, legacyKeywords: ["退房與前往羽田", "前往羽田"] },
+            { id: "tokyo-day9-airport", title: "抵達羽田機場 T3｜09:45 前", sub: "到 3 樓出境大廳，預計 10:15 左右報到及託運；完成後再到 4 樓江戶小路用餐或採買。", place: "羽田空港 第3ターミナル", category: "航班", startTime: "09:45", endTime: "10:15", legacyKeywords: ["羽田機場", "最後採買"] },
+            { id: "tokyo-day9-gate", title: "登機門集合｜約 11:45", sub: "以登機證和機場看板的登機時間為準。", place: "羽田空港 第3ターミナル", category: "航班", startTime: "11:45", legacyKeywords: ["登機門"] },
+            { id: "tokyo-day9-flight", title: "BR191 羽田 → 松山｜12:15–15:05", sub: "12:15 日本時間起飛，15:05 台灣時間抵達松山 T1。", place: "松山空港", category: "航班", startTime: "12:15", endTime: "15:05", transportMethod: "EVA Air BR191", transportDuration: "2 小時 50 分", legacyKeywords: ["返程", "BR191", "松山空港"] }
           ]
         }
       ]
@@ -6883,6 +6911,83 @@
       }
     };
 
+    // 2026/11/14 TXT 更新：以使用者提供的逐站行程為準，補齊時間、分流、交通與票券提醒。
+    // 這層覆蓋保留既有 TRIP_GUIDES 的相容欄位，讓舊版雲端資料也能在載入時取得最新整理內容。
+    const TOKYO_GUIDE_UPDATES = {
+      "2026-11-28": {
+        title: "抵達東京・巢鴨・上野",
+        summary: "先完成松山報到、羽田入境與交通卡確認，再寄放行李；下午走巢鴨地藏通，晚上依體力到上野採買與用餐。",
+        checklist: ["05:15 抵達松山 T1，預留報到、託運與出境時間", "BR192 抵達羽田後預留 40–60 分鐘入境", "出關後確認 Suica／Pasmo 餘額，京急轉 JR 山手線到巢鴨", "APA 15:00 起入住；提早抵達先寄放行李"],
+        sourceUrl: "https://app.notion.com/p/d0243df6279b83eb96578184fc333b69",
+        links: [{ label: "巢鴨景點細節", url: "https://app.notion.com/p/c2443df6279b83158ad6014d2d9bf274" }, { label: "上野與餐廳備案", url: "https://app.notion.com/p/c6343df6279b832296e38159669483f0" }],
+        items: ["預留松山機場報到、行李託運與出境時間。", "BR192 07:15 松山 T1 → 11:00 羽田 T3；入境後先確認交通卡。", "京急線往品川、轉 JR 山手線到巢鴨，交通約 ¥610。", "APA Hotel Sugamo Ekimae 住 11/28–12/2；15:00 起入住，10:00 前退房。", "巢鴨地藏通可逛高岩寺、水洗地藏、紅色內褲店與 Sugamon，安排鹽大福及小吃。", "上野可逛阿美橫町、二木菓子、多慶屋與上野公園，JR 單程約 ¥170。", "勝治晚餐到上野後再訂，先確認人數、套餐與取消條件；約 21:30 回巢鴨。"]
+      },
+      "2026-11-29": {
+        title: "哈利波特影城・池袋",
+        summary: "固定票券先完成影城入場，離場後在池袋安排購物；帝王蟹為個人行動，晚餐依同行狀況分流。",
+        checklist: ["09:15–09:30 巢鴨出發，JR 山手線轉西武線至豐島園", "KKday 10:30 影城票已購，預留入場與安檢時間", "影城內預留午餐、奶油啤酒與周邊購物", "18:00 帝王蟹為個人行動，晚餐再依人數會合"],
+        sourceUrl: "https://app.notion.com/p/3ea43df6279b8239adff0187f5a2c93e",
+        links: [{ label: "影城展區與用餐", url: "https://app.notion.com/p/03243df6279b82cdbc3801c9172832c6" }, { label: "池袋購物與晚餐", url: "https://app.notion.com/p/42643df6279b8246a90c81f8f608a96b" }],
+        items: ["巢鴨 → 池袋 → 豐島園，交通約 ¥360，建議提早約 20 分鐘到場。", "10:30 入場；大禮堂、魔法部、九又四分之三月台、霍格華茲特快車、斜角巷與室外展區為重點。", "12:30 左右可在 The Food Hall 或 Backlot Café 用餐、喝奶油啤酒，15:30 左右離場。", "池袋 Sunshine City、K-BOOKS、寶可夢中心、Animate 或吉卜力共和國擇一至兩個。", "18:00 帝王蟹為個人行動；約 19:00 晚餐可選無敵家、敘敘苑或鳥貴族。", "池袋回巢鴨搭 JR 山手線約 ¥170，依晚餐結束時間調整。"]
+      },
+      "2026-11-30": {
+        title: "原宿・澀谷・新宿",
+        summary: "以明治神宮森林參道開場，沿原宿、澀谷一路逛到新宿；SHIBUYA SKY 以票面時間決定是否保留。",
+        checklist: ["09:30 巢鴨搭 JR 山手線到原宿，交通約 ¥210", "明治神宮安排大鳥居、森林參道與本殿參拜", "原宿、表參道與澀谷 PARCO 擇重點逛，避免排隊壓縮晚餐", "SHIBUYA SKY、六歌仙先確認票券、分店與取消條件"],
+        sourceUrl: "https://app.notion.com/p/13043df6279b82f29683017a1242b983",
+        links: [{ label: "原宿", url: "https://app.notion.com/p/cae43df6279b8262aa3b019260ed2f1f" }, { label: "澀谷", url: "https://app.notion.com/p/dae43df6279b82ff844d01d824fc7604" }, { label: "新宿", url: "https://app.notion.com/p/2c443df6279b825e834d01680448d0ba" }],
+        items: ["巢鴨 → 原宿約 ¥210；10:00 明治神宮走鳥居與森林參道。", "11:30 原宿、表參道，可逛 Kiddy Land；午餐備案 AFURI。", "13:00 起拍八公、十字路口，再逛 PARCO 的 JUMP SHOP、Nintendo TOKYO 與寶可夢中心。", "15:30 SHIBUYA SKY 暫定，白天、夕陽與夜景依票面時間安排。", "17:30 新宿東口、3D 三色貓、北村相機與歌舞伎町一番街。", "19:00 六歌仙晚餐候選；約 21:30 搭 JR 山手線回巢鴨，交通約 ¥180。"]
+      },
+      "2026-12-01": {
+        title: "東京迪士尼樂園（陸地）",
+        summary: "整天以園區為主，先完成入園與熱門設施，再依遊行、晚餐和夜間節目調整順序。",
+        checklist: ["06:30 起床，前一晚先買早餐並確認 Tokyo Disney Resort App", "07:30 巢鴨出發，東京站轉京葉線；預留站內步行與安檢", "入園後優先美女與野獸、灰姑娘城堡、維尼獵蜜記，依 App 處理 DPA", "準備暖暖包、防風外套與行動電源，20:30 左右往舞濱站移動"],
+        sourceUrl: "https://app.notion.com/p/b5643df6279b82d2b82e01c4aff2e186",
+        links: [{ label: "園內設施、餐點與演出草案", url: "https://app.notion.com/p/7ba43df6279b8390a874817a435af55a" }],
+        items: ["前一晚確認門票、Tokyo Disney Resort App、同行票券與 DPA 預算。", "巢鴨 → 東京站 → 舞濱，交通約 ¥440；東京站轉京葉線要留站內步行時間。", "美女與野獸、灰姑娘城堡、維尼獵蜜記優先，小小世界與加勒比海盜作悠閒選項。", "午餐 Queen of Hearts Banquet Hall；晚餐可選 Hungry Bear Restaurant，爆米花作途中點心。", "下午至晚上依當日節目表安排城堡拍照、遊行與夜間演出，約 20:30 離園。", "舞濱 → 東京站 → 巢鴨；依體力調整，最晚約 22:00 回飯店。"]
+      },
+      "2026-12-02": {
+        title: "吉卜力美術館・換飯店",
+        summary: "上午退房並寄放大行李，先逛吉祥寺與井之頭公園，再準時進入吉卜力美術館；晚上換住田原町。",
+        checklist: ["10:00 前完成 APA 退房，經春日、藏前到田原町寄放行李", "10:45–11:15 確認東橫 INN 寄放；住宿 12/2–12/6 共四晚", "吉祥寺安排午餐、SUNROAD 與井之頭公園，15:45 抵達美術館", "16:00 入館票已確認，訂票人攜護照正本並以手機出示 QR Code"],
+        sourceUrl: "https://app.notion.com/p/d3943df6279b826698df81ae6556fa3e",
+        links: [{ label: "吉卜力子頁", url: "https://app.notion.com/p/ec443df6279b83e3ac6a81c1af3500ee" }, { label: "美術館官方交通", url: "https://www.ghibli-museum.jp/en/hours-and-directions/" }],
+        items: ["APA 10:00 前退房，巢鴨 → 春日 → 藏前，再步行到東橫 INN；交通約 ¥220。", "10:45–11:15 到田原町東橫 INN 寄放行李，晚上再辦入住。", "11:15 田原町 → 神田 → 吉祥寺，交通合計約 ¥618。", "12:00–15:15 吉祥寺用餐、逛 SUNROAD／LOFT，接著走井之頭公園。", "15:45 抵達吉卜力美術館；可步行或使用三鷹站接駁車。", "16:00–18:00 看主要展區、手稿、屋頂機器人與商店，先確認土星座影院場次。", "18:00 後回三鷹、神田、田原町；19:15–20:00 入住並在田原町／淺草用餐。"]
+      },
+      "2026-12-03": {
+        title: "團體淺草・個人雙展",
+        summary: "MAPPA、淺草、東京車站與排球少年展有時間重疊，先依票券分流；晚間再視體力到東京鐵塔會合。",
+        checklist: ["MAPPA EXPO 10:00–12:00 為個人行動，先確認 Lawson 訂單與場地", "淺草寺、仲見世 11:00–13:30 為部分同行，餐點依隊伍分流", "排球少年展 14:30 後仍待購票，取得票券才排入六本木路線", "17:00 檸檬牛舌為個人行動，東京鐵塔晚餐改為彈性會合"],
+        sourceUrl: "https://app.notion.com/p/4c043df6279b83d9b432011ee588ba5a",
+        links: [{ label: "淺草", url: "https://app.notion.com/p/ae743df6279b83d59eaa8138f0726931" }, { label: "東京站", url: "https://app.notion.com/p/a9d43df6279b83fd9b2701c51a8ccdbc" }, { label: "東京鐵塔", url: "https://app.notion.com/p/5ff43df6279b82e0816e819cf4e1d2d7" }],
+        items: ["MAPPA EXPO 10:00–12:00 個人行動；由田原町搭銀座線到銀座，再步行至東京國際論壇。", "淺草寺、仲見世 11:00–13:30；可加淺草神社與淺草橫町。", "12:10 お好み焼 きじ丸之內店為個人午餐，時間依展覽離場與候位調整。", "13:30–14:30 淺草 → 日本橋 → 東京站，交通約 ¥180；可視情況加小網神社。", "14:30–16:30 東京 Character Street、JUMP SHOP 與伴手禮採買。", "排球少年展為 14:30 後個人候選，須先取得票券；檸檬牛舌約 17:00。", "傍晚可到芝公園、赤羽橋站拍東京鐵塔，晚餐會合地點待定。"]
+      },
+      "2026-12-04": {
+        title: "富士山一日遊・山中湖 KABA",
+        summary: "跟團日以準時集合和保暖為優先，河口湖、忍野八海、KABA 的停留時間跟著導遊與車況調整。",
+        checklist: ["集合時間依團單；舊稿參考 07:50 報到、08:00 出發", "團費約 NT$2,417／人，含 KABA；集合點與下車點以團單為準", "山區風大且比東京低約 5–7°C，外套、圍巾與太陽眼鏡放在容易拿的位置", "市區備案的築地／排球少年展只有留在東京者才排入"],
+        sourceUrl: "https://app.notion.com/p/db343df6279b828d99e2019d21b4073f",
+        links: [{ label: "河口湖", url: "https://app.notion.com/p/6c543df6279b829382f6018c3243aeeb" }, { label: "忍野八海", url: "https://app.notion.com/p/45c43df6279b82fbbdac81755da8462b" }, { label: "KABA", url: "https://app.notion.com/p/27f43df6279b8290921081d58c565273" }],
+        items: ["田原町 → 上野 → 東京站丸之內北口；集合時間以團單為準。", "10:30–12:00 大石公園拍富士山與河口湖，午餐是否含餐先向旅行社確認。", "12:10–13:30 忍野八海，重點留給湧池，可買草餅與富士湧泉豆腐。", "14:00–15:30 山中湖 KABA 水陸巴士，場次依團單與當日運行。", "16:00–16:30 日川時計店街景為彈性景點，時間不足可直接回集合點。", "市區備案為築地場外或排球少年展，須留在東京且以票面時間為準。", "回東京後依下車點決定東京站一番街或上野晚餐，行李多先找置物櫃。"]
+      },
+      "2026-12-05": {
+        title: "台場購物・彩虹煙火",
+        summary: "上午台場採買，傍晚移到海濱公園卡位；煙火時間短，先確認官方公告與天氣，再安排晚餐和返程。",
+        checklist: ["09:15 淺草為彈性早晨安排，若已逛過可直接往台場", "10:45 田原町 → 新橋 → 台場，交通約 ¥510", "DiverCity、AQUA CiTY 與台場海濱分段安排，18:15–18:30 先到海邊", "煙火與 bills 最後點餐時間以當日公告、店家訂位為準"],
+        sourceUrl: "https://app.notion.com/p/0bc43df6279b838db7480",
+        links: [{ label: "台場購物與午餐", url: "https://app.notion.com/p/15b43df6279b82ed8db08153004df34d" }, { label: "煙火站點", url: "https://app.notion.com/p/0bf43df6279b83eb929301656bae2419" }],
+        items: ["09:15 淺草寺、雷門、仲見世為彈性安排；前兩天逛過可省略。", "10:45 田原町 → 新橋 → 台場，百合海鷗號與銀座線合計約 ¥510。", "11:00 起 DiverCity 拍實物大獨角獸鋼彈，再逛 AQUA CiTY／DECKS 與午餐。", "16:30–18:30 台場海濱、自由女神像與彩虹大橋，18:15 左右先找四人站位。", "19:00–19:10 台場彩虹煙火，實際施放依活動公告。", "19:30 bills 台場晚餐候選；備案是 AQUA CiTY 5F 拉麵國技館。", "約 20:30 回田原町，整理行李、確認重量與隔日護照。"]
+      },
+      "2026-12-06": {
+        title: "田原町退房・羽田返臺",
+        summary: "最後一天以準時退房、直達羽田和預留托運時間為優先；完成登機手續後再安排江戶小路與免稅採買。",
+        checklist: ["07:30 打包並核對護照、行動電源、易碎品與行李重量", "08:15 田原町東橫 INN 退房，直接帶行李往車站", "08:30 由田原町／淺草搭都營淺草線或京急直達羽田 T3", "BR191 12:15 起飛；登機門約 11:45 集合，文件集中放隨身包"],
+        sourceUrl: "https://app.notion.com/p/35f43df6279b835ca5b1016120d0e692",
+        links: [{ label: "回程交通與機場流程", url: "https://app.notion.com/p/38c43df6279b83ccaeb181485bd429af" }],
+        items: ["07:30 最後打包，核對護照、行動電源、易碎品與行李重量。", "08:15 田原町東橫 INN 退房，直接帶行李往車站。", "08:30 前往羽田 T3，淺草轉都營淺草線／京急直達，交通約 ¥760。", "09:45 前抵達 T3，10:15 左右辦理登機與託運；完成後再到江戶小路或免稅店。", "約 11:45 到登機門集合，以登機證與機場看板為準。", "BR191 12:15 羽田 → 15:05 松山 T1。"]
+      }
+    };
+
     // 每個行程卡片對應到 Notion「行程安排」看板中的內文頁。
     // 以日期＋標題／地點關鍵字比對，避免使用者拖曳排序或跨日移動後連結錯位。
     const NOTION_ITEM_LINKS = {
@@ -6912,10 +7017,10 @@
         { match: ["返回巢鴨"], url: "https://app.notion.com/p/dbe43df6279b83f6a2b781c501fff8c5" }
       ],
       "2026-12-02": [
-        { match: ["退房", "前往三鷹"], url: "https://app.notion.com/p/79843df6279b831fa21d81cddcbfe42b" },
+        { match: ["退房", "前往三鷹", "東橫", "寄放行李"], url: "https://app.notion.com/p/d3943df6279b826698df81ae6556fa3e" },
         { match: ["吉卜力", "Ghibli", "三鷹之森"], url: "https://app.notion.com/p/ec443df6279b83e3ac6a81c1af3500ee" },
-        { match: ["吉祥寺", "Sunroad"], url: "https://app.notion.com/p/ec443df6279b83e3ac6a81c1af3500ee" },
-        { match: ["田原町", "飯店 Check-in", "Toyoko"], url: "https://app.notion.com/p/0ae43df6279b83dca94e0183d7966bb0" }
+        { match: ["吉祥寺", "Sunroad"], url: "https://app.notion.com/p/d3943df6279b826698df81ae6556fa3e" },
+        { match: ["田原町", "飯店 Check-in", "Toyoko", "入住"], url: "https://app.notion.com/p/d3943df6279b826698df81ae6556fa3e" }
       ],
       "2026-12-03": [
         { match: ["淺草", "浅草", "雷門"], url: "https://app.notion.com/p/ae743df6279b83d59eaa8138f0726931" },
@@ -6956,11 +7061,13 @@
       return (Array.isArray(days) ? days : []).map(day => {
         const guide = TRIP_GUIDES[day.date];
         if (!guide) return day;
-        const decorated = { ...day, guide: clone(guide), detailSource: "Tokyo_2026_Daily_Itinerary_Details.txt（2026/11/08 匯出）" };
+        const guideUpdate = TOKYO_GUIDE_UPDATES[day.date] || {};
+        const mergedGuide = { ...guide, ...guideUpdate };
+        const decorated = { ...day, guide: clone(mergedGuide), detailSource: `Tokyo_2026_Daily_Itinerary_Details.txt（${TOKYO_ITINERARY_SOURCE_VERSION}）` };
         decorated.items = (Array.isArray(day.items) ? day.items : []).map((item, index) => ({
           ...item,
-          detail: item.detail || guide.items?.[index] || "",
-          sourceUrl: item.sourceUrl || guide.sourceUrl || "",
+          detail: item.detail || mergedGuide.items?.[index] || "",
+          sourceUrl: item.sourceUrl || mergedGuide.sourceUrl || "",
           notionUrl: item.notionUrl || notionItemUrlFor(day, item)
         }));
         return decorated;
@@ -7181,6 +7288,7 @@
       const stored = safeParse("emenuTokyo", null);
       const raw = activeTripId === CLOUD_TRIP_ID && stored ? stored : blankTripData(activeTripMeta);
       data = migrateData(raw);
+      if (activeTripId === CLOUD_TRIP_ID && data.itinerarySourceVersion === TOKYO_ITINERARY_SOURCE_VERSION && raw?.itinerarySourceVersion !== TOKYO_ITINERARY_SOURCE_VERSION) safeSet("emenuTokyo", data);
       flights = normalizeTravelRecords(safeParse(FLIGHTS_KEY, []), activeTripId === CLOUD_TRIP_ID ? defaultFlights : []);
       accommodations = normalizeTravelRecords(safeParse(ACCOMMODATIONS_KEY, []), activeTripId === CLOUD_TRIP_ID ? defaultAccommodations : []);
       reservedExpenses = normalizeTravelRecords(safeParse(RESERVED_EXPENSES_KEY, []), activeTripId === CLOUD_TRIP_ID ? defaultReservedExpenses : []);
@@ -7612,6 +7720,7 @@
           : await cloudRequest(`/api/trips/${encodeURIComponent(activeTripId)}/snapshot`);
         if (sequence !== tripLoadSequence) return;
         const datasets = snapshot.datasets || {};
+        let itineraryUpdated = false;
         const total = Object.values(datasets).reduce((sum, list) => sum + (Array.isArray(list) ? list.length : 0), 0);
         if (!total && !Object.values(snapshot.revisions || {}).some(entry => entry.revision > 0)) {
           accountSyncReady = true;
@@ -7623,8 +7732,12 @@
           if (!Array.isArray(datasets[dataset]) || (firebaseConfigured() && !snapshot.revisions?.[dataset]?.revision)) return;
           const value = localValueForCloudDataset(key, datasets[dataset]);
           if (value !== null && value !== undefined) {
-            safeSet(key, value);
-            if (key === "emenuTokyo") data = migrateData(value);
+            if (key === "emenuTokyo") {
+              const migrated = migrateData(value);
+              itineraryUpdated = migrated.itinerarySourceVersion === TOKYO_ITINERARY_SOURCE_VERSION && value?.itinerarySourceVersion !== TOKYO_ITINERARY_SOURCE_VERSION;
+              data = migrated;
+              safeSet(key, data);
+            } else safeSet(key, value);
             if (key === "tokyoTickets") tickets = value;
             if (key === FLIGHTS_KEY) flights = value;
             if (key === ACCOMMODATIONS_KEY) accommodations = value;
@@ -7637,6 +7750,7 @@
         cloudSessionWrite();
         cloudHydrating = false;
         accountSyncReady = true;
+        if (itineraryUpdated && ["admin", "editor"].includes(cloudAuthState.user?.role)) queueCloudSync("emenuTokyo", data);
         if (firebaseConfigured()) {
           cloudHydrating = true;
           refreshItineraryViews();
@@ -8024,23 +8138,25 @@
 
     function normalizeItem(item, dayIndex, itemIndex) {
       const parsed = extractTimeRange(item.title);
+      const source = { ...item };
+      delete source.legacyKeywords;
       return {
-        ...item,
-        id: item.id || `trip-${dayIndex + 1}-${itemIndex + 1}`,
-        startTime: item.startTime || parsed.startTime,
-        endTime: item.endTime || parsed.endTime,
-        status: item.status || "not_started",
-        category: item.category || "景點",
-        ticketId: item.ticketId || "",
-        budget: Number.isFinite(Number(item.budget)) ? Number(item.budget) : null,
-        indoorAlternative: item.indoorAlternative || "",
-        transportMethod: item.transportMethod || "",
-        transportDuration: item.transportDuration || "",
-        transportCost: Number.isFinite(Number(item.transportCost)) ? Number(item.transportCost) : 0,
-        transferCount: item.transferCount || "",
-        walkingDistance: item.walkingDistance || "",
-        stationExit: item.stationExit || "",
-        photo: item.photo || ""
+        ...source,
+        id: source.id || `trip-${dayIndex + 1}-${itemIndex + 1}`,
+        startTime: source.startTime || parsed.startTime,
+        endTime: source.endTime || parsed.endTime,
+        status: source.status || "not_started",
+        category: source.category || "景點",
+        ticketId: source.ticketId || "",
+        budget: Number.isFinite(Number(source.budget)) ? Number(source.budget) : null,
+        indoorAlternative: source.indoorAlternative || "",
+        transportMethod: source.transportMethod || "",
+        transportDuration: source.transportDuration || "",
+        transportCost: Number.isFinite(Number(source.transportCost)) ? Number(source.transportCost) : 0,
+        transferCount: source.transferCount || "",
+        walkingDistance: source.walkingDistance || "",
+        stationExit: source.stationExit || "",
+        photo: source.photo || ""
       };
     }
 
@@ -8058,8 +8174,91 @@
       }));
     }
 
+    function mergeTokyoItineraryItem(canonical, oldItems, usedIndexes) {
+      const keywords = Array.isArray(canonical.legacyKeywords) && canonical.legacyKeywords.length
+        ? canonical.legacyKeywords
+        : [canonical.title, canonical.place].filter(Boolean);
+      const matches = (entry) => {
+        const haystack = `${entry?.title || ""} ${entry?.place || ""}`.toLocaleLowerCase();
+        return keywords.some(keyword => haystack.includes(String(keyword).toLocaleLowerCase()));
+      };
+      let matchedIndex = oldItems.findIndex((entry, index) => !usedIndexes.has(index) && entry?.id === canonical.id);
+      if (matchedIndex < 0) matchedIndex = oldItems.findIndex((entry, index) => !usedIndexes.has(index) && matches(entry));
+      const oldItem = matchedIndex >= 0 ? oldItems[matchedIndex] : null;
+      if (matchedIndex >= 0) usedIndexes.add(matchedIndex);
+      const merged = { ...canonical };
+      if (oldItem) {
+        const preserveKeys = ["id", "status", "ticketId", "budget", "photo", "completed", "done", "locked", "note", "customNote", "reminder", "reminderAt", "assignedTo", "participants", "isPrivate"];
+        preserveKeys.forEach(key => {
+          if (oldItem[key] !== undefined && oldItem[key] !== null && oldItem[key] !== "") merged[key] = oldItem[key];
+        });
+      }
+      delete merged.legacyKeywords;
+      return merged;
+    }
+
+    function mergeTokyoItineraryDay(canonicalDay, oldDay, appendUnmatched = true) {
+      const oldItems = Array.isArray(oldDay?.items) ? oldDay.items : [];
+      const usedIndexes = new Set();
+      const items = (canonicalDay.items || []).map(item => mergeTokyoItineraryItem(item, oldItems, usedIndexes));
+      if (appendUnmatched) {
+        oldItems.forEach((item, index) => {
+          if (usedIndexes.has(index)) return;
+          // 保留旅伴自行新增的卡片；舊版自動產生的同日卡片則不再重複加入。
+          if (item?.id && !/^trip-\d+-\d+$/.test(String(item.id))) items.push({ ...item });
+        });
+      }
+      return { ...clone(canonicalDay), ...(oldDay ? { labelZh: oldDay.labelZh || canonicalDay.labelZh, labelJp: oldDay.labelJp || canonicalDay.labelJp } : {}), items };
+    }
+
+    function mergeTokyoRelaxedDay(canonicalDay, oldDay) {
+      const canonicalItems = Array.isArray(canonicalDay?.items) ? canonicalDay.items : [];
+      const oldItems = Array.isArray(oldDay?.items) ? oldDay.items : [];
+      const usedIndexes = new Set();
+      const items = oldItems.map(oldItem => {
+        const matchedCanonicalIndex = canonicalItems.findIndex((entry, index) => !usedIndexes.has(index) && (entry.id === oldItem?.id || (entry.legacyKeywords || [entry.title, entry.place]).some(keyword => `${oldItem?.title || ""} ${oldItem?.place || ""}`.toLocaleLowerCase().includes(String(keyword).toLocaleLowerCase()))));
+        if (matchedCanonicalIndex < 0) return { ...oldItem };
+        usedIndexes.add(matchedCanonicalIndex);
+        return mergeTokyoItineraryItem(canonicalItems[matchedCanonicalIndex], [oldItem], new Set());
+      });
+      return { ...clone(oldDay), items };
+    }
+
+    function mergeTokyoItineraryData(raw) {
+      if (activeTripId !== CLOUD_TRIP_ID) return raw;
+      const incoming = raw && Array.isArray(raw.days) && raw.days.length ? clone(raw) : clone(defaultData);
+      if (incoming.itinerarySourceVersion === TOKYO_ITINERARY_SOURCE_VERSION) return incoming;
+      const oldA = incoming.versions?.A?.days?.length ? incoming.versions.A.days : incoming.days;
+      const canonicalA = defaultData.days;
+      const mergedA = canonicalA.map(canonicalDay => {
+        const oldDay = oldA.find(day => day.date === canonicalDay.date) || null;
+        return mergeTokyoItineraryDay(canonicalDay, oldDay, true);
+      });
+      const oldB = incoming.versions?.B?.days?.length ? incoming.versions.B.days : [];
+      const mergedB = oldB.length
+        ? oldB.map(day => {
+            const canonicalDay = canonicalA.find(entry => entry.date === day.date);
+            return canonicalDay ? mergeTokyoRelaxedDay(canonicalDay, day) : day;
+          })
+        : buildRelaxedDays(mergedA);
+      const active = incoming.activeVersion === "B" ? "B" : "A";
+      const activeDays = active === "B" ? mergedB : mergedA;
+      const dayVersions = incoming.dayVersions && typeof incoming.dayVersions === "object" ? { ...incoming.dayVersions } : {};
+      const mixedDays = activeDays.map((day, index) => {
+        const version = dayVersions[day.date] === "B" ? "B" : (dayVersions[day.date] === "A" ? "A" : active);
+        return clone(version === "B" ? mergedB[index] || day : mergedA[index] || day);
+      });
+      return {
+        ...incoming,
+        itinerarySourceVersion: TOKYO_ITINERARY_SOURCE_VERSION,
+        versions: { A: { days: mergedA }, B: { days: mergedB } },
+        days: mixedDays
+      };
+    }
+
     function migrateData(raw) {
-      const source = raw && Array.isArray(raw.days) && raw.days.length ? raw : defaultData;
+      const incoming = raw && Array.isArray(raw.days) && raw.days.length ? raw : defaultData;
+      const source = activeTripId === CLOUD_TRIP_ID ? mergeTokyoItineraryData(incoming) : incoming;
       const active = source.activeVersion === "B" ? "B" : "A";
       const versionA = decorateItineraryGuides(source.versions?.A?.days?.length ? normalizeDays(source.versions.A.days) : normalizeDays(source.days));
       const singlePlan = source.singlePlan === true && !source.versions?.B?.days?.length;
