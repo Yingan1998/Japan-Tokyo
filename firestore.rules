@@ -37,8 +37,8 @@ service cloud.firestore {
 
     function activeMember(tripId) {
       return signedIn()
-        && ((memberExists(tripId) && memberDoc(tripId).data.status == 'active')
-          || (hasLegacyTokyoMember(tripId) && legacyMemberDoc().data.status == 'active'));
+        && memberExists(tripId)
+        && memberDoc(tripId).data.status == 'active';
     }
 
     function canWriteTrip(tripId) {
