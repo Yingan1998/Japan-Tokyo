@@ -89,9 +89,23 @@
     return firestore().doc(tripPath(tripId) + "/members/" + String(uid));
   }
 
+  function legacyMemberRef(uid) {
+    return firestore().doc("members/" + String(uid));
+  }
+
   async function memberFor(user, tripId = activeTripId) {
     if (!user) throw new Error("\u8ACB\u5148\u767B\u5165\u3002");
-    const snapshot = await memberRef(tripId, user.uid).get({ source: "server" });
+    let snapshot = null;
+    try {
+      snapshot = await memberRef(tripId, user.uid).get({ source: "server" });
+    } catch (error) {
+      if (String(tripId) !== DEFAULT_TRIP_ID) throw error;
+      console.warn("\u820A\u6771\u4EAC\u6210\u54E1\u6587\u4EF6\u6539\u7528\u76F8\u5BB9\u8DEF\u5F91\uFF1A", error);
+    }
+    // \u820A\u7248\u6771\u4EAC App \u4F7F\u7528\u9802\u5C64 members/{uid}\uFF1B\u4FDD\u7559\u8B80\u53D6\u76F8\u5BB9\u6027\uFF0C\u50C5\u9650\u65E2\u6709\u6771\u4EAC\u65C5\u7A0B\u3002
+    if ((!snapshot || !snapshot.exists) && String(tripId) === DEFAULT_TRIP_ID) {
+      snapshot = await legacyMemberRef(user.uid).get({ source: "server" });
+    }
     if (!snapshot.exists) {
       const error = new Error("\u6B64\u5E33\u865F\u5C1A\u672A\u52A0\u5165\u9019\u8D9F\u65C5\u884C\u3002");
       error.code = "TRIP_MEMBER_REQUIRED";
