@@ -6485,6 +6485,23 @@
       }
     }
   </style>
+  <style>
+    .tripArchiveButton {
+      color: #8d5a51;
+      background: rgba(255, 247, 239, .82);
+    }
+
+    @media (max-width: 600px) {
+      .travelCardActions {
+        gap: 6px;
+      }
+
+      .travelCardActions > * {
+        min-height: 40px;
+        white-space: nowrap;
+      }
+    }
+  </style>
 </head>
 
 <body data-auth-screen="loading">
@@ -7878,7 +7895,48 @@
       const isActive = activeTripId === trip.id && activeTripMeta;
       const role = trip.member?.role === "admin" ? "擁有者" : trip.member?.role === "editor" ? "編輯者" : "檢視者";
       const theme = trip.theme || (trip.id === CLOUD_TRIP_ID ? "postcard" : "journal");
-      return `<article class="travelCard${isActive ? " is-active" : ""}" data-theme="${escapeHtml(theme)}"><div class="travelCardTop"><span class="pill">${escapeHtml(trip.destination || "未設定目的地")}</span><span class="travelCardStatus${state.key === "ended" || state.key === "archived" ? " ended" : ""}">${state.label}</span></div><h3>${escapeHtml(trip.name || "未命名旅行")}</h3><p>${escapeHtml(formatTripRange(trip))}</p><div class="travelCardMeta"><span>${escapeHtml(trip.timezone || "時區待設定")}</span><span>${escapeHtml(trip.currency || "JPY")} → ${escapeHtml(trip.settlementCurrency || "TWD")}</span><span>${role}</span></div><div class="travelCardActions"><button class="btnPill primary" type="button" onclick="openTripById('${encodeURIComponent(trip.id)}')">開啟旅行</button>${trip.member?.role === "admin" ? `<button class="btnGhost" type="button" onclick="openTripSettings('${encodeURIComponent(trip.id)}')">設定</button>` : ""}</div></article>`;
+      const encodedId = encodeURIComponent(trip.id);
+      const isAdmin = trip.member?.role === "admin";
+      const archiveLabel = state.key === "archived" ? "恢復" : "封存";
+      return `<article class="travelCard${isActive ? " is-active" : ""}" data-theme="${escapeHtml(theme)}"><div class="travelCardTop"><span class="pill">${escapeHtml(trip.destination || "未設定目的地")}</span><span class="travelCardStatus${state.key === "ended" || state.key === "archived" ? " ended" : ""}">${state.label}</span></div><h3>${escapeHtml(trip.name || "未命名旅行")}</h3><p>${escapeHtml(formatTripRange(trip))}</p><div class="travelCardMeta"><span>${escapeHtml(trip.timezone || "時區待設定")}</span><span>${escapeHtml(trip.currency || "JPY")} → ${escapeHtml(trip.settlementCurrency || "TWD")}</span><span>${role}</span></div><div class="travelCardActions"><button class="btnPill primary" type="button" onclick="openTripById('${encodedId}')">開啟旅行</button>${isAdmin ? `<button class="btnGhost" type="button" onclick="openTripSettings('${encodedId}')">設定</button><button class="btnGhost tripArchiveButton" type="button" onclick="toggleTripArchive('${encodedId}')" title="${state.key === "archived" ? "恢復到旅行列表" : "移到已封存區，保留所有資料"}">${archiveLabel}</button>` : ""}</div></article>`;
+    }
+
+    async function toggleTripArchive(encodedId) {
+      const tripId = decodeURIComponent(String(encodedId || ""));
+      const trip = availableTrips.find(item => item.id === tripId);
+      if (!trip || trip.member?.role !== "admin") {
+        const status = document.getElementById("travelListStatus");
+        if (status) status.textContent = "只有這趟旅行的擁有者可以封存或恢復旅行。";
+        return;
+      }
+      const archived = tripStatus(trip).key === "archived";
+      const action = archived ? "恢復" : "封存";
+      const message = archived
+        ? `確定要恢復「${trip.name || "這趟旅行"}」嗎？`
+        : `確定要封存「${trip.name || "這趟旅行"}」嗎？\n\n資料會保留在「已封存」，之後仍可恢復，不會刪除行程、票券或旅費。`;
+      if (!window.confirm(message)) return;
+      const status = document.getElementById("travelListStatus");
+      if (status) status.textContent = `正在${action}旅行…`;
+      try {
+        const nextStatus = archived ? "active" : "archived";
+        const updated = firebaseConfigured()
+          ? await window.travelFirebase.updateTrip(tripId, { status: nextStatus })
+          : { ...trip, status: nextStatus };
+        availableTrips = availableTrips.map(item => item.id === tripId ? { ...item, ...updated, status: nextStatus } : item);
+        if (!firebaseConfigured()) localStorage.setItem(profileStorageKey("travelRefs"), JSON.stringify(availableTrips));
+        if (!archived && activeTripId === tripId) {
+          localStorage.removeItem(profileStorageKey("lastTripId"));
+          activeTripId = "";
+          activeTripMeta = null;
+          document.body.removeAttribute("data-trip-theme");
+          document.body.removeAttribute("data-trip-background");
+          setTravelListMode(true);
+          switchPage("travel-list");
+        }
+        renderTravelList();
+      } catch (error) {
+        if (status) status.textContent = `${action}失敗：${accountError(error)}`;
+      }
     }
 
     async function loadTravelList({ quiet = false } = {}) {
@@ -7911,7 +7969,8 @@
 
     function continueLastTrip() {
       const lastId = localStorage.getItem(accountStorageKey("lastTripId"));
-      const trip = availableTrips.find(item => item.id === lastId) || availableTrips.find(item => tripStatus(item).key === "active") || availableTrips[0];
+      const usableTrips = availableTrips.filter(item => tripStatus(item).key !== "archived");
+      const trip = usableTrips.find(item => item.id === lastId) || usableTrips.find(item => tripStatus(item).key === "active") || usableTrips[0];
       if (trip) openTripById(encodeURIComponent(trip.id));
     }
 
