@@ -52,8 +52,11 @@ service cloud.firestore {
         && request.resource.data.destination is string
         && request.resource.data.startDate is string
         && request.resource.data.endDate is string;
+      // 相容舊東京旅程：早期文件可能尚未有 ownerId，管理員可先更新設定，
+      // 但一旦文件已有 ownerId，就不得改成其他帳號。
       allow update: if isTripAdmin(tripId)
-        && request.resource.data.ownerId == resource.data.ownerId;
+        && (!resource.data.keys().hasAny(['ownerId'])
+          || request.resource.data.ownerId == resource.data.ownerId);
       allow delete: if false;
     }
 
@@ -74,8 +77,9 @@ service cloud.firestore {
       allow create: if signedIn()
         && uid == request.auth.uid
         && request.resource.data.tripId == tripId
-        && memberAfter(tripId, uid).data.status == 'active'
-        && memberAfter(tripId, uid).data.role == 'admin';
+        && ((activeMember(tripId) && memberDoc(tripId).data.role == 'admin')
+          || (memberAfter(tripId, uid).data.status == 'active'
+            && memberAfter(tripId, uid).data.role == 'admin'));
       allow update: if signedIn() && uid == request.auth.uid && activeMember(tripId);
       allow delete: if signedIn() && uid == request.auth.uid;
     }
