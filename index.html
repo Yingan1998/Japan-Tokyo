@@ -1,5 +1,5 @@
-Warning: truncated output (original token count: 135148)
-Total output lines: 12266
+Warning: truncated output (original token count: 135159)
+Total output lines: 12268
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -6158,7 +6158,8 @@ Total output lines: 12266
 
       .topActions {
         min-width: 0;
-        max-width: 52vw;
+        width: auto;
+        max-width: none;
         flex-wrap: nowrap;
         gap: 6px;
       }
@@ -6179,14 +6180,15 @@ Total output lines: 12266
       /* 我的旅行：新增按鈕保留單行文字；帳號操作平均分配且不撐滿整張卡。 */
       .travelListHeroActions {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: max-content max-content;
+        justify-content: end;
         width: 100%;
         gap: 8px;
       }
 
       .travelListHeroActions > * {
         min-width: 0;
-        width: 100%;
+        width: auto;
         flex: none;
       }
 
@@ -7282,7 +7284,7 @@ Total output lines: 12266
       "2026-12-06": {
         title: "田原町退房・羽田返臺",
         summary: "最後一天以準時退房、直達羽田和預留托運時間為優先；完成登機手續後再安排江戶小路與免稅採買。",
-        checklist: ["07:30 打包並核對護照、行動電源、易碎品與行李重量", "08:15 田原町東橫 INN 退房，直接帶行李往車站", "08:30 由田原町／淺草搭…15148 tokens truncated…    }
+        checklist: ["07:30 打包並核對護照、行動電源、易碎品與行李重量", "08:15 田原町東橫 INN 退房，直接帶行…15159 tokens truncated…    }
       renderCloudAuthPanel();
       setAccountScreen("app");
       animateAuthNode(document.querySelector(".app"), "auth-enter");
