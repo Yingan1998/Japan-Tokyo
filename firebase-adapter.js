@@ -423,21 +423,24 @@
     const user = window.firebase.auth().currentUser;
     const member = await memberFor(user, selectedTripId);
     if (member.role !== "admin") { const error = new Error("\u53EA\u6709\u65C5\u884C\u64C1\u6709\u8005\uFF0F\u7BA1\u7406\u54E1\u53EF\u4EE5\u4FEE\u6539\u65C5\u884C\u8A2D\u5B9A\u3002"); error.code = "FORBIDDEN"; throw error; }
-    const tripSnapshot = await firestore().doc(tripPath(selectedTripId)).get({ source: "server" });
-    const storedTrip = tripSnapshot.exists ? (tripSnapshot.data() || {}) : {};
     const current = await tripFor(selectedTripId);
     const editableFields = ["name", "destination", "startDate", "endDate", "timezone", "currency", "settlementCurrency", "cover", "theme", "backgroundTone", "status"];
     const update = {};
     editableFields.forEach(function (field) {
       if (Object.prototype.hasOwnProperty.call(patch || {}, field)) update[field] = patch[field];
     });
-    // \u4FDD\u7559\u820A\u6771\u4EAC\u6587\u4EF6\u7684 ownerId \u72C0\u614B\uFF1A\u82E5\u539F\u6587\u4EF6\u6C92\u6709 ownerId\uFF0C\u4E0D\u5728\u524D\u7AEF\u88DC\u5BEB\uFF0C
-    // \u8B93\u5DF2\u5B58\u5728\u7684\u65C5\u7A0B\u80FD\u5148\u6B63\u5E38\u7DE8\u8F2F\uFF0C\u4E4B\u5F8C\u518D\u7531\u7BA1\u7406\u54E1\uFF0F\u5F8C\u7AEF\u88DC\u5EFA\u6B04\u4F4D\u3002
-    if (Object.prototype.hasOwnProperty.call(storedTrip, "ownerId") && storedTrip.ownerId) update.ownerId = storedTrip.ownerId;
+    // \u4FDD\u7559\u820A\u6771\u4EAC\u6587\u4EF6\u7684 ownerId \u72C0\u614B\uFF1A\u66F4\u65B0\u6642\u4E0D\u4E3B\u52D5\u8986\u5BEB ownerId\uFF0C
+    // \u8B93\u6C92\u6709 ownerId \u7684\u820A\u6587\u4EF6\u4E5F\u80FD\u5148\u4FDD\u5B58\u4E00\u822C\u8A2D\u5B9A\u3002
     update.updatedAt = new Date().toISOString();
     await firestore().doc(tripPath(selectedTripId)).set(update, { merge: true });
     const next = { ...current, ...update, id: selectedTripId, member };
-    await firestore().doc("users/" + user.uid + "/tripRefs/" + selectedTripId).set({ tripId: selectedTripId, name: next.name, destination: next.destination, startDate: next.startDate, endDate: next.endDate, status: next.status || "active", updatedAt: next.updatedAt }, { merge: true });
+    try {
+      await firestore().doc("users/" + user.uid + "/tripRefs/" + selectedTripId).set({ tripId: selectedTripId, name: next.name, destination: next.destination, startDate: next.startDate, endDate: next.endDate, status: next.status || "active", updatedAt: next.updatedAt }, { merge: true });
+    } catch (error) {
+      // \u820A\u898F\u5247\u53EF\u80FD\u5C1A\u672A\u958B\u653E tripRefs\uFF1B\u4E3B\u65C5\u884C\u8A2D\u5B9A\u5DF2\u6210\u529F\u5C31\u4E0D\u963B\u65B7\u4F7F\u7528\u8005\u3002
+      if (error?.code !== "permission-denied") throw error;
+      console.warn("\u65C5\u884C\u8A2D\u5B9A\u5DF2\u66F4\u65B0\uFF0C\u4F46\u65C5\u7A0B\u7D22\u5F15\u5C1A\u672A\u540C\u6B65\uFF1B\u8ACB\u767C\u5E03\u6700\u65B0 firestore.rules\u3002", error);
+    }
     return next;
   }
 
