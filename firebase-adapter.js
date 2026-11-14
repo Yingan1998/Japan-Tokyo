@@ -343,6 +343,7 @@
       currency: "JPY",
       settlementCurrency: "TWD",
       theme: "postcard",
+      backgroundTone: "mist",
       status: "active",
       ownerId: member.role === "admin" ? member.uid || user.uid : ""
     } : {};
@@ -399,6 +400,7 @@
       settlementCurrency: String(payload.settlementCurrency || "TWD").toUpperCase(),
       cover: String(payload.cover || ""),
       theme: String(payload.theme || "journal"),
+      backgroundTone: String(payload.backgroundTone || "cream"),
       status: "active",
       ownerId: user.uid,
       createdAt: new Date().toISOString(),
