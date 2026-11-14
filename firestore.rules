@@ -76,7 +76,8 @@ service cloud.firestore {
     match /trips/{tripId}/members/{uid} {
       // Members are provisioned by Firebase Console, Admin SDK, or a trusted backend.
       // A traveller may read only their own membership document.
-      allow read: if signedIn() && (uid == request.auth.uid || canWriteTrip(tripId));
+      // 只允許本人讀取自己的成員文件，避免 activeMember() 檢查時形成循環判斷。
+      allow read: if signedIn() && uid == request.auth.uid;
       allow create: if signedIn()
         && uid == request.auth.uid
         && memberAfter(tripId, uid).data.status == 'active'
