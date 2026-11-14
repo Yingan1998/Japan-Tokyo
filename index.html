@@ -6067,6 +6067,51 @@
     body[data-trip-background="sage"] { --trip-bg-color:#dfe9dc; }
     body[data-trip-background="periwinkle"] { --trip-bg-color:#e1e7f5; }
     body[data-trip-background] .bg { background-color:var(--trip-bg-color); background-blend-mode:soft-light; }
+
+    /* 登入／登出回饋：短暫淡入、淡出與按鈕微型載入動畫。 */
+    .accountEntry,
+    .app { will-change: opacity, transform; }
+    .accountEntry.auth-enter { animation: authCardEnter .42s cubic-bezier(.22,.8,.28,1) both; }
+    .accountEntry.auth-exit { animation: authCardExit .28s ease both; }
+    .app.auth-enter { animation: appReveal .44s cubic-bezier(.22,.8,.28,1) both; }
+    .accountEntry form[aria-busy="true"] .accountPrimary,
+    .accountEntry .authActionBusy { position: relative; color: transparent !important; pointer-events: none; }
+    .accountEntry form[aria-busy="true"] .accountPrimary::after,
+    .accountEntry .authActionBusy::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      margin: -8px 0 0 -8px;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      color: #fff;
+      animation: authSpinner .72s linear infinite;
+    }
+    .accountEntry .authActionBusy::after { color: #315a76; }
+    @keyframes authCardEnter {
+      from { opacity: 0; transform: translateY(10px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes authCardExit {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(8px) scale(.985); }
+    }
+    @keyframes appReveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes authSpinner { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .accountEntry.auth-enter,
+      .accountEntry.auth-exit,
+      .app.auth-enter { animation: none; }
+      .accountEntry form[aria-busy="true"] .accountPrimary::after,
+      .accountEntry .authActionBusy::after { animation-duration: 1.2s; }
+    }
   </style>
 </head>
 
@@ -7243,6 +7288,16 @@
       document.querySelector(".bottomNav").inert = screen !== "app";
       document.getElementById("accountLoading").hidden = screen !== "loading";
       document.getElementById("accountSignIn").hidden = screen !== "login";
+      if (screen === "login") animateAuthNode(document.querySelector(".accountEntry"), "auth-enter");
+    }
+
+    function animateAuthNode(node, className, duration = 480) {
+      if (!node) return;
+      node.classList.remove("auth-enter", "auth-exit");
+      void node.offsetWidth;
+      node.classList.add(className);
+      window.clearTimeout(node.__authAnimationTimer);
+      node.__authAnimationTimer = window.setTimeout(() => node.classList.remove(className), duration);
     }
 
     function setAccountForm(mode) {
@@ -7910,6 +7965,7 @@
     function clearCloudSession() {
       cloudAuthState = { token: "", user: null, revisions: {}, recordVersions: {}, provider: "" };
       cloudSessionWrite();
+      sessionStorage.removeItem("tokyoSignedOut");
       ["cloudLoginPassword", "cloudSetupPassword", "accountCurrentPassword", "accountNewPassword", "accountConfirmPassword"].forEach(id => {
         const field = document.getElementById(id);
         if (field) field.value = "";
@@ -8020,6 +8076,7 @@
       }
       renderCloudAuthPanel();
       setAccountScreen("app");
+      animateAuthNode(document.querySelector(".app"), "auth-enter");
       // 登入成功後先進入「我的旅行」，不要等待 Firestore 旅程列表查詢，
       // 避免手機弱網時登入按鈕長時間維持 disabled。
       setTravelListMode(true);
@@ -8034,6 +8091,7 @@
       const button = document.getElementById("accountLogout");
       accountBusy = true;
       button.disabled = true;
+      button.classList.add("authActionBusy");
       accountLeaving = true;
       try {
         if (Object.keys(cloudSyncTimers).length) await new Promise(resolve => setTimeout(resolve, 700));
@@ -8043,15 +8101,18 @@
         accountSyncReady = false;
         Object.values(cloudSyncTimers).forEach(clearTimeout);
         clearCloudSession();
-        setAccountScreen("login");
         sessionStorage.removeItem("tokyoAccountScope");
-        sessionStorage.setItem("tokyoSignedOut", "1");
+        setAccountScreen("login");
+        setCloudAuthStatus("");
+        animateAuthNode(document.querySelector(".accountEntry"), "auth-exit", 300);
+        await new Promise(resolve => setTimeout(resolve, 280));
         location.reload();
       } catch (error) {
         setCloudAuthStatus(accountError(error), true);
       } finally {
         accountBusy = false;
         button.disabled = false;
+        button.classList.remove("authActionBusy");
         accountLeaving = false;
       }
     }
@@ -8078,10 +8139,7 @@
         if (result) return await openAccountSession(result);
         clearCloudSession();
         setAccountScreen("login");
-        if (sessionStorage.getItem("tokyoSignedOut")) {
-          sessionStorage.removeItem("tokyoSignedOut");
-          setCloudAuthStatus("已登出這台裝置。");
-        }
+        setCloudAuthStatus("");
       } catch (error) {
         clearCloudSession();
         setAccountScreen("login");
