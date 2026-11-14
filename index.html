@@ -6000,6 +6000,73 @@
         font-size: 12px;
       }
     }
+
+    /* 表單視窗：桌面與手機皆以完整置中視窗呈現，不再貼齊底部。 */
+    .modalSheet {
+      display: none;
+      place-items: center;
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    }
+
+    .modalSheet.open { display: grid; }
+
+    .modalPanel {
+      position: relative;
+      inset: auto;
+      left: auto;
+      bottom: auto;
+      width: min(720px, calc(100vw - 24px));
+      max-width: 720px;
+      max-height: min(90dvh, 900px);
+      transform: none;
+      border-radius: 26px;
+      box-shadow: 0 24px 70px rgba(20, 42, 61, .28);
+    }
+
+    @media (max-width: 600px) {
+      .modalSheet { padding: 12px; }
+      .modalPanel {
+        width: min(100%, 520px);
+        max-width: 100%;
+        max-height: calc(100dvh - 24px);
+        border-radius: 24px;
+      }
+    }
+
+    /* 十種國家手繪封面：以色彩、紙張與旅誌氣氛區分，不改動東京原本的富士山明信片。 */
+    .travelCard[data-theme="alpine"] { background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(211,231,246,.86)); }
+    .travelCard[data-theme="mediterranean"] { background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(225,240,239,.86)); }
+    .travelCard[data-theme="paris"] { background: linear-gradient(145deg, rgba(255,252,249,.95), rgba(239,222,228,.84)); }
+    .travelCard[data-theme="tuscany"] { background: linear-gradient(145deg, rgba(255,253,245,.95), rgba(240,224,193,.86)); }
+    .travelCard[data-theme="morocco"] { background: linear-gradient(145deg, rgba(255,250,238,.95), rgba(242,211,177,.86)); }
+    .travelCard[data-theme="nordic"] { background: linear-gradient(145deg, rgba(250,253,255,.96), rgba(212,229,239,.88)); }
+
+    body[data-trip-theme="alpine"] { --blue1:#d9ebf5; --blue2:#9fc4d7; --blue3:#446d8e; --chip:#edf7fb; --accent:#c27657; --tabActive:#4d7696; }
+    body[data-trip-theme="mediterranean"] { --blue1:#d7efeb; --blue2:#9ccfc5; --blue3:#347d79; --chip:#effaf6; --accent:#d47751; --tabActive:#478d87; }
+    body[data-trip-theme="paris"] { --blue1:#f4dde4; --blue2:#dfb5c3; --blue3:#7c5970; --chip:#fff2f4; --accent:#c96861; --tabActive:#8b657c; }
+    body[data-trip-theme="tuscany"] { --blue1:#f4e8c9; --blue2:#dec38e; --blue3:#8b6947; --chip:#fff8e9; --accent:#bd744f; --tabActive:#9d7651; }
+    body[data-trip-theme="morocco"] { --blue1:#f1d3ae; --blue2:#d79b67; --blue3:#925d43; --chip:#fff4e6; --accent:#bd6049; --tabActive:#a66c4a; }
+    body[data-trip-theme="nordic"] { --blue1:#dcecf4; --blue2:#a7cadb; --blue3:#496e8a; --chip:#f0f8fb; --accent:#b06c5e; --tabActive:#5c829a; }
+
+    body[data-trip-theme="alpine"] .bg { background-color:#d9ebf5; background-image: radial-gradient(circle at 74% 18%, rgba(255,255,255,.82) 0 9%, transparent 9.5%), linear-gradient(145deg,#f6fbfd 0%,#d7e9f2 56%,#b5cfdd 100%); background-size:auto,cover; }
+    body[data-trip-theme="mediterranean"] .bg { background-color:#d7efeb; background-image: radial-gradient(circle at 80% 18%, rgba(255,229,160,.6) 0 8%, transparent 8.5%), linear-gradient(145deg,#f9fcf5 0%,#dcefe8 54%,#b6d8cf 100%); background-size:auto,cover; }
+    body[data-trip-theme="paris"] .bg { background-color:#f4dde4; background-image: radial-gradient(circle at 16% 24%, rgba(255,255,255,.8) 0 9%, transparent 9.5%), linear-gradient(145deg,#fffaf4 0%,#f5e4e5 55%,#dfc5d1 100%); background-size:auto,cover; }
+    body[data-trip-theme="tuscany"] .bg { background-color:#f4e8c9; background-image: radial-gradient(ellipse at 25% 72%, rgba(151,176,120,.28) 0 13%, transparent 13.5%), linear-gradient(145deg,#fffbed 0%,#f4e4bd 55%,#d9bd8f 100%); background-size:auto,cover; }
+    body[data-trip-theme="morocco"] .bg { background-color:#f1d3ae; background-image: radial-gradient(circle at 74% 22%, rgba(255,215,138,.62) 0 10%, transparent 10.5%), linear-gradient(145deg,#fff8e7 0%,#f1d3ae 55%,#d39b73 100%); background-size:auto,cover; }
+    body[data-trip-theme="nordic"] .bg { background-color:#dcecf4; background-image: radial-gradient(circle at 80% 20%, rgba(175,220,223,.46) 0 13%, transparent 13.5%), linear-gradient(145deg,#f7fcff 0%,#dcecf4 55%,#b7d0e1 100%); background-size:auto,cover; }
+
+    /* 十種可由使用者選擇的背景色，以柔和色層疊在各國手繪封面上。 */
+    body[data-trip-background="mist"] { --trip-bg-color:#d8eaf4; }
+    body[data-trip-background="cream"] { --trip-bg-color:#f6efdf; }
+    body[data-trip-background="mint"] { --trip-bg-color:#dcefe8; }
+    body[data-trip-background="rose"] { --trip-bg-color:#f5e1e4; }
+    body[data-trip-background="peach"] { --trip-bg-color:#f5dfc7; }
+    body[data-trip-background="lavender"] { --trip-bg-color:#ebe5f3; }
+    body[data-trip-background="sand"] { --trip-bg-color:#eee0c9; }
+    body[data-trip-background="sky"] { --trip-bg-color:#d9edf5; }
+    body[data-trip-background="sage"] { --trip-bg-color:#dfe9dc; }
+    body[data-trip-background="periwinkle"] { --trip-bg-color:#e1e7f5; }
+    body[data-trip-background] .bg { background-color:var(--trip-bg-color); background-blend-mode:soft-light; }
   </style>
 </head>
 
@@ -7265,19 +7332,21 @@
     }
 
     function resetTripState(meta) {
-      const selectedMeta = meta || { id: CLOUD_TRIP_ID, name: "Japan Tokyo", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard" };
+      const selectedMeta = meta || { id: CLOUD_TRIP_ID, name: "Japan Tokyo", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard", backgroundTone: "mist" };
       activeTripId = String(selectedMeta.id || CLOUD_TRIP_ID);
       const requestedTheme = String(selectedMeta.theme || "");
       const safeTheme = activeTripId === CLOUD_TRIP_ID
         ? (requestedTheme || "postcard")
         : (requestedTheme === "postcard" || !requestedTheme ? "journal" : requestedTheme);
-      activeTripMeta = { ...selectedMeta, id: activeTripId, theme: safeTheme };
+      const backgroundTone = String(selectedMeta.backgroundTone || (activeTripId === CLOUD_TRIP_ID ? "mist" : "cream"));
+      activeTripMeta = { ...selectedMeta, id: activeTripId, theme: safeTheme, backgroundTone };
       window.__ACTIVE_TRIP_ID__ = activeTripId;
       if (window.travelFirebase?.setTrip) window.travelFirebase.setTrip(activeTripId);
       START_DATE = activeTripMeta.startDate || "2026-11-28";
       END_DATE = activeTripMeta.endDate || "2026-12-06";
       DASHBOARD_TIMEZONE = activeTripMeta.timezone || "Asia/Tokyo";
       document.body.dataset.tripTheme = activeTripMeta.theme || (activeTripId === CLOUD_TRIP_ID ? "postcard" : "journal");
+      document.body.dataset.tripBackground = activeTripMeta.backgroundTone || "mist";
       const locationChip = document.getElementById("tripLocationChip");
       if (locationChip) locationChip.textContent = `📍 ${activeTripMeta.destination || "旅行目的地"}`;
       const kicker = document.getElementById("dashboardKickerLabel");
@@ -7399,7 +7468,7 @@
           ? await window.travelFirebase.listTrips()
           : JSON.parse(localStorage.getItem(profileStorageKey("travelRefs")) || "[]");
         if (!availableTrips.length && !firebaseConfigured()) {
-          availableTrips = [{ id: CLOUD_TRIP_ID, name: "Japan Tokyo｜旅する手帳", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard", status: "active", member: cloudAuthState.user }];
+          availableTrips = [{ id: CLOUD_TRIP_ID, name: "Japan Tokyo｜旅する手帳", destination: "東京", startDate: "2026-11-28", endDate: "2026-12-06", timezone: "Asia/Tokyo", currency: "JPY", settlementCurrency: "TWD", theme: "postcard", backgroundTone: "mist", status: "active", member: cloudAuthState.user }];
         }
         renderTravelList();
       } catch (error) {
@@ -7481,7 +7550,7 @@
       const form = event.currentTarget;
       const submit = form.querySelector('[type="submit"]');
       const status = document.getElementById("tripCreateStatus");
-      const payload = { name: document.getElementById("newTripName").value.trim(), destination: document.getElementById("newTripDestination").value.trim(), startDate: document.getElementById("newTripStartDate").value, endDate: document.getElementById("newTripEndDate").value, timezone: document.getElementById("newTripTimezone").value, currency: document.getElementById("newTripCurrency").value, settlementCurrency: document.getElementById("newTripSettlementCurrency").value, theme: document.getElementById("newTripTheme").value };
+      const payload = { name: document.getElementById("newTripName").value.trim(), destination: document.getElementById("newTripDestination").value.trim(), startDate: document.getElementById("newTripStartDate").value, endDate: document.getElementById("newTripEndDate").value, timezone: document.getElementById("newTripTimezone").value, currency: document.getElementById("newTripCurrency").value, settlementCurrency: document.getElementById("newTripSettlementCurrency").value, theme: document.getElementById("newTripTheme").value, backgroundTone: document.getElementById("newTripBackgroundTone").value };
       if (payload.theme === "postcard" && !/東京|tokyo/i.test(payload.destination)) payload.theme = "journal";
       if (!payload.name || !payload.destination || payload.endDate < payload.startDate) { if (status) status.textContent = "請確認必填欄位與日期範圍。"; return; }
       submit.disabled = true;
@@ -7571,7 +7640,7 @@
       editingTripId = tripId;
       const sheet = document.getElementById("tripCreateSheet");
       document.getElementById("tripCreateTitle").textContent = "編輯旅行設定";
-      const values = { newTripName: trip.name || "", newTripDestination: trip.destination || "", newTripStartDate: trip.startDate || "", newTripEndDate: trip.endDate || "", newTripTimezone: trip.timezone || "Asia/Tokyo", newTripCurrency: trip.currency || "JPY", newTripSettlementCurrency: trip.settlementCurrency || "TWD", newTripTheme: trip.theme || "postcard" };
+      const values = { newTripName: trip.name || "", newTripDestination: trip.destination || "", newTripStartDate: trip.startDate || "", newTripEndDate: trip.endDate || "", newTripTimezone: trip.timezone || "Asia/Tokyo", newTripCurrency: trip.currency || "JPY", newTripSettlementCurrency: trip.settlementCurrency || "TWD", newTripTheme: trip.theme || "postcard", newTripBackgroundTone: trip.backgroundTone || "mist" };
       Object.entries(values).forEach(([id, value]) => { const field = document.getElementById(id); if (field) field.value = value; });
       document.getElementById("tripCreateStatus").textContent = "延長日期會新增空白日；縮短日期前會先檢查受影響資料。";
       sheet.classList.add("open");
@@ -11457,7 +11526,8 @@
         <div class="formField"><label for="newTripTimezone">旅行時區</label><select class="formControl" id="newTripTimezone"><option value="Asia/Tokyo">日本時間 Asia/Tokyo</option><option value="Asia/Taipei">台北時間 Asia/Taipei</option><option value="Asia/Seoul">韓國時間 Asia/Seoul</option><option value="Europe/London">英國時間 Europe/London</option><option value="America/Los_Angeles">美西時間 America/Los_Angeles</option></select></div>
         <div class="formField"><label for="newTripCurrency">旅行幣別</label><select class="formControl" id="newTripCurrency"><option value="JPY">JPY 日圓</option><option value="TWD">TWD 新台幣</option><option value="KRW">KRW 韓元</option><option value="USD">USD 美元</option><option value="EUR">EUR 歐元</option></select></div>
         <div class="formField"><label for="newTripSettlementCurrency">換算幣別</label><select class="formControl" id="newTripSettlementCurrency"><option value="TWD">TWD 新台幣</option><option value="JPY">JPY 日圓</option><option value="USD">USD 美元</option><option value="EUR">EUR 歐元</option></select></div>
-        <div class="formField"><label for="newTripTheme">封面風格</label><select class="formControl" id="newTripTheme"><option value="journal" selected>北國手繪旅誌</option><option value="sakura">櫻色散步</option><option value="sunset">暖陽公路</option><option value="postcard">富士山冬日明信片（東京）</option><option value="minimal">簡約旅誌（舊版）</option></select></div>
+        <div class="formField"><label for="newTripTheme">封面風格</label><select class="formControl" id="newTripTheme"><option value="postcard">🇯🇵 日本｜富士山冬日明信片（東京）</option><option value="journal" selected>🇨🇦 加拿大｜楓葉手繪旅誌</option><option value="sakura">🇰🇷 韓國｜櫻色城市散步</option><option value="sunset">🇺🇸 美國｜西岸暖陽公路</option><option value="alpine">🇨🇭 瑞士｜阿爾卑斯水彩</option><option value="mediterranean">🇬🇷 希臘｜愛琴海手繪</option><option value="paris">🇫🇷 法國｜巴黎明信片</option><option value="tuscany">🇮🇹 義大利｜托斯卡尼手帳</option><option value="morocco">🇲🇦 摩洛哥｜沙漠拼貼</option><option value="nordic">🇮🇸 冰島｜極光雪景</option></select></div>
+        <div class="formField"><label for="newTripBackgroundTone">整體背景色</label><select class="formControl" id="newTripBackgroundTone"><option value="mist" selected>霧藍 Mist</option><option value="cream">奶油 Cream</option><option value="mint">薄荷 Mint</option><option value="rose">櫻粉 Rose</option><option value="peach">蜜桃 Peach</option><option value="lavender">薰衣草 Lavender</option><option value="sand">沙丘 Sand</option><option value="sky">晴空 Sky</option><option value="sage">鼠尾草 Sage</option><option value="periwinkle">藍紫 Periwinkle</option></select></div>
         <div id="tripCreateStatus" class="tripCreateStatus full" role="status" aria-live="polite"></div>
         <div class="modalActions full"><button class="btnGhost" type="button" onclick="closeTripCreateSheet()">取消</button><button class="btnPill primary" type="submit">建立旅行</button></div>
       </form>
