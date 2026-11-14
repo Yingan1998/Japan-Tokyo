@@ -14,19 +14,32 @@ service cloud.firestore {
       return getAfter(/databases/$(database)/documents/trips/$(tripId)/members/$(uid));
     }
 
+    function legacyMemberDoc() {
+      return get(/databases/$(database)/documents/members/$(request.auth.uid));
+    }
+
+    function hasLegacyTokyoMember(tripId) {
+      return tripId == 'japan-tokyo-2026' && legacyMemberDoc().exists();
+    }
+
+    function memberHasRole(tripId, role) {
+      return (memberDoc(tripId).exists() && memberDoc(tripId).data.role == role)
+        || (hasLegacyTokyoMember(tripId) && legacyMemberDoc().data.role == role);
+    }
+
     function activeMember(tripId) {
       return signedIn()
-        && memberDoc(tripId).exists()
-        && memberDoc(tripId).data.status == 'active';
+        && ((memberDoc(tripId).exists() && memberDoc(tripId).data.status == 'active')
+          || (hasLegacyTokyoMember(tripId) && legacyMemberDoc().data.status == 'active'));
     }
 
     function canWriteTrip(tripId) {
       return activeMember(tripId)
-        && (memberDoc(tripId).data.role == 'admin' || memberDoc(tripId).data.role == 'editor');
+        && (memberHasRole(tripId, 'admin') || memberHasRole(tripId, 'editor'));
     }
 
     function isTripAdmin(tripId) {
-      return activeMember(tripId) && memberDoc(tripId).data.role == 'admin';
+      return activeMember(tripId) && memberHasRole(tripId, 'admin');
     }
 
     function allowedDataset(datasetId) {
@@ -70,6 +83,12 @@ service cloud.firestore {
         && memberAfter(tripId, uid).data.role == 'admin'
         && getAfter(/databases/$(database)/documents/trips/$(tripId)).data.ownerId == request.auth.uid;
       allow update, delete: if false;
+    }
+
+    // 舊版東京 App 使用頂層 members/{uid} 儲存旅伴角色；只允許本人讀取，禁止前端修改。
+    match /members/{uid} {
+      allow read: if signedIn() && uid == request.auth.uid;
+      allow write: if false;
     }
 
     match /users/{uid}/tripRefs/{tripId} {
