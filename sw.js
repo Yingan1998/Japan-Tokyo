@@ -1,4 +1,4 @@
-const CACHE_NAME = "japan-tokyo-pwa-v20";
+const CACHE_NAME = "japan-tokyo-pwa-v21";
 const APP_SHELL = [
   "./index.html",
   "./manifest.webmanifest",
