@@ -5690,16 +5690,28 @@
     .accountSosHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .accountSosHeader h2 { margin: 3px 0 0; font-size: 18px; }
     .accountSosPanel p { margin: 9px 0 0; color: #765953; font-size: 12px; line-height: 1.55; }
-    .accountSosGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .accountSosGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
     .accountSosGrid a, .accountSosGrid button {
       display: grid; min-height: 68px; place-items: center; gap: 3px; padding: 8px 5px;
       border: 1px solid rgba(176, 74, 56, .18); border-radius: 14px; color: #8e3329;
       background: rgba(255, 255, 255, .72); font: inherit; text-align: center; text-decoration: none; cursor: pointer;
     }
     .accountSosGrid strong { font-size: 19px; }
+    .accountSosGrid .accountSosHotline strong { font-size: 14px; letter-spacing: -.02em; }
     .accountSosGrid span { font-size: 10px; font-weight: 800; }
-    .accountSosPhrase { margin-top: 10px; padding: 10px; border-radius: 12px; background: rgba(255, 226, 210, .72); font-weight: 900; line-height: 1.6; }
-    .accountSosPhrase small { color: #765953; font-weight: 600; }
+    .accountSosPhrasePanel { margin-top: 10px; padding: 11px; border: 1px solid rgba(176, 74, 56, .16); border-radius: 14px; background: rgba(255, 226, 210, .58); }
+    .accountSosPhraseToolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .accountSosPhraseToolbar strong { font-size: 13px; }
+    .accountSosPhraseToolbar small { display: block; margin-top: 2px; color: #765953; font-size: 10px; font-weight: 600; line-height: 1.4; }
+    .accountSosPhraseToolbar label { display: grid; gap: 3px; color: #765953; font-size: 10px; font-weight: 800; }
+    .sosLanguageSelect { min-height: 40px; padding: 7px 28px 7px 9px; border: 1px solid rgba(176, 74, 56, .2); border-radius: 10px; color: #4b2e2a; background: rgba(255, 255, 255, .9); font: inherit; font-size: 12px; font-weight: 800; }
+    .accountSosPhraseList { display: grid; gap: 7px; max-height: 335px; margin-top: 9px; overflow-y: auto; }
+    .accountSosPhraseCard { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 9px 10px; border: 1px solid rgba(176, 74, 56, .14); border-radius: 12px; background: rgba(255, 255, 255, .84); }
+    .accountSosPhraseCard strong { display: block; color: #63332e; font-size: 12px; }
+    .accountSosPhraseText { margin: 4px 0 0; color: #3f2b2a; font-size: 15px; font-weight: 900; line-height: 1.45; }
+    .accountSosPhraseHint { display: block; margin-top: 3px; color: #806763; font-size: 10px; line-height: 1.4; }
+    .accountSosCopy { min-width: 58px; min-height: 40px; padding: 7px 8px; border: 1px solid rgba(176, 74, 56, .18); border-radius: 10px; color: #8e3329; background: rgba(255, 255, 255, .9); font: inherit; font-size: 11px; font-weight: 900; cursor: pointer; }
+    .accountSosCopy.copied { color: #246d61; border-color: rgba(36, 109, 97, .28); background: rgba(221, 246, 236, .9); }
 
     .homeShortcutCard {
       padding: 16px 18px;
@@ -5872,7 +5884,10 @@
       .accountPasswordRow .btnGhost { min-width: 0; padding-inline: 8px; font-size: 12px; }
       .accountEntryBody { padding: 18px 16px 8px; }
       .accountCover { min-height: 220px; padding: 22px 20px 18px; }
-      .accountSosGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .accountSosGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .accountSosPhraseToolbar { align-items: flex-start; flex-direction: column; }
+      .accountSosPhraseToolbar label { width: 100%; }
+      .sosLanguageSelect { width: 100%; }
       .homeShortcutCard { padding: 14px 12px; }
       .homeShortcutHeader h2 { font-size: 16px; }
       .homeShortcutGrid { gap: 6px; }
@@ -6574,13 +6589,25 @@
         </section>
         <section id="accountSosPanel" class="accountSosPanel" hidden aria-labelledby="accountSosTitle">
           <div class="accountSosHeader"><div><span class="dashboardKicker">TOKYO EMERGENCY</span><h2 id="accountSosTitle">日本緊急協助</h2></div><button class="btnGhost" type="button" onclick="togglePublicSos(false)">關閉</button></div>
-          <p>需要立即協助時，請直接撥打當地緊急電話。以下資訊不需要登入即可使用。</p>
+          <p>需要立即協助時，請直接撥打當地緊急電話。下方也整理英、日、韓與中文短句，方便出示給櫃台、司機或醫護人員。</p>
           <div class="accountSosGrid">
             <a href="tel:110"><strong>110</strong><span>警察／事故</span></a>
             <a href="tel:119"><strong>119</strong><span>消防／救護</span></a>
-            <button type="button" onclick="speakEmergencyPhrase()"><strong>日文求助</strong><span>顯示常用句</span></button>
+            <a class="accountSosHotline" href="tel:05038162787"><strong>050-3816-2787</strong><span>旅客支援／英中韓</span></a>
+            <button type="button" onclick="speakEmergencyPhrase()"><strong>多語求助</strong><span>英／日／韓／中</span></button>
           </div>
-          <div id="accountSosPhrase" class="accountSosPhrase" hidden>助けてください。日本語が話せません。<br><small>請幫幫我，我不會說日文。</small></div>
+          <div id="accountSosPhrase" class="accountSosPhrasePanel" hidden>
+            <div class="accountSosPhraseToolbar">
+              <div><strong>常用求助短句</strong><small>選擇語言後按「複製」，可直接貼給對方看。</small></div>
+              <label>語言<select id="sosLanguageSelect" class="sosLanguageSelect" onchange="renderEmergencyPhrases()" aria-label="選擇求助語言">
+                <option value="zh">繁體中文</option>
+                <option value="ja" selected>日本語</option>
+                <option value="en">English</option>
+                <option value="ko">한국어</option>
+              </select></label>
+            </div>
+            <div id="accountSosPhraseList" class="accountSosPhraseList" aria-live="polite"></div>
+          </div>
         </section>
         <p id="accountEntryStatus" class="accountStatus" role="status"></p>
       </div>
@@ -7732,9 +7759,88 @@
       if (next) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
+    const EMERGENCY_PHRASES = Object.freeze([
+      { id: "help", label: "需要協助", zh: "請幫幫我。", ja: "助けてください。", en: "Please help me.", ko: "도와주세요。", romanized: "Tasukete kudasai." },
+      { id: "noJapanese", label: "不會說日文", zh: "我不會說日文。可以說英文嗎？", ja: "日本語が話せません。英語は話せますか？", en: "I don't speak Japanese. Do you speak English?", ko: "일본어를 못합니다. 영어를 하실 수 있나요?", romanized: "Nihongo ga hanasemasen. Eigo wa hanasemasu ka?" },
+      { id: "police", label: "請叫警察", zh: "請幫我報警。", ja: "警察を呼んでください。", en: "Please call the police.", ko: "경찰을 불러 주세요。", romanized: "Keisatsu o yonde kudasai." },
+      { id: "ambulance", label: "請叫救護車", zh: "請幫我叫救護車。", ja: "救急車を呼んでください。", en: "Please call an ambulance.", ko: "구급차를 불러 주세요。", romanized: "Kyukyusha o yonde kudasai." },
+      { id: "hospital", label: "需要去醫院", zh: "我需要去醫院。", ja: "病院に行きたいです。", en: "I need to go to a hospital.", ko: "병원에 가야 합니다。", romanized: "Byoin ni ikitai desu." },
+      { id: "lost", label: "迷路／請看地址", zh: "我迷路了，請帶我到這個地址。", ja: "道に迷いました。この住所へ行きたいです。", en: "I am lost. Please take me to this address.", ko: "길을 잃었습니다. 이 주소로 데려다 주세요。", romanized: "Michi ni mayoimashita. Kono jusho e ikitai desu." },
+      { id: "passport", label: "護照遺失", zh: "我的護照遺失了。", ja: "パスポートをなくしました。", en: "I lost my passport.", ko: "여권을 잃어버렸습니다。", romanized: "Pasupooto o nakushimashita." },
+      { id: "allergy", label: "食物過敏", zh: "我對＿＿過敏，請不要加入。", ja: "＿＿のアレルギーがあります。入れないでください。", en: "I am allergic to ___. Please do not add it.", ko: "저는 ___ 알레르기가 있습니다. 넣지 말아 주세요。", romanized: "___ no arerugi ga arimasu. Irenaide kudasai." },
+      { id: "hotel", label: "前往飯店", zh: "請帶我到這個地址的飯店。", ja: "この住所のホテルまでお願いします。", en: "Please take me to the hotel at this address.", ko: "이 주소의 호텔까지 가 주세요。", romanized: "Kono jusho no hoteru made onegaishimasu." }
+    ]);
+
+    function renderEmergencyPhrases() {
+      const list = document.getElementById("accountSosPhraseList");
+      const languageSelect = document.getElementById("sosLanguageSelect");
+      if (!list || !languageSelect) return;
+      const language = languageSelect.value || "ja";
+      list.replaceChildren();
+      EMERGENCY_PHRASES.forEach((entry) => {
+        const card = document.createElement("article");
+        card.className = "accountSosPhraseCard";
+        const copy = document.createElement("button");
+        copy.type = "button";
+        copy.className = "accountSosCopy";
+        copy.textContent = "複製";
+        copy.addEventListener("click", () => copyEmergencyPhrase(entry.id, copy));
+        const body = document.createElement("div");
+        const label = document.createElement("strong");
+        label.textContent = entry.label;
+        const phrase = document.createElement("p");
+        phrase.className = "accountSosPhraseText";
+        phrase.lang = language;
+        phrase.textContent = entry[language] || entry.ja;
+        const hint = document.createElement("small");
+        hint.className = "accountSosPhraseHint";
+        hint.textContent = language === "ja"
+          ? `羅馬拼音：${entry.romanized} · 中文：${entry.zh}`
+          : `日文：${entry.ja}`;
+        body.append(label, phrase, hint);
+        card.append(body, copy);
+        list.append(card);
+      });
+    }
+
+    async function copyEmergencyPhrase(id, button) {
+      const language = document.getElementById("sosLanguageSelect")?.value || "ja";
+      const entry = EMERGENCY_PHRASES.find((item) => item.id === id);
+      const text = entry?.[language] || entry?.ja || "";
+      if (!text) return;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.setAttribute("readonly", "");
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          textarea.remove();
+        }
+        if (button) {
+          const original = button.textContent;
+          button.textContent = "已複製";
+          button.classList.add("copied");
+          window.setTimeout(() => { button.textContent = original; button.classList.remove("copied"); }, 1400);
+        }
+      } catch {
+        if (button) button.textContent = "請長按複製";
+      }
+    }
+
     function speakEmergencyPhrase() {
       const phrase = document.getElementById("accountSosPhrase");
-      if (phrase) phrase.hidden = !phrase.hidden;
+      if (!phrase) return;
+      phrase.hidden = !phrase.hidden;
+      if (!phrase.hidden) {
+        renderEmergencyPhrases();
+        phrase.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     }
 
     function accountError(error) {
