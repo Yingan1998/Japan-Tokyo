@@ -10,6 +10,10 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/trips/$(tripId)/members/$(request.auth.uid));
     }
 
+    function memberExists(tripId) {
+      return exists(/databases/$(database)/documents/trips/$(tripId)/members/$(request.auth.uid));
+    }
+
     function memberAfter(tripId, uid) {
       return getAfter(/databases/$(database)/documents/trips/$(tripId)/members/$(uid));
     }
@@ -18,18 +22,22 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/members/$(request.auth.uid));
     }
 
+    function legacyMemberExists() {
+      return exists(/databases/$(database)/documents/members/$(request.auth.uid));
+    }
+
     function hasLegacyTokyoMember(tripId) {
-      return tripId == 'japan-tokyo-2026' && legacyMemberDoc().exists();
+      return tripId == 'japan-tokyo-2026' && legacyMemberExists();
     }
 
     function memberHasRole(tripId, role) {
-      return (memberDoc(tripId).exists() && memberDoc(tripId).data.role == role)
+      return (memberExists(tripId) && memberDoc(tripId).data.role == role)
         || (hasLegacyTokyoMember(tripId) && legacyMemberDoc().data.role == role);
     }
 
     function activeMember(tripId) {
       return signedIn()
-        && ((memberDoc(tripId).exists() && memberDoc(tripId).data.status == 'active')
+        && ((memberExists(tripId) && memberDoc(tripId).data.status == 'active')
           || (hasLegacyTokyoMember(tripId) && legacyMemberDoc().data.status == 'active'));
     }
 
