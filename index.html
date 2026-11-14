@@ -6301,6 +6301,190 @@
       }
     }
   </style>
+  <style>
+    /* 手機版第二階段修正：避免頂部重疊、資訊卡被拉伸，以及工具列被截斷。 */
+    @media (max-width: 600px) {
+      .app {
+        padding-bottom: calc(164px + env(safe-area-inset-bottom));
+      }
+
+      /* 品牌列使用固定的右側操作區，右側不會再壓到品牌文字。 */
+      .topbar {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 210px);
+        overflow: visible;
+      }
+
+      .topActions {
+        width: 210px;
+        max-width: 100%;
+        overflow: hidden;
+        justify-content: flex-end;
+      }
+
+      .topActions > .rate {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .brandHome {
+        display: flex;
+        min-width: 0;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      @media (max-width: 380px) {
+        .topbar {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+
+        .topActions {
+          width: 100%;
+        }
+      }
+
+      /* 天氣、地點、日期各自依內容高度排列，不讓日期文字把地點卡片拉高。 */
+      .infoRow {
+        align-items: start;
+      }
+
+      .infoRow .locChip,
+      .infoRow .dateChip {
+        align-self: start;
+        min-height: 48px;
+        height: auto;
+        line-height: 1.45;
+      }
+
+      .infoRow .locChip {
+        white-space: nowrap;
+      }
+
+      .infoRow #dateRange {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+      }
+
+      .infoRow #countdownBox {
+        align-self: start;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+      }
+
+      /* 捷徑卡片縮短留白，三欄仍保留清楚的觸控區。 */
+      .homeShortcutCard {
+        padding: 14px 12px;
+      }
+
+      .homeShortcutHeader {
+        gap: 8px;
+      }
+
+      .homeShortcutHeader h2 {
+        font-size: 16px;
+      }
+
+      .postmarkStamp {
+        width: 50px;
+        height: 50px;
+        font-size: 9px;
+      }
+
+      .homeShortcutGrid button {
+        min-height: 68px;
+        border-radius: 14px;
+      }
+
+      /* 行程標題獨立一行，三個常用操作在下一行平均分配，避免水平截斷。 */
+      .itineraryTitleRow {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+        gap: 8px;
+        overflow: visible;
+      }
+
+      .itineraryTitleRow .sectionTitle {
+        width: fit-content;
+        max-width: 100%;
+        font-size: 18px;
+      }
+
+      .itineraryTitleRow .sectionTitleActions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+        max-width: none;
+        overflow: visible;
+        gap: 6px;
+      }
+
+      .itineraryTitleRow .sectionTitleActions .btnPill {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        justify-content: center;
+        padding: 9px 5px;
+        font-size: 12px;
+      }
+
+      /* 摘要可換行，並與第一張時間軸卡片保留距離。 */
+      .tripSummary {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        margin: 2px 4px 12px;
+        padding: 8px 10px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, .42);
+        line-height: 1.45;
+      }
+
+      .tripSummary span {
+        min-width: 0;
+        font-size: 11px;
+      }
+
+      .tripSummary span:last-child {
+        margin-left: auto;
+        text-align: right;
+      }
+
+      /* 來源資訊降為輔助文字，避免在行程重點中搶主視覺。 */
+      .dashboardGuideMeta {
+        display: grid;
+        gap: 4px;
+        margin-top: 12px;
+        padding-top: 8px;
+        border-top: 1px dashed rgba(83, 111, 130, .18);
+      }
+
+      #dashboardGuideSource {
+        color: #8797a1;
+        font-size: 10px;
+      }
+
+      /* 時間軸左側線與卡片保持固定間距，避免摘要或底部導覽造成視覺黏連。 */
+      #tripList {
+        padding-left: 30px;
+      }
+
+      #tripList::before {
+        left: 10px;
+        top: 10px;
+        bottom: 24px;
+      }
+
+      #tripList .itemTop::before {
+        left: -27px;
+      }
+    }
+  </style>
 </head>
 
 <body data-auth-screen="loading">
