@@ -7580,8 +7580,11 @@
       if (!sheet) return;
       editingTripId = "";
       document.getElementById("tripCreateForm")?.reset();
+      document.getElementById("tripCreateKicker").textContent = "NEW TRIP";
       document.getElementById("tripCreateTitle").textContent = "建立旅行";
+      document.getElementById("tripCreateHint").textContent = "新旅行會建立獨立的日期時間軸與資料空間，不會帶入東京行程。";
       document.getElementById("tripCreateStatus").textContent = "";
+      document.getElementById("tripCreateSubmit").textContent = "建立旅行";
       const start = document.getElementById("newTripStartDate");
       const end = document.getElementById("newTripEndDate");
       const today = new Date();
@@ -7694,7 +7697,10 @@
       if (!trip) return;
       editingTripId = tripId;
       const sheet = document.getElementById("tripCreateSheet");
+      document.getElementById("tripCreateKicker").textContent = "EDIT TRIP";
       document.getElementById("tripCreateTitle").textContent = "編輯旅行設定";
+      document.getElementById("tripCreateHint").textContent = "更新這趟旅行的設定；既有行程、票券、住宿與旅費資料都會保留。";
+      document.getElementById("tripCreateSubmit").textContent = "儲存修改";
       const values = { newTripName: trip.name || "", newTripDestination: trip.destination || "", newTripStartDate: trip.startDate || "", newTripEndDate: trip.endDate || "", newTripTimezone: trip.timezone || "Asia/Tokyo", newTripCurrency: trip.currency || "JPY", newTripSettlementCurrency: trip.settlementCurrency || "TWD", newTripTheme: trip.theme || "postcard", newTripBackgroundTone: trip.backgroundTone || "mist" };
       Object.entries(values).forEach(([id, value]) => { const field = document.getElementById(id); if (field) field.value = value; });
       document.getElementById("tripCreateStatus").textContent = "延長日期會新增空白日；縮短日期前會先檢查受影響資料。";
@@ -11572,10 +11578,10 @@
     <div class="modalBackdrop" onclick="closeTripCreateSheet()"></div>
     <div class="modalPanel tripCreatePanel" role="dialog" aria-modal="true" aria-labelledby="tripCreateTitle">
       <div class="rowBetween">
-        <div><span class="dashboardKicker">NEW TRIP</span><h3 id="tripCreateTitle" style="margin:2px 0 0">建立旅行</h3></div>
+        <div><span class="dashboardKicker" id="tripCreateKicker">NEW TRIP</span><h3 id="tripCreateTitle" style="margin:2px 0 0">建立旅行</h3></div>
         <button class="btnGhost" type="button" onclick="closeTripCreateSheet()">關閉</button>
       </div>
-      <p class="muted tripCreateHint">新旅行會建立獨立的日期時間軸與資料空間，不會帶入東京行程。</p>
+      <p class="muted tripCreateHint" id="tripCreateHint">新旅行會建立獨立的日期時間軸與資料空間，不會帶入東京行程。</p>
       <form id="tripCreateForm" class="formGrid tripCreateForm" onsubmit="submitTripCreate(event)">
         <div class="formField full"><label for="newTripName">旅行名稱 <span class="requiredMark">必填</span></label><input class="formControl" id="newTripName" required maxlength="80" placeholder="例如：2027 京都春日旅行"></div>
         <div class="formField full"><label for="newTripDestination">主要目的地 <span class="requiredMark">必填</span></label><input class="formControl" id="newTripDestination" required maxlength="80" placeholder="例如：日本京都"></div>
@@ -11587,7 +11593,7 @@
         <div class="formField"><label for="newTripTheme">封面風格</label><select class="formControl" id="newTripTheme"><option value="postcard">🇯🇵 日本｜富士山冬日明信片（東京）</option><option value="journal" selected>🇨🇦 加拿大｜楓葉手繪旅誌</option><option value="sakura">🇰🇷 韓國｜櫻色城市散步</option><option value="sunset">🇺🇸 美國｜西岸暖陽公路</option><option value="alpine">🇨🇭 瑞士｜阿爾卑斯水彩</option><option value="mediterranean">🇬🇷 希臘｜愛琴海手繪</option><option value="paris">🇫🇷 法國｜巴黎明信片</option><option value="tuscany">🇮🇹 義大利｜托斯卡尼手帳</option><option value="morocco">🇲🇦 摩洛哥｜沙漠拼貼</option><option value="nordic">🇮🇸 冰島｜極光雪景</option></select></div>
         <div class="formField"><label for="newTripBackgroundTone">整體背景色</label><select class="formControl" id="newTripBackgroundTone"><option value="mist" selected>霧藍 Mist</option><option value="cream">奶油 Cream</option><option value="mint">薄荷 Mint</option><option value="rose">櫻粉 Rose</option><option value="peach">蜜桃 Peach</option><option value="lavender">薰衣草 Lavender</option><option value="sand">沙丘 Sand</option><option value="sky">晴空 Sky</option><option value="sage">鼠尾草 Sage</option><option value="periwinkle">藍紫 Periwinkle</option></select></div>
         <div id="tripCreateStatus" class="tripCreateStatus full" role="status" aria-live="polite"></div>
-        <div class="modalActions full"><button class="btnGhost" type="button" onclick="closeTripCreateSheet()">取消</button><button class="btnPill primary" type="submit">建立旅行</button></div>
+        <div class="modalActions full"><button class="btnGhost" type="button" onclick="closeTripCreateSheet()">取消</button><button class="btnPill primary" id="tripCreateSubmit" type="submit">建立旅行</button></div>
       </form>
     </div>
   </div>
